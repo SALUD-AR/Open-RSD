@@ -2,6 +2,9 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+    <input id="modalCreateTipoDocumentoId" type="hidden" />
+    <input id="modalCreateSexoId" type="hidden" />
+
     <div class="modal fade" id="modalCreatePaciente">
         <form id="formModalCreate">
 
@@ -81,7 +84,7 @@
                                 id="btnCreatePaciente" 
                                 type="button" 
                                 class="btn btn-primary"
-                                onclick="modalCreatePacienteAccept()"
+                                onclick="onModalCreatePacienteAccept()"
                                 @*data-dismiss="modal"*@
                                 >Confirmar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

@@ -39,7 +39,7 @@ namespace Msn.InteropDemo.Data.DataInitialization
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error inicializando datos", ex);
+                _logger.LogError(ex, "Error inicializando datos:");
             }
         }
 
@@ -64,7 +64,7 @@ namespace Msn.InteropDemo.Data.DataInitialization
 
         private async Task SeedDefaultAdminUser()
         {
-            if (!_dataContext.Users.Any(x => x.UserName.ToUpper() == "ADMIN@MSNINTEROPDEMO.MSAL.GOB.AR"))
+            if (!_dataContext.Users.Any(x => x.NormalizedUserName  == "ADMIN"))
             {
                 _logger.LogInformation("Incializando usuario Admin");
 

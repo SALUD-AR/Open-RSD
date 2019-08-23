@@ -1,15 +1,8 @@
 ﻿
 //On document Ready
 $(function () {
-    updateToolTips();
     $('#FechaNacimiento').mask('99/99/9999');    
 })
-
-//Inicializa los Tooltips
-function updateToolTips() {
-    //$('[data-toggle="tooltip"]').tooltip();
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////////
 /////////// POST PARA BUSCAR PACIENTES ///////////////////////////////////////////////
@@ -47,7 +40,6 @@ function doPost() {
             gridContentLocalResult.html(data.table);
             gridContentLocalResult.fadeIn('slow');
             btnNuevoPaciente.fadeIn('slow');
-            updateToolTips()
         },
         error: function (request, status, error) {
             console.log("request:" + request.responseText);
@@ -227,30 +219,32 @@ function FederarPaciente(id) {
 /////////////////////////////////////////////////////////////////////////////////////
 /// PROCESAR NUEVO PACIENTE /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
 function showModalCreatePaciente() {
-
     $('#modalCreatePrimerApellido').val($('#PrimerApellido').val());
     $('#modalCreatePrimerNombre').val($('#PrimerNombre').val());
-    $('#modalCreateSexoNombre').val($('#Sexo').val());
-    $('#modalCreateTipoDocumentoNombre').val($('#TipoDocumentoId').val());
+    $('#modalCreateSexoId').val($('#Sexo').val());
+    $('#modalCreateSexoNombre').val($('#Sexo option:selected').text());
+    $('#modalCreateTipoDocumentoId').val($('#TipoDocumentoId').val());
+    $('#modalCreateTipoDocumentoNombre').val($("#TipoDocumentoId option:selected").text());
     $('#modalCreateNroDocumento').val($('#NroDocumento').val());
     $('#modalCreateFechaNacimiento').val($('#FechaNacimiento').val());
+    $('#modalCreateEmail').val('');
+
     $('#modalCreatePaciente').modal('show');
 }
 
-function modalCreatePacienteAccept() {
+function onModalCreatePacienteAccept() {
     var form = $('#formModalCreate');
-    form.validate()
 
-    if (form.valid()) {
-        alert("valido");
-    } else {
-        alert("IN valido");
+    form.validate()
+    if (!form.valid()) {
+        return;
     }
 
-}
+    $('#modalCreatePaciente').modal('hide');
 
+    confirmNuevoPaciente();
+}
 
 function confirmNuevoPaciente() {
     confirmDialog("Nuevo Paciente", "Confirma Generar un nuevo paciente con los datos ingresados ?",
