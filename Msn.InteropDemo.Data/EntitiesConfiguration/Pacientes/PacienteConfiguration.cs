@@ -35,6 +35,11 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Pacientes
             builder.Property(p => p.FederadoDateTime)
                             .HasColumnType("SmallDateTime")
                             .IsRequired(false);
+
+            builder.Property(p => p.Email)
+                .HasMaxLength(100)
+                .IsRequired(false)
+                .IsUnicode(false);
         }
     }
 }

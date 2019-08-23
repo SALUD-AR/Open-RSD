@@ -183,6 +183,11 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult CreateByFrontEnd(ViewModel.Pacientes.PacienteViewModel entity)
         {
+            if(!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = FriendlyErrors() }) { StatusCode = 200 };
+            }
+
             try
             {
                 var op = _pacienteAppService.Save(entity);

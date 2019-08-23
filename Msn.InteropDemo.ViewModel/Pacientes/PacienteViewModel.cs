@@ -69,5 +69,9 @@ namespace Msn.InteropDemo.ViewModel.Pacientes
         public int? FederadorId { get; set; }
 
         public DateTime? FederadoDateTime { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
     }
 }

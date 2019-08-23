@@ -37,6 +37,8 @@ namespace Msn.InteropDemo.Entities.Pacientes
 
         public DateTime? FederadoDateTime { get; set; }
 
+        public string Email { get; set; }
+
         public override string ToString()
         {
             return $"PrimerApellido:{PrimerApellido}, PrimerNombre:{PrimerNombre}, Tipo Doc.:{TipoDocumentoId}, Nro. Documento:{NroDocumento}, Sexo:{Sexo}";
