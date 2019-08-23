@@ -1,0 +1,57 @@
+﻿@model Msn.InteropDemo.ViewModel.Pacientes.PacienteListViewModel
+
+@{
+    ViewData["Title"] = "Pacientes";
+}
+
+<partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
+
+<p>
+    <a asp-action="BuscarPaciente"><span class="fa fa-plus-circle"></span> Nuevo Paciente</a>
+</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="text-left">Apellido y Nombre</th>
+            <th class="text-left">Tipo Doc.</th>
+            <th class="text-right">Documento</th>
+            <th class="text-left">Sexo</th>
+            <th class="text-center">Fecha Nac.</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+        <tr>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => item.ApellidosNombresCompletos)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => item.TipoDocumentoNombre)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.NroDocumento)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => item.SexoNombre)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.FechaNacimiento)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Editar" data-delay='{ "show": 500, "hide": 100 }'><span class="fa fa-edit"></span></a>&nbsp;
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+}

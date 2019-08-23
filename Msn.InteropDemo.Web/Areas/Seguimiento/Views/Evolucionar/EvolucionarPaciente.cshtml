@@ -1,0 +1,154 @@
+﻿@model Msn.InteropDemo.ViewModel.Evoluciones.EvolucionHistoViewModel
+
+@{
+    ViewData["Title"] = "Evolucionar Paciente";
+    var pacienteSexoClass = Model.Sexo == "M" ? "fa-male" : "fa-female";
+}
+
+<partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
+
+<hr />
+
+<input asp-for="PacienteId" type="hidden" />
+<input id="evolucionId" type="hidden" value="@Model.PredefEvolucionId" />
+
+
+
+@Html.AntiForgeryToken()
+
+<div class="form-row">
+    <div class="col-md-1 text-center">
+        <div class="fa fa-4x @pacienteSexoClass"></div>
+    </div>
+    <div class="col-md-11 text-left">
+        <div>
+            <span>@Model.PacientePrimerApellido, @Model.PacientePrimerNombre, @Model.PacienteEdad años</span>
+        </div>
+        <div>
+            <span>Fecha de nacimiento: @Model.PacienteFechaNacimiento</span>
+        </div>
+        <div>
+            <span>@Model.PacienteTipoDocumentoNombre: @Model.PacienteNroDocumento</span>
+        </div>
+    </div>
+</div>
+
+<div class="form-row mt-3">
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-header text-center">
+                
+                <b>Consultas</b>
+            </div>
+            <div class="card-body" style="padding-top:10px;">
+                <a href="#!" onclick="setupNuevaEvolucion()"><span class="fa fa-plus-circle mb-3"></span> Nueva consulta</a>
+                <div class="list-group">
+                    @foreach (var item in Model.Items)
+                    {
+                        var strId = "btnMenuFecha" + @item.Id;
+                    <button id="@strId" type="button" onclick="loadEvolucion(@item.Id)" class="list-group-item list-group-item-action btn-menu-fechas small text-center">
+                        <span>@item.FechaEvolucion</span>
+                        <br />
+                        <span>@item.ProfesionalApellido</span>
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <div id="currentConsultaFecha" style="display:none;">
+                    <b><span id="currentFechaConsultaText"></span></b> - Consulta Ambulatoria - <span id="currentConsultaProfesionalFullname"></span>
+                </div>
+                <div id="nuevaConsultaTitulo" class="text-primary" style="display:none;">
+                    <span><b>Ingresando Nueva consulta</b></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <div>
+                            <b>Diagnóstico:</b>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <table id="tableHallazgos" class="table table-sm table-responsive-sm">
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="#!" id="btnSerachHallazgos" onclick="showSearchSnowstormHallagos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Diagóstico</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <div>
+                            <b>Evolución:</b>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea id="textAreaObservacion" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-row mt-3">
+                    <div class="col-md-6">
+                        <div>
+                            <b>Indicar Vacunas</b>
+                        </div>
+                        <table id="tableVacunas" class="table table-sm table-responsive-sm">
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="#!" id="btnSearchVacunas" onclick="showSearchSnowstormVacunas()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Vacuna</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <b>Indicar Medicamentos</b>
+                        </div>
+                        <table id="tableMedicamentos" class="table table-sm table-responsive-sm">
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="#!" id="btnSearchMedicamentos" onclick="showSearchSnowstormMedicamentos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Medicamento</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group float-right mt-3">
+    <button id="btnSaveEvolucion" onclick="saveEvolucion()" type="button" class="btn btn-outline-primary">Grabar Consulta</button>
+</div>
+
+<br />
+<br />
+
+<partial name="Partials/_SearchSnowstormModal" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Seguimiento/Evolucionar/EvolucionarPaciente.js"></script>
+    <script src="~/js/Views/Seguimiento/Evolucionar/SearchSnowstormModal.js"></script>
+    <script src="~/js/Views/ConfirmDialog.js"></script>
+}

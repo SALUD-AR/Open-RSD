@@ -1,0 +1,74 @@
+﻿@model ViewModel.Request.BuscarPacienteRequestModel
+
+<form action="javascript:doPost();" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @Html.AntiForgeryToken()
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Ingrese los datos mínimos del paciente
+        </div>
+        <div class="card-body">
+
+            <div class="form-row">
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="PrimerApellido" class="control-label">Apellido</label>
+                        <input asp-for="PrimerApellido" class="form-control" />
+                        <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="PrimerNombre" class="control-label">Nombre</label>
+                        <input asp-for="PrimerNombre" class="form-control" />
+                        <span asp-validation-for="PrimerNombre" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="Sexo" class="control-label"></label>
+                        <select asp-for="Sexo" asp-items="Model.SexoList" class="form-control"></select>
+                        <span asp-validation-for="Sexo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="TipoDocumentoId" class="control-label"></label>
+                        <select asp-for="TipoDocumentoId" asp-items="Model.TipoDocumentoList" class="form-control"></select>
+                        <span asp-validation-for="TipoDocumentoId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="NroDocumento" class="control-label"></label>
+                        <input asp-for="NroDocumento" class="form-control" />
+                        <span asp-validation-for="NroDocumento" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group required">
+                        <label asp-for="FechaNacimiento" class="control-label"></label>
+                        <input asp-for="FechaNacimiento" class="form-control" placeholder="dd/mm/aaaa" />
+                        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 float-right">
+                    <div class="form-group">
+                        <button id="btnSubmit" type="submit" class="btn btn-outline-primary float-right"><span class="fa fa-search"></span> Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<div id="gridContentLocalResult" style="display:none;"></div>
+
+

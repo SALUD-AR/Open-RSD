@@ -1,0 +1,39 @@
+CASO DE USO DE BUSQUEDA Y ALTA DE PACIENTE
+
+
+1) El usuario ingresa la siguiente informacion para buscar un paciente:
+	Primer Apellido
+	Otros Apellidos 
+	Primer Nombre
+	Otros nombres
+	Tipo Documento
+	Nro. Dcumento
+	Sexo (Segun DNI)
+	Fecha Nacimiento
+
+2) El sistema busca por ese criterio y entrega un valor de ranking por cada 
+valor coincidente en su Base de Datos. 
+Prresentando los pacientes en una lista y un boton en el fondo de la lista 
+par poder cread un nuevo paciente.
+
+3.A) El usuario selecciona un paciene de la lista para evolucionar
+	 Realiza las siguitenes acciones:
+		El sistema presenta un modal al usuario
+		Verifica si el Paciente está registrado en el BUS
+		Si el paciente no está registrado lo da de alta
+			Indica en el modal el algta exitosa del paciente en el bus
+		Si el paciente ya esta dado de alta solo incida que lo está
+	Al final de este proceso el Modal habilita un boton de Evolucionar el paciente
+
+3.B) El Paciene no es encontrado y el usuario selecciona crear un nuevo Paciente
+	 Realiza las siguitenes acciones:
+		Muestra un modal al usuario para ver la evolución de las operaciones
+		Toma los datos cargados para la busqueda del paciente y los muestra en el modal
+		Los graba en su Base de datos local
+		Federa el paciente en el BUS
+		indica las tareas realizadas en el modal
+	Al final de este proceso el Modal habilita un boton de Evolucionar el paciente
+
+
+
+

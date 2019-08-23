@@ -1,0 +1,100 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="modal fade" id="modalPaciente">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Paciente</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-row form-inline" style="border-bottom:1px; border-bottom-color:rgb(222, 226, 230); border-bottom-style:solid; padding-bottom:15px;">
+                    <div class="col-md-4">
+                        <div id="progressRegistrandoPacienteLocal" style="display:none;">
+                            <span class="text-primary fa fa-database"></span> Registrando Paciente en Dominio <span class="fas fa-spinner fa-spin"></span>
+                        </div>
+                        <div id="progressPacienteLocalRegistrado" style="display:none;">
+                            <span class="text-primary fa fa-database"></span> Paciente ya registrado <span class="text-success fas fa-check"></span>
+                        </div>
+                        <div id="progressPacienteLocalRegistradoNuevo" style="display:none;">
+                            <span class="text-primary fa fa-database"></span> Paciente registrado exitosamente <span class="text-success fas fa-check"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div id="progressVerificandoExistenciaEnElBUS" style="display:none;">
+                            <span class="text-primary fa fa-network-wired"></span> Verificando Existencia en BUS <span id="spinVerificaExistenciaBus" class="fas fa-spinner fa-spin"></span>
+                        </div>
+                        <div id="progressExistenciaEnElBUSVerificada" style="display:none;">
+                            <span class="text-primary fa fa-network-wired"></span> Verificando Existencia en BUS <span class="text-success fas fa-check"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="progressPacienteYaFederado" style="display:none;">
+                            <span class="text-primary fa fa-user-check"></span> Paciente ya federado <span class="text-success fas fa-check"></span>
+                        </div>
+                        <div id="progressAltaPacienteBUS" style="display:none;">
+                            <span class="text-primary fa fa-user-check"></span> Dando del alta Paciente en el BUS <span class="fas fa-spinner fa-spin"></span>
+                        </div>
+                        <div id="progressAltaPacienteBUSFinalizada" style="display:none;">
+                            <span class="text-primary fa fa-user-check"></span> Paciente Federado en el BUS <span class="text-success fas fa-check"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalPrimerApellido" class="control-label">Apellido</label>
+                            <input id="modalPrimerApellido" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalPrimerNombre" class="control-label">Nombre</label>
+                            <input id="modalPrimerNombre" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalGeneroNombre" class="control-label">Sexo</label>
+                            <input id="modalGeneroNombre" class="form-control" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalTipoDocumentoNombre" class="control-label">Tipo. Doc.</label>
+                            <input id="modalTipoDocumentoNombre" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalNroDocumento" class="control-label">Nro. Documento</label>
+                            <input id="modalNroDocumento" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="modalFechaNacimiento" class="control-label">Fecha de Nacimiento</label>
+                            <input id="modalFechaNacimiento" class="form-control" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="btnEvolucionar" type="button" onclick="redirect2Evolucion()" class="btn btn-success" data-dismiss="modal"><span class="fa fa-file-medical"></span>&nbsp;Historia Clínica</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

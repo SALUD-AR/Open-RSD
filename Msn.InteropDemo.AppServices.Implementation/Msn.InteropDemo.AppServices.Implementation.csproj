@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Mapping\Profiles\UnidadFuncionalProfile.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.AppServices\Msn.InteropDemo.AppServices.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Entities\Msn.InteropDemo.Entities.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Fhir\Msn.InteropDemo.Fhir.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm.Expressions\Msn.InteropDemo.Snowstorm.Expressions.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm\Msn.InteropDemo.Snowstorm.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.ViewModel\Msn.InteropDemo.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>

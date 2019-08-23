@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.AppServices\Msn.InteropDemo.AppServices.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Integration\Msn.InteropDemo.Integration.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm.Expressions\Msn.InteropDemo.Snowstorm.Expressions.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm\Msn.InteropDemo.Snowstorm.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.logging.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<input id="searchSnowstormSelectedConceptId" type="hidden" />
+<input id="searchSnowstormSelectedTerm" type="hidden" />
+
+<div class="modal fade" id="searchSnowstormModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title">TITLE</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="input-group mb-3">
+                        <input id="textSearch" type="text" class="form-control" placeholder="ingrese el texto a buscar" aria-label="ingrese el texto a buscar" aria-describedby="btnSeachSnowstorm">
+                        <div class="input-group-append">
+                            <button onclick="seachSnowstorm()" class="btn btn-outline-primary" type="button" id="btnSeachSnowstorm"><span class="fa fa-search"></span> Buscar</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="seachSnowstormResultContainer" class="form-row" style="display:none">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

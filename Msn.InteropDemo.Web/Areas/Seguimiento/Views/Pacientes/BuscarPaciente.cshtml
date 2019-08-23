@@ -1,0 +1,34 @@
+﻿@model ViewModel.Request.BuscarPacienteRequestModel
+
+@{
+    ViewData["Title"] = "Buscar Paciente";
+}
+
+<partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
+
+<hr />
+
+<input id="pacienteId" type="hidden" />
+
+<partial name="Partials/_ModalCreatePaciente" model="@Model" />
+<partial name="Partials/_BuscarPaciente" model="@Model" />
+
+<div id="btnNuevoPaciente" class="form-row" style="display:none;">
+    <div class="col-lg-4 col-md-4 col-sm-6">&nbsp;</div>
+    <div class="col-lg-4 col-md-4 col-sm-6 text-center">
+        <button type="button" class="btn btn-outline-primary" onclick="confirmNuevoPaciente()">
+            <span class="fa fa-plus-circle"></span> Agregar nuevo Paciente
+        </button>
+    </div>
+</div>
+
+<partial name="Partials/_ModalPaciente" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Seguimiento/Pacientes/BuscarPaciente.js"></script>
+    <script src="~/js/Views/ConfirmDialog.js"></script>
+    <script src="~/js/jquery.mask.min.js"></script>
+}
+
+

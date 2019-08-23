@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.Entities\Msn.InteropDemo.Entities.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm.Expressions\Msn.InteropDemo.Snowstorm.Expressions.csproj" />
+  </ItemGroup>
+
+</Project>

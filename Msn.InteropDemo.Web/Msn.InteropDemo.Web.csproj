@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-Msn.InteropDemo.Web-4FC93C61-5367-44EF-B18E-E257085EA1B0</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Seguimiento\Data\**" />
+    <Compile Remove="Areas\Seguimiento\Models\**" />
+    <Compile Remove="Data\**" />
+    <Content Remove="Areas\Seguimiento\Data\**" />
+    <Content Remove="Areas\Seguimiento\Models\**" />
+    <Content Remove="Data\**" />
+    <EmbeddedResource Remove="Areas\Seguimiento\Data\**" />
+    <EmbeddedResource Remove="Areas\Seguimiento\Models\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="Areas\Seguimiento\Data\**" />
+    <None Remove="Areas\Seguimiento\Models\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\Seguimiento\Views\Evolucionar\EvolucionarPaciente_OLD.cshtml" />
+    <Content Remove="Areas\Seguimiento\Views\Pacientes\Partials\_ModalProgresoVerificacion.cshtml" />
+    <Content Remove="wwwroot\js\Views\Seguimiento\Evolucionar\ModalHallazgos.js" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.Filters.Expressions" Version="2.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.AppServices.Implementation\Msn.InteropDemo.AppServices.Implementation.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.AppServices\Msn.InteropDemo.AppServices.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Data\Msn.InteropDemo.Data.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Entities\Msn.InteropDemo.Entities.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Fhir.Implementacion\Msn.InteropDemo.Fhir.Implementacion.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Fhir\Msn.InteropDemo.Fhir.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Integration\Msn.InteropDemo.Integration.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm.Implementation\Msn.InteropDemo.Snowstorm.Implementation.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Snowstorm\Msn.InteropDemo.Snowstorm.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.ViewModel\Msn.InteropDemo.ViewModel.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-solid-900.woff2" />
+  </ItemGroup>
+
+</Project>

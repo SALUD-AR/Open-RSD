@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Open-RSD</h1>
+        <p>Este es un proyecto educativo, que demuestra cómo un sistema se conecta con la Red de Salud Digital, parte de la Estrategia de Salud Digital de la República Argentina.</p>
+        <p>Open-RSD contiene las funcionalidades básicas de un Índice Maestro de Pacientes y una Historia clínica electrónica.</p>
+        <p><a class="btn btn-primary btn-lg" asp-action="BuscarPaciente" asp-controller="Pacientes" asp-area="Seguimiento">Ingresar &raquo;</a></p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Candidatos</h3>
+            <p>
+                Búsqueda de Candidatos.<br />
+                Control de duplicaciones de personas.<br />
+                Asignación de un peso a los datos coincidentes.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h3>Federación</h3>
+            <p>
+                Federación de Pacientes en el BUS de interoperabilidad.<br />
+                Busqueda en el BUS de interoerabilidad por Match y por ID de Dominio.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h3>Codificación </h3>
+            <p>
+                Integrando SNOMED CT.<br />
+                obteniendo datos de Hallazgos, Vacunas y Medicamentos directamente de un servidor de Snowstorm.
+            </p>
+        </div>
+        <div class="col-md-4 text-muted">
+            <h3>Vacunas </h3>
+            <p>
+                Envío al Registro Nominal de Vacunas<br />
+                (en desarrollo)
+            </p>
+        </div>
+        <div class="col-md-4 text-muted">
+            <h3>BUS </h3>
+            <p>
+                Integración con el BUS de Interoperablidad compartiendo contenido de la Historia Clínica Electrónica.<br />
+                (en desarrollo)
+            </p>
+        </div>
+        <div class="col-md-4 text-muted">
+            <h3>Análisis</h3>
+            <p>
+                Análisis de los datos registrados en SNOMED CT utilizando el servidor de Snowstorm para generar consultas.<br />
+                (en desarrollo)
+            </p>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+                <b>Atención:</b>
+                <br />NO debe utilizarse Open-RSD para almacenar datos reales ni en entornos de producción, es una herramienta educativa que no tiene los criterios de seguridad, confidencialidad y estabilidad necesarios para estas tareas.
+                <br />
+                Open-RSD se distribuye con la Licencia Apache 2, por lo tanto su código fuente puede re-utilizarse en otros proyectos, bajo la absoluta responsabilidad de los desarrolladores de incorporar las funcionalidades faltantes para su uso productivo.
+            </div>
+        </div>
+    </div>
+</div>

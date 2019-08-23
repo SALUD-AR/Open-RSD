@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.R4" Version="1.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Integration\Msn.InteropDemo.Integration.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Evoluciones.EvolucionDiagnosticoViewModel>
+
+    <table id="tableHallazgos" class="table table-sm table-hover table-responsive-sm">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.SctDescriptionTerm)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+        

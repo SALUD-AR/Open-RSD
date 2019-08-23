@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<input id="hallazgosSelectedConceptId" type="hidden" />
+<input id="hallazgosSelectedTerm" type="hidden" />
+
+<div class="modal fade" id="modalHallazgo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title">Hallazgos</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="input-group mb-3">
+                        <input id="textSearchHallazgos" type="text" class="form-control" placeholder="ingrese el texto a buscar" aria-label="ingrese el texto a buscar" aria-describedby="btnSearchHallazgos">
+                        <div class="input-group-append">
+                            <button onclick="buscarHallazgos()" class="btn btn-outline-primary" type="button" id="btnSearchHallazgos"><span class="fa fa-search"></span> Buscar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="hallazgosModalGridContainer" class="form-row" style="display:none">
+                </div>
+
+                <div id="hallazgosObservacionContainer" style="display:none">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="hallazgosTermSelected" class="control-label">Concepto Seleccionado</label>
+                                <input id="hallazgosTermSelected" class="form-control" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="hallazgosObservacion" class="control-label">Observación</label>
+                                <input id="hallazgosObservacion" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="searchHallazgoFooter" class="modal-footer" style="display:none;">
+                <button  onclick="doPostHallazgo()" type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

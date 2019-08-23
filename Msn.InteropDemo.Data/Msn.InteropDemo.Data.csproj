@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190721213043_Initial-Create.cs" />
+    <Compile Remove="Migrations\20190721213043_Initial-Create.Designer.cs" />
+    <Compile Remove="Migrations\20190721213330_Initial-Create.cs" />
+    <Compile Remove="Migrations\20190721213330_Initial-Create.Designer.cs" />
+    <Compile Remove="Migrations\20190723005605_add_federation_data.cs" />
+    <Compile Remove="Migrations\20190723005605_add_federation_data.Designer.cs" />
+    <Compile Remove="Migrations\20190723010211_add_federation_data.cs" />
+    <Compile Remove="Migrations\20190723010211_add_federation_data.Designer.cs" />
+    <Compile Remove="Migrations\20190802155103_add_EvoluiconPaciente.cs" />
+    <Compile Remove="Migrations\20190802155103_add_EvoluiconPaciente.Designer.cs" />
+    <Compile Remove="Migrations\20190816223536_add_url_json_files.cs" />
+    <Compile Remove="Migrations\20190816223536_add_url_json_files.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Entities\Msn.InteropDemo.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

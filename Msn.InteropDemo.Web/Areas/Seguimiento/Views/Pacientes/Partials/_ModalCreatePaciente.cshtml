@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    <div class="modal fade" id="modalCreatePaciente">
+        <form id="formModalCreate">
+
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Creación de un nuevo Paciente</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreatePrimerApellido" class="control-label">Apellido</label>
+                                    <input id="modalCreatePrimerApellido" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreatePrimerNombre" class="control-label">Nombre</label>
+                                    <input id="modalCreatePrimerNombre" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreateSexoNombre" class="control-label">Sexo</label>
+                                    <input id="modalCreateSexoNombre" class="form-control" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreateTipoDocumentoNombre" class="control-label">Tipo. Documento</label>
+                                    <input id="modalCreateTipoDocumentoNombre" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreateNroDocumento" class="control-label">Nro. Documento</label>
+                                    <input id="modalCreateNroDocumento" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="modalCreateFechaNacimiento" class="control-label">Fecha de Nacimiento</label>
+                                    <input id="modalCreateFechaNacimiento" class="form-control" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <label for="modalCreateEmail" class="control-label">Correo electrónco</label>
+                                <input id="modalCreateEmail"
+                                       class="form-control valid"
+                                       type="email"
+                                       name="modalCreateEmail" value=""
+                                       aria-describedby="Email-error"
+                                       aria-invalid="false">
+                                <span class="text-danger field-validation-error"
+                                      data-valmsg-for="modalCreateEmail"
+                                      data-valmsg-replace="true">
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button 
+                                id="btnCreatePaciente" 
+                                type="button" 
+                                class="btn btn-primary"
+                                onclick="modalCreatePacienteAccept()"
+                                @*data-dismiss="modal"*@
+                                >Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+</div>

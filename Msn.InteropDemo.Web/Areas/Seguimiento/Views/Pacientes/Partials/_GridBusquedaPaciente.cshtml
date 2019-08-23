@@ -1,0 +1,79 @@
+﻿@model Msn.InteropDemo.ViewModel.Pacientes.PacienteListViewModel
+
+
+@{
+    string css_score = "";
+}
+
+<div class="text-left mb-2">
+    <b>Pacientes similares en la base local, seleccione uno o agregue un nuevo paciente con los datos que ingresó</b>
+</div>
+
+<table class="table table-hover table-responsive-sm">
+    <thead>
+        <tr>
+            <th class="text-left">Apellido</th>
+            <th class="text-left">Nombre</th>
+            <th class="text-left">Sexo</th>
+            <th class="text-left">Tipo Doc.</th>
+            <th class="text-right">Documento</th>
+            <th class="text-center">Fecha Nac.</th>
+            <th class="text-right">Ranking</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+
+            if (item.Score <= Convert.ToDecimal(0.5))
+            {
+                css_score = "text-danger";
+            }
+            else if ((item.Score > Convert.ToDecimal(0.5)) && (item.Score < Convert.ToDecimal(0.9)))
+            {
+                css_score = "text-secondary";
+            }
+            else if (item.Score > Convert.ToDecimal(0.9))
+            {
+                css_score = "text-success";
+            }
+            <tr>
+                <td class="text-left @item.PrimerApellidoCss">
+                    @Html.DisplayFor(modelItem => item.PrimerApellido)
+                </td>
+                <td class="text-left @item.PrimerNombreCss">
+                    @Html.DisplayFor(modelItem => item.PrimerNombre)
+                </td>
+                <td class="text-left @item.SexoCss">
+                    @Html.DisplayFor(modelItem => item.SexoNombre)
+                </td>
+                <td class="text-left @item.TipoDocumentoCss">
+                    @Html.DisplayFor(modelItem => item.TipoDocumentoNombre)
+                </td>
+                <td class="text-right @item.NroDocumentoCss">
+                    @Html.DisplayFor(modelItem => item.NroDocumento)
+                </td>
+
+                <td class="text-center @item.FechaNacimientoCss">
+                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                </td>
+                <td class="text-right @css_score">
+                    <strong>
+                        @Html.DisplayFor(modelItem => item.FrienlyScore)
+                    </strong>
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-outline-primary"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Evolucionar"
+                            data-delay='{ "show": 1000, "hide": 50 }'
+                            onclick="javascript:MostarPacienteExistente(@item.Id)">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
