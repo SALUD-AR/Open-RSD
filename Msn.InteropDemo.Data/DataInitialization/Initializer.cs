@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.Data.Context;
 using Msn.InteropDemo.Entities.Activity;
@@ -32,6 +33,8 @@ namespace Msn.InteropDemo.Data.DataInitialization
         {
             try
             {
+                _dataContext.Database.Migrate();
+
                 await SeedTiposDocumentosAsync();
                 await SeedRoles();
                 await SeedDefaultAdminUser();
