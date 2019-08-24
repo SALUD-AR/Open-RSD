@@ -341,3 +341,5 @@ healthchecksdb
 /Msn.InteropDemo.Web/Logs
 /Msn.InteropDemo.Fhir.ConsoleTest/Logs
 /Dockerfile
+/Msn.InteropDemo.Web/appsettings.json
+/Msn.InteropDemo.Web/appsettings.Development.json
