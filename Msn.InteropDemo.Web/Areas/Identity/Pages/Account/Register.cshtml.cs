@@ -39,10 +39,10 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            //[Required]
-            //[EmailAddress]
-            //[Display(Name = "Email")]
-            //public string Email { get; set; }
+            [Required(ErrorMessage = "La {0} es requerida.")]
+            [EmailAddress(ErrorMessage = "Debe ingresar una {0} válida." )]
+            [Display(Name = "Casila de Correo")]
+            public string Email { get; set; }
 
             [Required(ErrorMessage = "El {0} es requerido")]
             [Display(Name = "Nombre")]
@@ -83,13 +83,14 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                 {
                     UserName = Input.UserName,
                     Nombre = Input.Nombre,
-                    Apellido = Input.Apellido
+                    Apellido = Input.Apellido,
+                    Email = Input.Email
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation($"Nueva usuario registrado:username:{user.UserName}, Apellido:{user.Apellido}, Nombre:{user.Nombre}");
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Page(

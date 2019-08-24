@@ -43,7 +43,7 @@ namespace Msn.InteropDemo.Web
             services.AddDbContext<Data.Context.DataContext>();
             services.AddIdentity<Entities.Identity.SystemUser, IdentityRole>(options =>
             {
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
 

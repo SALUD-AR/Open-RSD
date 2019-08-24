@@ -28,8 +28,9 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "La {0} es requerida.")]
+            [EmailAddress(ErrorMessage = "Debe ingresar una {0} válida.")]
+            [Display(Name = "Casilla de Correo")]
             public string Email { get; set; }
         }
 
@@ -40,9 +41,16 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    ModelState.AddModelError("Email", "No se ha encontrado un usuario con la casilla de correo ingresada.");
+                    return Page();
                 }
+
+
+                //if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                //{
+                //    // Don't reveal that the user does not exist or is not confirmed
+                //    return RedirectToPage("./ForgotPasswordConfirmation");
+                //}
 
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
