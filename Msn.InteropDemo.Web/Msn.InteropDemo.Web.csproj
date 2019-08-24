@@ -72,11 +72,4 @@
     <None Include="wwwroot\lib\fontawesome-590\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
