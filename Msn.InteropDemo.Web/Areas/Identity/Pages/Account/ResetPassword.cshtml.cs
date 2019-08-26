@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
+        private readonly ILogger<ResetPasswordModel> _logger;
         private readonly UserManager<Entities.Identity.SystemUser> _userManager;
 
-        public ResetPasswordModel(UserManager<Entities.Identity.SystemUser> userManager)
+        public ResetPasswordModel(ILogger<ResetPasswordModel> logger,
+                                  UserManager<Entities.Identity.SystemUser> userManager)
         {
+            _logger = logger;
             _userManager = userManager;
         }
 
@@ -25,18 +29,20 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Required(ErrorMessage = "El {0} es requerido")]
+            [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} caracteres y como máximo {1}.", MinimumLength = 6)]
+            [Display(Name = "Usuario")]
+            public string UserName { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "La {0} es requerida")]
+            [StringLength(50, ErrorMessage = "La {0} debe tener al menos {2} caracteres y como máximo {1}.", MinimumLength = 6)]
             [DataType(DataType.Password)]
+            [Display(Name = "Contraseña")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmar contraseña")]
+            [Compare("Password", ErrorMessage = "Las conraseñas inegresasas no coinciden.")]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
@@ -46,7 +52,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("No se ha provisto el código de verificación.");
             }
             else
             {
@@ -54,6 +60,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                 {
                     Code = code
                 };
+
                 return Page();
             }
         }
@@ -65,7 +72,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email);
+            var user = await _userManager.FindByNameAsync(Input.UserName);
             if (user == null)
             {
                 // Don't reveal that the user does not exist

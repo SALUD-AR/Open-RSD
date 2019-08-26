@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Email>
+  <subject>Open-RSD - Recuperación de Contraseña</subject>
+  <body>
+    <![CDATA[ Estimado/a $firstname$ $lastname$
+
+<p>Este correo ha sido enviado por Open-RSD de manera automática para ayudarle a recuperar su contraseña</p>
+
+<p>Puede ingresar a recuperar su contraseña: 
+<a href="$UrlAndCode$">Haciendo click Aquí</a> 
+</p>
+
+<p>En caso de que el link no funcione copie la siguiente UR y péguela en la barra de su navegador web:
+<br>
+  <b>$UrlAndCode$</b>
+</p>
+
+<p>POR FAVOR NO RESPONDA ESTE CORREO<br />
+ESTA CASILLA SE UTILIZA SOLO PARA LA GENERACION AUTOMATICA DE EMAIL DEL SISTEMA.
+</p>
+
+ ]]>
+  </body>
+  <bcc></bcc>
+</Email>

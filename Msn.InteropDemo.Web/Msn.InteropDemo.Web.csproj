@@ -47,6 +47,7 @@
     <ProjectReference Include="..\Msn.InteropDemo.AppServices.Implementation\Msn.InteropDemo.AppServices.Implementation.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.AppServices\Msn.InteropDemo.AppServices.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Communication\Msn.InteropDemo.Communication.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Data\Msn.InteropDemo.Data.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Entities\Msn.InteropDemo.Entities.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Fhir.Implementacion\Msn.InteropDemo.Fhir.Implementacion.csproj" />
@@ -78,5 +79,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

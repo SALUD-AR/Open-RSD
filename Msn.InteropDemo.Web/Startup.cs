@@ -55,25 +55,30 @@ namespace Msn.InteropDemo.Web
 
             })
                 .AddEntityFrameworkStores<Data.Context.DataContext>()
+                .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
 
             //*** DEPENDENCY INJECTIONS FOR OBJECTS ************************************************
             services.AddHttpContextAccessor();
+
             services.Configure<IntegrationServicesConfiguration>(Configuration.GetSection("IntegrationServices"));
+            services.Configure<Emailing.EmailTemplatesWebPath>(Configuration.GetSection("EmailTemplatesWebPath"));
+            services.Configure<Communication.Emailing.EmailSenderConfiguration>(Configuration.GetSection("EmailSenderConfiguration"));
+
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<IntegrationServicesConfiguration>>().Value);
+            services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<Emailing.EmailTemplatesWebPath>>().Value);
+            services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<Communication.Emailing.EmailSenderConfiguration>>().Value);
+
             services.AddTransient(typeof(Data.Context.DataContext));
-
+            services.AddTransient<Communication.Emailing.IEmailSender, Communication.Emailing.EmailSender>();
+            services.AddTransient<Emailing.IEmailGenerator, Emailing.EmailGenerator>();
             services.AddTransient<Helpers.ISelectListHelper, Helpers.SelectListHelper>();
-
             services.AddTransient<Fhir.IPatientManager, Fhir.Implementacion.PatientManager>();
-
             services.AddTransient<AppServices.Core.ICurrentContext, Security.CurrentContext>();
-
             services.AddTransient<AppServices.IPacienteAppService, AppServices.Implementation.AppServices.PacienteAppService>();
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
             services.AddTransient<AppServices.ILogActivityAppService, AppServices.Implementation.AppServices.LogActivityAppService>();
-
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
             //**************************************************************************************
 
