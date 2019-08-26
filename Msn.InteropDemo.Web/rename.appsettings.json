@@ -37,11 +37,11 @@
   "AllowedHosts": "*",
 
   "IntegrationServices": {
-    
+
     "Services": [
       {
         "ServiceName": "BUS",
-        
+
         "BaseURL": "https://testapp.hospitalitaliano.org.ar/masterfile-federacion-service/fhir",
         "EndPoints": [
           {
@@ -63,7 +63,7 @@
       },
       {
         "ServiceName": "SNOWSTORM",
-        
+
         "BaseURL": "https://snowstorm.msal.gov.ar/MAIN/",
         "EndPoints": [
           {
@@ -79,5 +79,18 @@
         ]
       }
     ]
+  },
+
+  "EmailTemplatesWebPath": {
+    "ResetPasswordUrl": "http://localhost:64610/identity/account/resetpassword",
+    "ResetPasswordTemplatePath": "Emailing\\Templates\\ResetPaswordEmail.xml"
+  },
+
+  "EmailSenderConfiguration": {
+    "serverName": "{HOST_NAME}",
+    "port": "{PORT_NUMBER}",
+    "userName": "{SENDER_ACCOUNT_NAME}",
+    "password": "{SSENDER_ACOUNT_PASSWORD}",
+    "enableSSL": "{true|false} (boolean)"
   }
 }
