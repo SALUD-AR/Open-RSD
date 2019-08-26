@@ -39,12 +39,13 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "La {0} es requerida.")]
+            [EmailAddress(ErrorMessage = "Debe ingresar una {0} válida.")]
+            [Display(Name = "Casila de Correo")]
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Teléfono")]
             public string PhoneNumber { get; set; }
         }
 
@@ -109,7 +110,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Su cuenta ha sido actualizada.";
             return RedirectToPage();
         }
 

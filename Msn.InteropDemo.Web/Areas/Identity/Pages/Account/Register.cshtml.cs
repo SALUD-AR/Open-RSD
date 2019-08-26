@@ -65,7 +65,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar contraseña")]
-            [Compare("Password", ErrorMessage = "Las conraseñas inegresasas no coinciden.")]
+            [Compare("Password", ErrorMessage = "Las contraseñas inegresasas no coinciden.")]
             public string ConfirmPassword { get; set; }
         }
 

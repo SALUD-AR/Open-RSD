@@ -7,7 +7,7 @@
 {
     <li class="nav-item">
         @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span class="fa fa-user-circle"></span> @User.Identity.Name</a>*@
-        <a href="#!" class="nav-link text-dark" title="Mi cuenta"><span class="fa fa-user-circle"></span> @User.Identity.Name</a>
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link text-dark" title="Mi cuenta"><span class="fa fa-user-circle"></span> @User.Identity.Name</a>
 
     </li>
     <li class="nav-item">
