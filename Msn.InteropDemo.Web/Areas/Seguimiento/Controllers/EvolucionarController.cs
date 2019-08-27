@@ -37,7 +37,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             return View();
         }
 
-        [Helpers.Attributes.Breadcrumb("Evolucionar Paciente")]
+        [Helpers.Attributes.Breadcrumb("Historia Clínica")]
         public ActionResult EvolucionarPaciente(int id)
         {
             var model = _evolucionAppService.GetEvolucionesHisto(id);
