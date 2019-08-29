@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Msn.InteropDemo.Web.CustomValidators;
 
 namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
 {
@@ -67,6 +68,11 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirmar contraseña")]
             [Compare("Password", ErrorMessage = "Las contraseñas inegresasas no coinciden.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "CUIT")]
+            [Required(ErrorMessage = "El CUIT es requerido")]
+            [CuitValidator(ErrorMessage = "El CUIT ingresado es inválido")]
+            public string CUIT { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -84,7 +90,8 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                     UserName = Input.UserName,
                     Nombre = Input.Nombre,
                     Apellido = Input.Apellido,
-                    Email = Input.Email
+                    Email = Input.Email,
+                    CUIT = long.Parse(Common.Utils.Helpers.Cuit.ToCleanFormat(Input.CUIT))
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

@@ -19,17 +19,24 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label asp-for="Input.Apellido"></label>
                         <input asp-for="Input.Apellido" class="form-control" />
                         <span asp-validation-for="Input.Apellido" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label asp-for="Input.Nombre"></label>
                         <input asp-for="Input.Nombre" class="form-control" />
                         <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group required">
+                        <label asp-for="Input.CUIT"></label>
+                        <input asp-for="Input.CUIT" class="form-control" placeholder="##-########-#" />
+                        <span asp-validation-for="Input.CUIT" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -57,7 +64,7 @@
                         <span asp-validation-for="Input.UserName" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="Input.Password"></label>
                         <input asp-for="Input.Password" class="form-control" />
@@ -77,9 +84,14 @@
     
 </form>
 
-
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/jquery.mask.min.js"></script>
+    <script>
+        //On document Ready
+        $(function () {
+            $('#Input_CUIT').mask('99-99999999-9');    
+        })
+    </script>
+
 }

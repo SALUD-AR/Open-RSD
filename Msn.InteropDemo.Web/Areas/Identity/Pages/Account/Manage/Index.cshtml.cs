@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Msn.InteropDemo.Web.CustomValidators;
 
 namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -47,6 +48,11 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Teléfono")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "CUIT")]
+            [Required(ErrorMessage = "El CUIT es requerido")]
+            [CuitValidator(ErrorMessage = "El CUIT ingresado es inválido")]
+            public string CUIT { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -66,7 +72,8 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                CUIT = Common.Utils.Helpers.Cuit.ToUIFormat(user.CUIT) 
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -109,6 +116,8 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            user.CUIT = long.Parse(Common.Utils.Helpers.Cuit.ToCleanFormat(Input.CUIT));
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Su cuenta ha sido actualizada.";
             return RedirectToPage();

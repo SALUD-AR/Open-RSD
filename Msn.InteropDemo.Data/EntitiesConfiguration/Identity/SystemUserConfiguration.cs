@@ -20,6 +20,9 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Identity
                 .HasMaxLength(100)
                 .IsUnicode()
                 .IsRequired();
+
+            builder.Property(p => p.CUIT)
+                .IsRequired(false);
         }
     }
 }
