@@ -66,7 +66,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.Core
         public virtual OperationResult<TKey> Save<TModel>(TModel model)
         {
             var entity = Mapper.Map<TEntity>(model);
-            return Save(entity);
+            var op = Save(entity);
+            op.Id = entity.Id;
+            return op;
         }
 
         public virtual OperationResult<TKey> Update(TEntity entity)

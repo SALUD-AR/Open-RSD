@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model List<ViewModel.Evoluciones.EvolucionHistoItemViewModel>
+
+<div class="list-group">
+    @foreach (var item in Model)
+    {
+        var strId = "btnMenuFecha" + @item.Id;
+        <button id="@strId" type="button" onclick="loadEvolucion(@item.Id)" class="list-group-item list-group-item-action btn-menu-fechas small text-center @item.Active">
+            <span>@item.FechaEvolucion</span>
+            <br />
+            <span>@item.ProfesionalApellido</span>
+        </button>
+    }
+</div>

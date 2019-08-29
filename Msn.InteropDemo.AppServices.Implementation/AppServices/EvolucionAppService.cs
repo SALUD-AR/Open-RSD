@@ -46,13 +46,13 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             {
                 throw new ArgumentException("message", nameof(term));
             }
-            
+
             IEnumerable<ViewModel.Snomed.SnomedItem> items;
 
             term = term.Trim();
             var qr = _snowstormManager.RunQuery(expression, term);
             items = Mapper.Map<IEnumerable<ViewModel.Snomed.SnomedItem>>(qr.Items);
-            
+
             items = items.OrderBy(x => x.Description.Length).ToList();
 
             return items;
@@ -74,20 +74,30 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             return items;
         }
 
+        public List<EvolucionHistoItemViewModel> GetEvolucionHistoDates(int pacienteId)
+        {
+            var items = Get<EvolucionHistoItemViewModel>(filter: x => x.PacienteId == pacienteId,
+                                                         includeProperties: "Paciente,CreatedUser")
+                                                            .OrderByDescending(x => x.CreatedDateTime)
+                                                            .ToList();
+
+            return items;
+        }
+
         public EvolucionHistoViewModel GetEvolucionesHisto(int pacienteId)
         {
             var entity = CurrentContext.DataContext.Pacientes
                             .Include(x => x.TipoDocumento)
                             .FirstOrDefault(x => x.Id == pacienteId);
 
-            if(entity == null)
+            if (entity == null)
             {
                 throw new Exception($"Paciente No encontrado ID: {pacienteId}");
             }
 
             var model = Mapper.Map<EvolucionHistoViewModel>(entity);
 
-            var  items = Get<EvolucionHistoItemViewModel>(filter: x => x.PacienteId == pacienteId,
+            var items = Get<EvolucionHistoItemViewModel>(filter: x => x.PacienteId == pacienteId,
                                                    includeProperties: "Paciente,CreatedUser")
                                                    .ToList();
 

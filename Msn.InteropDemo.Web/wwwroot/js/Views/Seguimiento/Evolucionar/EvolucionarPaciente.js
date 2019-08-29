@@ -2,14 +2,35 @@
 $(function () {
     var id = $('#evolucionId').val();
     if (id) {
+        loadEvolucionMenuList();
         loadEvolucion(id);
     } else {
         setupNuevaEvolucion();
     }
 
-
 });
 
+
+function loadEvolucionMenuList() {
+    var pacienteId = $('#PacienteId').val();
+    var container = $('#evolucionListMenuContainer');
+    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetEvolucionListMenu?pacienteId=" + pacienteId;
+
+    $.ajax({
+        url: loc,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+            container.html(data.menuItems);
+        },
+        error: function (request, status, error) {
+            console.log(request.responseText);
+            alert(request.responseText);
+        }
+    });
+
+}
 
 function loadEvolucion(id) {
     var btnSerachHallazgos = $('#btnSerachHallazgos');
@@ -180,6 +201,9 @@ function saveEvolucion() {
         data: dataToPost,
         cache: false,
         success: function (data) {
+
+            console.log(data);
+
             if (data.success) {
                 showSaveEvolucionOk(data.id);
             }
@@ -198,6 +222,7 @@ function showSaveEvolucionOk(id) {
         (accept) => {
             if (accept) {
                 $('#evolucionId').val(id);
+                loadEvolucionMenuList();
                 loadEvolucion(id);
                 //redirectToPacientes();
             }

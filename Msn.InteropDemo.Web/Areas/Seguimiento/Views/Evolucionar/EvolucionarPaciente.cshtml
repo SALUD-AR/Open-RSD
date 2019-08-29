@@ -42,16 +42,7 @@
             </div>
             <div class="card-body" style="padding-top:10px;">
                 <a href="#!" onclick="setupNuevaEvolucion()"><span class="fa fa-plus-circle mb-3"></span> Nueva consulta</a>
-                <div class="list-group">
-                    @foreach (var item in Model.Items)
-                    {
-                        var strId = "btnMenuFecha" + @item.Id;
-                    <button id="@strId" type="button" onclick="loadEvolucion(@item.Id)" class="list-group-item list-group-item-action btn-menu-fechas small text-center">
-                        <span>@item.FechaEvolucion</span>
-                        <br />
-                        <span>@item.ProfesionalApellido</span>
-                    </button>
-                    }
+                <div id="evolucionListMenuContainer">
                 </div>
             </div>
         </div>

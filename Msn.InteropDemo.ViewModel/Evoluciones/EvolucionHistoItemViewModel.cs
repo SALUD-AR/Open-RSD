@@ -12,5 +12,9 @@ namespace Msn.InteropDemo.ViewModel.Evoluciones
 
         public int PacienteId { get; set; }
         public string ProfesionalApellido { get; set; }
+
+        public DateTime CreatedDateTime { get; set; }
+
+        public string Active { get; set; }
     }
 }

@@ -50,7 +50,38 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             return View(model);
         }
 
+        public JsonResult GetEvolucionListMenu(int pacienteId)
+        {
+            try
+            {
+                var model = _evolucionAppService.GetEvolucionHistoDates(pacienteId);
+                if(model.Any())
+                {
+                    model[0].Active = "active";
+                }
+                var menuItems = this.RenderViewToStringAsync("Partials/_EvolucionListMenu", model).Result;
+                return new JsonResult(new { menuItems }) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
 
+        public JsonResult GetEvolucion(int id)
+        {
+            try
+            {
+                var model = _evolucionAppService.GetById(id);
+                return new JsonResult(new { Evolucion = model }) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
 
         public JsonResult SearchByExpressionTerm(string expression, string term)
         {
@@ -87,20 +118,6 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                 var items = _evolucionAppService.SearchSnowstormHallazgos(term);
                 var table = this.RenderViewToStringAsync("Partials/_GridBusquedaHallazgos", items).Result;
                 return new JsonResult(new { table }) { StatusCode = 200 };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error obteniendo datos");
-                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
-            }
-        }
-
-        public JsonResult GetEvolucion(int id)
-        {
-            try
-            {
-                var model = _evolucionAppService.GetById(id);
-                return new JsonResult(new { Evolucion = model }) { StatusCode = 200 };
             }
             catch (Exception ex)
             {
