@@ -59,6 +59,11 @@ namespace Msn.InteropDemo.Web
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
 
+            //*** Set Local DomainName **********************************************
+            var domainName = Configuration.GetValue<string>("DomainName");
+            Common.Constants.DomainName.LocalDomain.SetValue(domainName);
+            //***********************************************************************
+
             //*** DEPENDENCY INJECTIONS FOR OBJECTS ************************************************
             services.AddHttpContextAccessor();
 

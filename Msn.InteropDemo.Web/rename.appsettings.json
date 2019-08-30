@@ -36,6 +36,8 @@
 
   "AllowedHosts": "*",
 
+  "DomainName": "{URL_DEL_DOMINIO}",
+
   "IntegrationServices": {
 
     "Services": [
