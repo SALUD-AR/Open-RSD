@@ -163,14 +163,16 @@ function mapToCie10(id) {
 
             if (data.success) {
                 var nexElement = '<span class="cie10MappedText text-success">' + data.item.subcategoriaNombre + '</span>';
+
                 var str = 'CIE10: ' + data.item.subcategoriaId + ' - ';
                 container.hide('slow', function () {
                     container.attr('id', data.item.subcategoriaId);
                     container.text(str);
                     container.addClass('cie10MappedId text-success');
-                    $(nexElement).insertAfter(container);
                     container.show('slow');
+                    $(nexElement).insertAfter(container).hide().show('slow');
                 });
+
             } else {
                 container.text('CIE10: No Encontrado');
                 container.addClass('text-danger');

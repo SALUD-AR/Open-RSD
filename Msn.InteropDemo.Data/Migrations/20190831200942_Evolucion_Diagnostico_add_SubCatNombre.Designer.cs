@@ -9,8 +9,8 @@ using Msn.InteropDemo.Data.Context;
 namespace Msn.InteropDemo.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190830161736_add_Cie10")]
-    partial class add_Cie10
+    [Migration("20190831200942_Evolucion_Diagnostico_add_SubCatNombre")]
+    partial class Evolucion_Diagnostico_add_SubCatNombre
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -279,6 +279,15 @@ namespace Msn.InteropDemo.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Cie10SubcategoriaId")
+                        .HasColumnType("char(4)")
+                        .HasMaxLength(4)
+                        .IsUnicode(false);
+
+                    b.Property<string>("Cie10SubcategoriaNombre")
+                        .HasMaxLength(300)
+                        .IsUnicode(true);
+
                     b.Property<int>("EvolucionId");
 
                     b.Property<decimal?>("SctConceptId")
@@ -291,6 +300,8 @@ namespace Msn.InteropDemo.Data.Migrations
                         .IsUnicode(true);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Cie10SubcategoriaId");
 
                     b.HasIndex("EvolucionId");
 

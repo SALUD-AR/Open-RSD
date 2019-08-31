@@ -6,6 +6,14 @@ namespace Msn.InteropDemo.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "Cie10SubcategoriaId",
+                table: "EvolucionDiagnostico",
+                type: "char(4)",
+                unicode: false,
+                maxLength: 4,
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Cie10",
                 columns: table => new
@@ -18,12 +26,25 @@ namespace Msn.InteropDemo.Data.Migrations
                 {
                     table.PrimaryKey("PK_Cie10", x => x.SubcategoriaId);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EvolucionDiagnostico_Cie10SubcategoriaId",
+                table: "EvolucionDiagnostico",
+                column: "Cie10SubcategoriaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Cie10");
+
+            migrationBuilder.DropIndex(
+                name: "IX_EvolucionDiagnostico_Cie10SubcategoriaId",
+                table: "EvolucionDiagnostico");
+
+            migrationBuilder.DropColumn(
+                name: "Cie10SubcategoriaId",
+                table: "EvolucionDiagnostico");
         }
     }
 }

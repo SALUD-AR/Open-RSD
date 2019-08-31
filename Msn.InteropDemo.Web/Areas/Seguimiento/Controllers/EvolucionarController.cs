@@ -152,6 +152,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public JsonResult SaveEvolucion(ViewModel.Evoluciones.EvolucionViewModel model)
         {
             try

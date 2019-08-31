@@ -176,18 +176,13 @@ function saveEvolucion() {
         var item = {
             SctConceptId: this.id,
             SctDescriptionTerm: strTerm,
-            Cie10SubcategoriId: cie10Id,
-            Cie10SubcategoriText: cie10Text
+            Cie10SubcategoriaId: cie10Id,
+            Cie10SubcategoriaNombre: cie10Text
         };
-
-        console.log(item);
 
         dataToPost.Diagnosticos.push(item);
     });
-
-    //PARA TEST
-    return;
-
+  
     //Table Vacunas
     $('#tableVacunas > tbody > tr').each(function () {
         var item = {

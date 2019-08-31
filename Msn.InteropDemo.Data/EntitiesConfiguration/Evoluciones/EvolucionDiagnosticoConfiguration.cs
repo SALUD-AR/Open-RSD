@@ -16,7 +16,20 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Pacientes
                 .IsUnicode()
                 .IsRequired();
 
+            builder.Property(x => x.Cie10SubcategoriaId)
+               .HasMaxLength(4)
+               .HasColumnType("char(4)")
+               .IsRequired(false)
+               .IsUnicode(false);
+
+            builder.Property(x => x.Cie10SubcategoriaNombre)
+              .HasMaxLength(300)
+              .IsRequired(false)
+              .IsUnicode();
+
             builder.HasIndex(x => x.SctConceptId);
+
+            builder.HasIndex(x => x.Cie10SubcategoriaId);
         }
     }
 }
