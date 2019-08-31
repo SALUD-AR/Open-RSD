@@ -161,13 +161,32 @@ function saveEvolucion() {
 
     //Table Hallazgos
     $('#tableHallazgos > tbody > tr').each(function () {
+
+        var strTerm = $(this).find('div.sctTerm').text();
+        var cie10MappedId = $(this).find('span.cie10MappedId');
+        var cie10MappedText = $(this).find('span.cie10MappedText');
+        var cie10Id = null;
+        var cie10Text = null;
+
+        if (cie10MappedId.length) {
+            cie10Id = cie10MappedId.attr('id');
+            cie10Text = cie10MappedText.text();
+        } 
+
         var item = {
             SctConceptId: this.id,
-            SctDescriptionTerm: this.cells[0].innerHTML
+            SctDescriptionTerm: strTerm,
+            Cie10SubcategoriId: cie10Id,
+            Cie10SubcategoriText: cie10Text
         };
+
+        console.log(item);
 
         dataToPost.Diagnosticos.push(item);
     });
+
+    //PARA TEST
+    return;
 
     //Table Vacunas
     $('#tableVacunas > tbody > tr').each(function () {

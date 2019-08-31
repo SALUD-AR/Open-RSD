@@ -70,14 +70,6 @@ namespace Msn.InteropDemo.Data.Context
 
         public DbSet<Entities.Evoluciones.EvolucionVacunaAplicacion> EvolucionVacunaAplicaciones { get; set; }
 
-
-
-
-
-
-
-
-
-
+        public DbSet<Entities.Codificacion.Cie10> Cie10 { get; set; }
     }
 }

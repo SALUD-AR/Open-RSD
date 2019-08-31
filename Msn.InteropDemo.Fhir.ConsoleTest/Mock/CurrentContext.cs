@@ -22,7 +22,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest.Mock
         public void RegisterActivityLog(ActivityLog activityLog)
         {
             activityLog.SessionUserId = SessionUserId;
-            activityLog.ContextUserId = GetCurrentUserId;
+            activityLog.CreatedUserId = GetCurrentUserId;
 
             DataContext.ActivityLogs.Add(activityLog);
             DataContext.SaveChanges();

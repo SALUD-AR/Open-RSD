@@ -16,12 +16,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
 
         static void Main(string[] args)
         {
-            //CreatePatient();
-            //ConfigureLogger();
-            //var bunble = GetPatient();
-            //ShowPatients();
-            //ShowPatient("1982708");
-            //Log.CloseAndFlush();
+          
             try
             {
                 RegisteServices();
@@ -31,6 +26,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
             {
                 Console.WriteLine($"Error al registrar servicios:\n{ex.ToString()}");
                 Console.ReadKey();
+                return;
             }
 
             try
@@ -45,8 +41,14 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
                 //                           new DateTime(1964, 6, 30));
 
                 //TestExpression();
+                //CreatePatient();
+                //ConfigureLogger();
+                //var bunble = GetPatient();
+                //ShowPatients();
+                //ShowPatient("1982708");
+                //TestExpressionAppService();
 
-                TestExpressionAppService();
+                TestCie10Mapping();
 
             }
             catch (Exception ex)
@@ -56,6 +58,14 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
 
             Log.CloseAndFlush();
             DisposeServices();
+        }
+
+
+        private static void TestCie10Mapping()
+        {
+            var service = _serviceProvider.GetService<AppServices.ICie10AppService>();
+            var resp = service.GetCie10MappedItems("94599006");
+
         }
 
        private static void RegisteServices()
@@ -70,8 +80,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
 
             IServiceCollection services = new ServiceCollection();
 
-            services.AddDbContext<Data.Context.DataContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<Data.Context.DataContext>();
 
             services.AddLogging(config => config.AddSerilog());
 
@@ -82,6 +91,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
             services.AddTransient<IPatientManager, Implementacion.PatientManager>();
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
+            services.AddTransient<AppServices.ICie10AppService, AppServices.Implementation.AppServices.Cie10AppService>();
 
 
             _serviceProvider = services.BuildServiceProvider();
