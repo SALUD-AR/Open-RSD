@@ -42,6 +42,7 @@ function loadEvolucion(id) {
     var btnMenuFecha = $('#btnMenuFecha' + id);
     var currentFechaConsultaText = $('#currentFechaConsultaText');
     var currentConsultaProfesionalFullname = $('#currentConsultaProfesionalFullname');
+    var textAreaObservacion = $('#textAreaObservacion');
 
     $('.btn-menu-fechas').each(function () {
         $(this).removeClass('active');
@@ -53,6 +54,7 @@ function loadEvolucion(id) {
     btnSearchMedicamentos.css('display', 'none');
     btnSaveEvolucion.css('display', 'none');
     nuevaConsultaTitulo.hide('slow');
+    textAreaObservacion.prop('readonly', true);
 
     var loc = window.rootUrl + "Seguimiento/Evolucionar/GetEvolucion/" + id;
 
@@ -77,9 +79,31 @@ function loadEvolucion(id) {
             $("#tableHallazgos > tbody > tr").remove();
 
             $.each(data.evolucion.diagnosticos, function (i, item) {
+
                 trHTML += '<tr id="' + item.sctConceptId + '" class="tr-evolucion">';
-                trHTML += '<td>' + item.sctDescriptionTerm + '</td>';
-                trHTML += '<td></td></tr>';
+
+                if (!item.cie10SubcategoriaId) {
+                //trHTML += '<td>' + item.sctDescriptionTerm + '</td>';
+                //trHTML += '<td></td></tr>';
+                trHTML += '<td>' +
+                    '<div class="sctTerm">' + item.sctDescriptionTerm + '</div>' +
+                    '<div class="text-muted small">SctId: ' + item.sctConceptId + ' --> ' +
+                    '<span>(No mapeado)</span>' +
+                    '</div> ' +
+                    '</td>';
+                }
+            else {
+                trHTML += '<td>' +
+                    '<div class="sctTerm">' + item.sctDescriptionTerm + '</div>' +
+                    '<div class="text-muted small">SctId: ' + item.sctConceptId +
+                    ' --> <span class="text-success">CIE10: ' + item.cie10SubcategoriaId + ' - </span>' +
+                    '<span class="text-success">' + item.cie10SubcategoriaNombre + '</span>' +
+                    '</div>' +
+                    '</td>';
+            }
+
+                //trHTML += '<td>' + item.sctDescriptionTerm + '</td>';
+                //trHTML += '<td></td></tr>';
             });
 
             $('#tableHallazgos').append(trHTML);
@@ -121,23 +145,25 @@ function setupNuevaEvolucion() {
     var btnSearchVacunas = $('#btnSearchVacunas');
     var btnSearchMedicamentos = $('#btnSearchMedicamentos');
     var btnSaveEvolucion = $('#btnSaveEvolucion');
-
     var currentConsultaFecha = $('#currentConsultaFecha');
     var nuevaConsultaTitulo = $('#nuevaConsultaTitulo');
+    var textAreaObservacion = $('#textAreaObservacion');
     
     currentConsultaFecha.hide('slow');
     nuevaConsultaTitulo.show('slow');
-
     btnSerachHallazgos.show('slow');
     btnSearchVacunas.show('slow');
     btnSearchMedicamentos.show('slow');
     btnSaveEvolucion.show('slow');
+    textAreaObservacion.prop('readonly', false);
+    
 
+
+    textAreaObservacion.val('');
     $('#evolucionId').val('');
     $("#tableHallazgos > tbody > tr").remove();
     $("#tableMedicamentos > tbody > tr").remove();
     $("#tableVacunas > tbody > tr").remove();
-    $('#textAreaObservacion').val('');
 
     $('.btn-menu-fechas').each(function () {
         $(this).removeClass('active');
