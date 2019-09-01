@@ -55,8 +55,10 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             public string CUIT { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(bool mustCongifAccount = false)
         {
+            ViewData.Add("MustCongifAccount", mustCongifAccount);
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -120,7 +122,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Su cuenta ha sido actualizada.";
-            return RedirectToPage();
+            return RedirectToPage(new { mustCongifAccount = false });
         }
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()

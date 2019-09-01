@@ -6,7 +6,14 @@
 }
 
 <h4>@ViewData["Title"]</h4>
+
+@if ((bool)ViewData["MustCongifAccount"])
+{
+    <partial name="_MustConfigAccount" />
+}
+
 <partial name="_StatusMessage" for="StatusMessage" />
+
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post">
