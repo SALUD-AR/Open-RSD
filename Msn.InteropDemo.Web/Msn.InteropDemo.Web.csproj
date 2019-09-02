@@ -81,6 +81,13 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <None Update="Emailing\Templates\ResetPaswordEmail.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
