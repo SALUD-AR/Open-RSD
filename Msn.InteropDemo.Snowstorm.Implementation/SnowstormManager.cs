@@ -120,23 +120,24 @@ namespace Msn.InteropDemo.Snowstorm.Implementation
         /// <summary>
         /// Realiza un Query de un determinado Refset
         /// </summary>
-        /// <param name="conceptId">El ConcepId del Refset en el cual se busca</param>
+        /// <param name="refsetId">El ConcepId del Refset en el cual se busca</param>
         /// <param name="term">Termino por el cual se filtran los datos obtenidos</param>
         /// <returns></returns>
-        public RefsetQueryResponse RunQueryRefset(string conceptId, string term)
+        public RefsetQueryResponse RunQueryRefset(string refsetId, string term)
         {
-            if (string.IsNullOrWhiteSpace(conceptId))
+            if (string.IsNullOrWhiteSpace(refsetId))
             {
-                throw new ArgumentException("message", nameof(conceptId));
+                throw new ArgumentException("message", nameof(refsetId));
             }
             if (string.IsNullOrWhiteSpace(term))
             {
                 throw new ArgumentException("message", nameof(term));
             }
             
-            var query = $"referenceSet={conceptId}&activeFilter=true&offset={0}&limit={50}";
+            var query = $"referenceSet={refsetId}&activeFilter=true&offset={0}&limit={50}";
             var serviceConfig = _integrationServicesConfiguration.GetConfigurationService(IntegrationServicesConfiguration.ConfigurationServicesName.SNOWSTORM);
             var endpoint = serviceConfig.GetEndPoint(IntegrationService.ConfigurationEndPointName.SNOWSTORM_REFSET_MEMBERS);
+            var urlFriendly = $"{endpoint.FriendlyURL}?{query}";
             var url = $"{endpoint.URL}?{query}";
 
             var client = new HttpConsumer.SnowstormRequest(Expressions.Constants.HeaderDefault.Headers);
@@ -146,7 +147,9 @@ namespace Msn.InteropDemo.Snowstorm.Implementation
 
             var activityLog = new ActivityLog
             {
-                ActivityRequest = $"{url}",
+                RequestIsURL = true,
+                ActivityRequest = url,
+                ActivityRequestUI = urlFriendly,
                 ActivityTypeDescriptorId = (int)Entities.Activity.ActivityType.SNOWSTORM_FIND_CONCEPTS,
                 ActivityResponse = $"Conceptos obtenidos Limite:{ret.Limit} sobre un Total de:{ret.Total}"
             };
@@ -155,5 +158,40 @@ namespace Msn.InteropDemo.Snowstorm.Implementation
 
             return ret;
         }
+
+
+        public RefsetQueryCie10MapResponse RunQueryCie10MapRefset(string sctConceptId)
+        {
+            if (string.IsNullOrWhiteSpace(sctConceptId))
+            {
+                throw new ArgumentException("message", nameof(sctConceptId));
+            }
+
+            var referenceSetId = "447562003"; //CIE10 Mapeo de Snowmed a CIE10.
+
+            var query = $"referenceSet={referenceSetId}&referencedComponentId={sctConceptId}&active=true&offset={0}&limit={50}";
+            var serviceConfig = _integrationServicesConfiguration.GetConfigurationService(IntegrationServicesConfiguration.ConfigurationServicesName.SNOWSTORM);
+            var endpoint = serviceConfig.GetEndPoint(IntegrationService.ConfigurationEndPointName.SNOWSTORM_REFSET_MEMBERS);
+
+            var urlFriendly = $"{endpoint.FriendlyURL}?{query}";
+            var url = $"{endpoint.URL}?{query}";
+
+            var client = new HttpConsumer.SnowstormRequest(Expressions.Constants.HeaderDefault.Headers);
+            var ret = client.Get<RefsetQueryCie10MapResponse>(url);
+
+            var activityLog = new ActivityLog
+            {
+                RequestIsURL = true,
+                ActivityRequest = url,
+                ActivityRequestUI = urlFriendly,
+                ActivityTypeDescriptorId = (int)Entities.Activity.ActivityType.SNOWSTORM_FIND_CONCEPTS,
+                ActivityResponse = $"Buesqueda Mapeo CIE10. Conceptos obtenidos Limite:{ret.Limit} sobre un Total de:{ret.Total}"
+            };
+
+            _currentContext.RegisterActivityLog(activityLog);
+
+            return ret;
+        }
+
     }
 }

@@ -12,5 +12,7 @@ namespace Msn.InteropDemo.Entities.Identity
 
         public string Apellido { get; set; }
 
+        public long? CUIT { get; set; }
+
     }
 }

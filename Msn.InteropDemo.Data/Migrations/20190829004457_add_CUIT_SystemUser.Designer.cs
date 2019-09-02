@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Msn.InteropDemo.Data.Context;
 
 namespace Msn.InteropDemo.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190829004457_add_CUIT_SystemUser")]
+    partial class add_CUIT_SystemUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,28 +211,6 @@ namespace Msn.InteropDemo.Data.Migrations
                     b.ToTable("ActivityTypeDescriptor");
                 });
 
-            modelBuilder.Entity("Msn.InteropDemo.Entities.Codificacion.Cie10", b =>
-                {
-                    b.Property<string>("SubcategoriaId")
-                        .HasColumnType("char(4)")
-                        .HasMaxLength(4)
-                        .IsUnicode(false);
-
-                    b.Property<string>("CategoriaNombre")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .IsUnicode(true);
-
-                    b.Property<string>("SubcategoriaNombre")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .IsUnicode(true);
-
-                    b.HasKey("SubcategoriaId");
-
-                    b.ToTable("Cie10");
-                });
-
             modelBuilder.Entity("Msn.InteropDemo.Entities.Evoluciones.Evolucion", b =>
                 {
                     b.Property<int>("Id")
@@ -277,15 +257,6 @@ namespace Msn.InteropDemo.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Cie10SubcategoriaId")
-                        .HasColumnType("char(4)")
-                        .HasMaxLength(4)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Cie10SubcategoriaNombre")
-                        .HasMaxLength(300)
-                        .IsUnicode(true);
-
                     b.Property<int>("EvolucionId");
 
                     b.Property<decimal?>("SctConceptId")
@@ -298,8 +269,6 @@ namespace Msn.InteropDemo.Data.Migrations
                         .IsUnicode(true);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Cie10SubcategoriaId");
 
                     b.HasIndex("EvolucionId");
 

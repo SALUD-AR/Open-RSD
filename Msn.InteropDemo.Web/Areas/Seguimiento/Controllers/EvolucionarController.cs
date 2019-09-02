@@ -15,17 +15,20 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
     {
         private readonly IPacienteAppService _pacienteAppService;
         private readonly IEvolucionAppService _evolucionAppService;
+        private readonly ICie10AppService _cie10AppService;
         private readonly ISelectListHelper _selectListHelper;
         private readonly ILogger<EvolucionarController> _logger;
 
         public EvolucionarController(IPacienteAppService pacienteAppService, 
                                      IEvolucionAppService evolucionAppService,
+                                     ICie10AppService cie10AppService,
                                      ISelectListHelper selectListHelper,
                                      ILogger<EvolucionarController> logger
             )
         {
             _pacienteAppService = pacienteAppService;
             _evolucionAppService = evolucionAppService;
+            _cie10AppService = cie10AppService;
             _selectListHelper = selectListHelper;
             _logger = logger;
         }
@@ -126,7 +129,30 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             }
         }
 
+        public JsonResult GetMapeoCie10(string conceptId)
+        {
+            try
+            {
+                var lstitems = _cie10AppService.GetCie10MappedItems(conceptId);
+
+                //TODO: Modificar con la implementacion del modal para seleccion multiple
+                if(lstitems.Any())
+                {
+                    var item = lstitems.ToList()[0];
+                    return new JsonResult(new { success = true,  item }) { StatusCode = 200 };
+                }
+
+                return new JsonResult(new { success = false }) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public JsonResult SaveEvolucion(ViewModel.Evoluciones.EvolucionViewModel model)
         {
             try

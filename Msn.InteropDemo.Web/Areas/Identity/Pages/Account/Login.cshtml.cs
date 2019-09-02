@@ -15,11 +15,15 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly UserManager<Entities.Identity.SystemUser> _userManager;
         private readonly SignInManager<Entities.Identity.SystemUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Entities.Identity.SystemUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(UserManager<Entities.Identity.SystemUser> userManager,
+                          SignInManager<Entities.Identity.SystemUser> signInManager,
+                          ILogger<LoginModel> logger)
         {
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -77,9 +81,22 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var sysUser = _userManager.FindByNameAsync(Input.UserName).Result;
+                    if (sysUser != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(sysUser.Email) || !sysUser.CUIT.HasValue)
+                        {
+                            return RedirectToPage("Manage/Index", new { mustCongifAccount = true });
+                        }
+                    }
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
+
+                
+
+
                 //if (result.RequiresTwoFactor)
                 //{
                 //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

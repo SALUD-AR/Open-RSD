@@ -1,15 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using Hl7.Fhir.Rest;
+﻿using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
+using Msn.InteropDemo.AppServices.Core;
+using Msn.InteropDemo.Entities.Activity;
+using Msn.InteropDemo.Fhir.Model.Response;
 using Msn.InteropDemo.Integration.Configuration;
 using Newtonsoft.Json.Linq;
-using Msn.InteropDemo.Fhir.Model.Response;
-using Msn.InteropDemo.AppServices.Core;
-using Msn.InteropDemo.ViewModel.Activity;
-using Msn.InteropDemo.Entities.Activity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Msn.InteropDemo.Fhir.Implementacion
 {
@@ -70,9 +69,9 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             };
 
             var serviceUrl = _integrationServicesConfiguration.GetConfigurationService(IntegrationServicesConfiguration.ConfigurationServicesName.BUS);
-            var patientCreateUrl = serviceUrl.GetEndPoint(IntegrationService.ConfigurationEndPointName.PATIENT_POST_CREATE);
+            //var patientCreateUrl = serviceUrl.GetEndPoint(IntegrationService.ConfigurationEndPointName.PATIENT_POST_CREATE);
 
-            var client = new FhirClient(patientCreateUrl.URL)
+            var client = new FhirClient(serviceUrl.BaseURL)
             {
                 PreferredFormat = ResourceFormat.Json
             };
@@ -145,6 +144,12 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                                           request.FechaNacimiento);
 
             return bundle.Total > 0;
+        }
+
+        public bool ExistsPatient(Common.Constants.DomainName system, string value)
+        {
+            var bundle = GetPatientByIdentifier(system.Value, value);
+            return bundle.Total.HasValue && (bundle.Total > 0);
         }
 
         public Hl7.Fhir.Model.Bundle GetPatientsByMatch(int dni,
@@ -258,41 +263,6 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             return ret;
         }
 
-        private void OnAfterResponseFhirServer(object sender, AfterResponseEventArgs e)
-        {
-            if (e.Body != null)
-            {
-                var responseBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
-
-                //Prettify !!!
-                responseBody = JToken.Parse(responseBody).ToString();
-
-                _logger.LogInformation($"Received response with s {e.RawResponse.StatusCode}");
-                _logger.LogInformation($"Received response with body: {responseBody }");
-            }
-        }
-
-        private void OnBeforeRequestFhirServer(object sender, BeforeRequestEventArgs e)
-        {
-            if (e.Body != null)
-            {
-                var requestAdderss = e.RawRequest.Address.ToString();
-                var requestBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
-
-                //Prettify !!!
-                requestBody = JToken.Parse(requestBody).ToString();
-
-                _logger.LogInformation($"Send Request Address:{requestAdderss}");
-                _logger.LogInformation($"Send Request Body:{requestBody}");
-            }
-        }
-
-        public bool ExistsPatient(Common.Constants.DomainName system, string value)
-        {
-            var bundle = GetPatientByIdentifier(system.Value, value);
-            return bundle.Total.HasValue && (bundle.Total > 0);
-        }
-
         public Hl7.Fhir.Model.Bundle GetPatientByIdentifier(Common.Constants.DomainName system, string value)
         {
             return GetPatientByIdentifier(system.Value, value);
@@ -386,6 +356,33 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             return ret;
         }
 
+        private void OnAfterResponseFhirServer(object sender, AfterResponseEventArgs e)
+        {
+            if (e.Body != null)
+            {
+                var responseBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
 
+                //Prettify !!!
+                responseBody = JToken.Parse(responseBody).ToString();
+
+                _logger.LogInformation($"Received response with s {e.RawResponse.StatusCode}");
+                _logger.LogInformation($"Received response with body: {responseBody }");
+            }
+        }
+
+        private void OnBeforeRequestFhirServer(object sender, BeforeRequestEventArgs e)
+        {
+            if (e.Body != null)
+            {
+                var requestAdderss = e.RawRequest.Address.ToString();
+                var requestBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
+
+                //Prettify !!!
+                requestBody = JToken.Parse(requestBody).ToString();
+
+                _logger.LogInformation($"Send Request Address:{requestAdderss}");
+                _logger.LogInformation($"Send Request Body:{requestBody}");
+            }
+        }
     }
 }

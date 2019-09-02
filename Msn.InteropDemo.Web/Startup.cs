@@ -59,6 +59,11 @@ namespace Msn.InteropDemo.Web
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
 
+            //*** Set Local DomainName **********************************************
+            var domainName = Configuration.GetValue<string>("DomainName");
+            Common.Constants.DomainName.LocalDomain.SetValue(domainName);
+            //***********************************************************************
+
             //*** DEPENDENCY INJECTIONS FOR OBJECTS ************************************************
             services.AddHttpContextAccessor();
 
@@ -78,6 +83,7 @@ namespace Msn.InteropDemo.Web
             services.AddTransient<AppServices.Core.ICurrentContext, Security.CurrentContext>();
             services.AddTransient<AppServices.IPacienteAppService, AppServices.Implementation.AppServices.PacienteAppService>();
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
+            services.AddTransient<AppServices.ICie10AppService, AppServices.Implementation.AppServices.Cie10AppService>();
             services.AddTransient<AppServices.ILogActivityAppService, AppServices.Implementation.AppServices.LogActivityAppService>();
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
             //**************************************************************************************

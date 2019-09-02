@@ -12,5 +12,9 @@ namespace Msn.InteropDemo.ViewModel.Evoluciones
         public decimal? SctConceptId { get; set; }
 
         public string SctDescriptionTerm { get; set; }
+
+        public string Cie10SubcategoriaId { get; set; }
+
+        public string Cie10SubcategoriaNombre { get; set; }
     }
 }

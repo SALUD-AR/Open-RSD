@@ -7,7 +7,7 @@ namespace Msn.InteropDemo.Snowstorm
     {
         QueryResponse RunQuery(Expressions.ExpresionBuilders.Base.BaseExpBuilder builder);
         QueryResponse RunQuery(string expression, string term);
-
-        RefsetQueryResponse RunQueryRefset(string conceptId, string term);
+        RefsetQueryCie10MapResponse RunQueryCie10MapRefset(string sctConceptId);
+        RefsetQueryResponse RunQueryRefset(string refsetId, string term);
     }
 }
