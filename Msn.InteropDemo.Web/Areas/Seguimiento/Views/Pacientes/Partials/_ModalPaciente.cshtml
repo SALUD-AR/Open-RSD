@@ -16,20 +16,16 @@
             <div class="modal-body">
                 <div class="form-row form-inline mb-3" style="border-bottom:1px; border-bottom-color:rgb(222, 226, 230); border-bottom-style:solid; padding-bottom:15px;">
                         <div class="col-md-4">
-                            <div id="progressPacienteLocalRegistrado" style="display:none;">
-                                <span class="text-primary fa fa-database"></span> Paciente ya registrado en la BBDD local <span class="text-success fas fa-check"></span>
+                            <div id="progressPacienteLocal" style="display:none;">
+                                <span class="text-primary fa fa-database"></span><span id="progressPacienteLocalText"></span><span id="progressPacienteLocalCheck" class="text-success fas fa-check"></span>
                             </div>
-                            <div id="progressPacienteLocalRegistradoNuevo" style="display:none;">
-                                <span class="text-primary fa fa-database small"></span> Paciente creado exitosamente en la BBDD local<span class="text-success fas fa-check"></span>
-                            </div>
-
-                        </div>
+s                        </div>
                         <div class="col-md-4">
                             <div id="progressVerificandoExistenciaEnElBUS" style="display:none;">
                                 <span class="text-primary fa fa-network-wired"></span> Verificando si el Paciente está Federado <span id="spinVerificaExistenciaBus" class="fas fa-spinner fa-spin"></span>
                             </div>
                             <div id="progressPacienteYaFederado" style="display:none;">
-                                <span class="text-primary fa fa-user-check"></span> Paciente ya Federado por este Dominio <span class="text-success fas fa-check"></span>
+                                <span class="text-primary far fa-smile-beam"></span> Paciente ya Federado por este Dominio
                             </div>
                             <div id="progressPacienteNoFederado" style="display:none;">
                                 <span class="text-primary far fa-frown"></span> Paciente No Federado por este Dominio

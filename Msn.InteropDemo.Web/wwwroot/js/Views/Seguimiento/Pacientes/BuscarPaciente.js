@@ -54,11 +54,13 @@ function doPost() {
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-/// MUESTRA EL MODAL Y EJECUTA LAS OPEACIONES DE BUSQUEDA DE PACIENTE ////////////////
+/// MUESTRA EL MODAL Y EJECUTA LAS OPEACIONES DE FEDERACION DE PACIENTE ////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-function MostarPacienteExistente(id) {
-    var progressPacienteLocalRegistrado = $('#progressPacienteLocalRegistrado');
-    var progressPacienteLocalRegistradoNuevo = $('#progressPacienteLocalRegistradoNuevo');
+function MostarPaciente(id, preExistenteEnDB = false) {
+    var progressPacienteLocal = $('#progressPacienteLocal');
+    var progressPacienteLocalText = $('#progressPacienteLocalText');
+    var progressPacienteLocalCheck = $('#progressPacienteLocalCheck');
+    
     var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
     
     var progressPacienteYaFederado = $('#progressPacienteYaFederado');
@@ -96,8 +98,16 @@ function MostarPacienteExistente(id) {
         }
     });
 
-    progressPacienteLocalRegistrado.show();
-    progressPacienteLocalRegistradoNuevo.css('display', 'none');
+    if (preExistenteEnDB) {
+        progressPacienteLocalText.text(' Paciente ya registrado en la BBDD local ');
+        progressPacienteLocalCheck.css('display', 'none');
+    } else {
+        progressPacienteLocalText.text(' Creado exitosamente en la BBDD local ');
+        progressPacienteLocalCheck.show();
+    }
+
+    progressPacienteLocal.show();
+    //progressPacienteLocalRegistradoNuevo.css('display', 'none');
     progressAltaPacienteBUS.css('display', 'none');
     progressVerificandoExistenciaEnElBUS.css('display', 'none');
     progressAltaPacienteBUSFinalizada.css('display', 'none');
@@ -126,6 +136,7 @@ function MostarPacienteExistente(id) {
                 });
 
                 progressAltaPacienteBUS.delay(2000).fadeOut('slow', () => {
+                    //SI LA FEDERACION FUE EXITOSA
                     if (federaOk) {
                         progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
                             btnEvolucionar.fadeIn('slow');
@@ -292,91 +303,13 @@ function confirmNuevoPaciente() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-/// SE MUESTRA EL MODAL QUE REALIZA LAS VERIFICACIONES Y FEDERA EL PACIENTE SI ES NECESARIO ///
+/// REGISTRA EL NUEVO PACIENTE Y LO MUESTRA                                                 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////
 function MostarPacienteNuevo() {
     //1. Registrar el paciente en la DB Local
-    //2. Registrar el paciente en la DB Local
-
-    var progressPacienteLocalRegistradoNuevo = $('#progressPacienteLocalRegistradoNuevo');
-    var progressPacienteLocalRegistrado = $('#progressPacienteLocalRegistrado');
-    var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
-    var progressAltaPacienteBUSFinalizadaError = $('#progressAltaPacienteBUSFinalizadaError');
-    var federacionErrorDetalle = $('#federacionErrorDetalle');
-    var progressPacienteYaFederado = $('#progressPacienteYaFederado');
-    var btnEvolucionar = $('#btnEvolucionar');
-    var progressAltaPacienteBUS = $('#progressAltaPacienteBUS');
-    var progressAltaPacienteBUSFinalizada = $('#progressAltaPacienteBUSFinalizada');
-    var pacienteId = $('#pacienteId');
-
-   
-    $('#modalPrimerApellido').val($('#PrimerApellido').val());
-    $('#modalPrimerNombre').val($('#PrimerNombre').val());
-    $('#modalGeneroNombre').val($('#Sexo').children("option:selected").text());
-    $('#modalTipoDocumentoNombre').val($('#TipoDocumentoId').children("option:selected").text());
-    $('#modalNroDocumento').val($('#NroDocumento').val());
-    $('#modalFechaNacimiento').val($('#FechaNacimiento').val());
-
-    progressPacienteLocalRegistrado.css('display', 'none');
-    progressPacienteLocalRegistradoNuevo.css('display', 'none');
-    progressVerificandoExistenciaEnElBUS.css('display', 'none');
-    progressAltaPacienteBUS.css('display', 'none');
-    progressAltaPacienteBUSFinalizada.css('display', 'none');
-    progressPacienteYaFederado.css('display', 'none');
-
-    btnEvolucionar.css('display', 'none');
-
-    $('#modalPaciente').modal('show');
-
-
-    //DAR DE ALTA EL PACIENTE EN NUESTRA DB
-    RegistrarPacienteLocal();
-
-    
-    progressPacienteLocalRegistradoNuevo.fadeIn('slow', () => {
-
-        //VERIFICAR EXISTENCIA EN EL BUS
-        var pacienteFederado = VerificarExistenciaPacienteLocalEnBUS(pacienteId.val());
-
-        progressVerificandoExistenciaEnElBUS.fadeIn('slow', () => {
-            progressVerificandoExistenciaEnElBUS.delay(1000).fadeOut('slow', () => {
-
-                alert("pacienteFederado:" + pacienteFederado);
-
-                //SI NO EXISTE EN EL BUS
-                if (pacienteFederado) {
-                    progressAltaPacienteBUS.fadeIn('slow', () => {
-                        var federacionResult = FederarPaciente(pacienteId.val());
-                        console.log(federacionResult);
-                    });
-
-                    progressAltaPacienteBUS.fadeOut('slow', () => {
-
-                        if (federacionResult.success) {
-                            progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
-                                btnEvolucionar.fadeIn('slow');
-                            });
-                        } else {
-                            progressAltaPacienteBUSFinalizadaError.fadeIn('slow', () => {
-                                federacionErrorDetalle.text(federacionResult.message);
-                                federacionErrorDetalle.fadeIn('slow')
-                                btnEvolucionar.fadeIn('slow');
-                            });
-                        }
-                    });
-                }
-                //SI EXISTE EN EL BU
-                else {
-                    progressAltaPacienteBUS.fadeOut('slow', () => {
-                        progressPacienteYaFederado.fadeIn('slow', () => {
-                            btnEvolucionar.fadeIn('slow');
-                        });
-                    });
-                }
-            });
-        });
-    });
-    
+    //2. Muestra el paciente 
+    var pacienteId = RegistrarPacienteLocal();
+    MostarPaciente(pacienteId, false);
 }
 
 
@@ -384,7 +317,7 @@ function MostarPacienteNuevo() {
 /// REGISTRA UN NUEVO PACIENTE EN LA DB LOCAL //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 function RegistrarPacienteLocal() {
-    var ret;
+    var ret = 0;
     var pacienteId = $('#pacienteId');
 
     var dataToPost = {
@@ -417,10 +350,10 @@ function RegistrarPacienteLocal() {
         success: function (data) {
             if (data.success) {
                 pacienteId.val(data.pacienteId);
-                ret = true;
+                ret = data.pacienteId;
             }
             else {
-                ret = false;
+                ret = 0;
             }
         },
         error: function (request, status, error) {
@@ -430,7 +363,7 @@ function RegistrarPacienteLocal() {
                 alert(request.responseText);
             }
 
-            ret = false;
+            ret = 0;
         }
     });
 
