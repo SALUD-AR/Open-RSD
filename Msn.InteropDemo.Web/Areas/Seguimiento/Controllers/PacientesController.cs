@@ -159,6 +159,9 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult FederarPaciente(int id)
         {
+
+            return new JsonResult(new { success = true, message = "" }) { StatusCode = 200 };
+
             try
             {
                 var op = _pacienteAppService.FederarPaciente(id);
@@ -174,7 +177,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error Federando Paciente");
-                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+                return new JsonResult(new { success = false, message = ex.Message }) { StatusCode = 500 };
             }
         }
 
