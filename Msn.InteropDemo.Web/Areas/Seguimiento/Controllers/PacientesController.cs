@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices;
@@ -159,9 +155,6 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult FederarPaciente(int id)
         {
-
-            return new JsonResult(new { success = true, message = "" }) { StatusCode = 200 };
-
             try
             {
                 var op = _pacienteAppService.FederarPaciente(id);
