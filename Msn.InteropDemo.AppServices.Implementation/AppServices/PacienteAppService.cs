@@ -53,7 +53,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 }
                 else
                 {
-                    op.AddError("El registro en el BUS noha devuelto resultados.");
+                    op.AddError("El Federador no ha devuelto resultados.");
                 }
 
             }

@@ -19,7 +19,7 @@
                             <div id="progressPacienteLocal" style="display:none;">
                                 <span class="text-primary fa fa-database"></span><span id="progressPacienteLocalText"></span><span id="progressPacienteLocalCheck" class="text-success fas fa-check"></span>
                             </div>
-s                        </div>
+                          </div>
                         <div class="col-md-4">
                             <div id="progressVerificandoExistenciaEnElBUS" style="display:none;">
                                 <span class="text-primary fa fa-network-wired"></span> Verificando si el Paciente está Federado <span id="spinVerificaExistenciaBus" class="fas fa-spinner fa-spin"></span>
@@ -39,7 +39,7 @@ s                        </div>
                                 <span class="text-primary fa fa-user-plus"></span> Proceso de Federación exitoso <span class="text-success fas fa-check"></span>
                             </div>
                             <div id="progressAltaPacienteBUSFinalizadaError" style="display:none;">
-                                <span class="text-danger fas fa-exclamation-triangle"></span> Error en la Federación del Paciente
+                                <span style="cursor:pointer;" class="text-danger fas fa-exclamation-triangle"></span><span id="progressErrorTitle" data-toggle="tooltip" data-placement="top" title="" data-delay='{ "show": 500, "hide": 100 }'> Error en la Federación del Paciente <i class="text-danger far fa-comment"></i></span> 
                             </div>
                         </div>
                     </div>

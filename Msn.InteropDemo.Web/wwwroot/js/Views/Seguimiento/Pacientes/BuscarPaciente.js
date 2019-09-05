@@ -60,6 +60,7 @@ function MostarPaciente(id, preExistenteEnDB = false) {
     var progressPacienteLocal = $('#progressPacienteLocal');
     var progressPacienteLocalText = $('#progressPacienteLocalText');
     var progressPacienteLocalCheck = $('#progressPacienteLocalCheck');
+    var progressErrorTitle = $('#progressErrorTitle');
     
     var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
     
@@ -106,8 +107,7 @@ function MostarPaciente(id, preExistenteEnDB = false) {
         progressPacienteLocalCheck.show();
     }
 
-    progressPacienteLocal.show();
-    //progressPacienteLocalRegistradoNuevo.css('display', 'none');
+    progressPacienteLocal.show();    
     progressAltaPacienteBUS.css('display', 'none');
     progressVerificandoExistenciaEnElBUS.css('display', 'none');
     progressAltaPacienteBUSFinalizada.css('display', 'none');
@@ -116,7 +116,7 @@ function MostarPaciente(id, preExistenteEnDB = false) {
     progressPacienteNoFederado.css('display', 'none');
     btnEvolucionar.css('display', 'none');
 
-    var federaOk = false;
+    var federaResult = false;
 
     $('#modalPaciente').modal('show');
 
@@ -132,17 +132,23 @@ function MostarPaciente(id, preExistenteEnDB = false) {
                 console.log('Paciente:' + id + ' No Federado, se procede a Federar');
                 progressPacienteNoFederado.fadeIn('slow');
                 progressAltaPacienteBUS.delay(500).fadeIn('slow', () => {
-                    federaOk = FederarPaciente(id);
+                    federaResult = FederarPaciente(id);
                 });
 
                 progressAltaPacienteBUS.delay(2000).fadeOut('slow', () => {
                     //SI LA FEDERACION FUE EXITOSA
-                    if (federaOk) {
+                    if (federaResult.success) {
                         progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
                             btnEvolucionar.fadeIn('slow');
                         });
                     } else {
                         progressAltaPacienteBUSFinalizadaError.fadeIn('slow', () => {
+                            console.log(federaResult.message);
+                            progressErrorTitle.tooltip('hide');
+                            progressErrorTitle.attr('title', federaResult.message);
+                            $('[data-toggle="tooltip"]').tooltip(); //refresh del Tooltip
+                            progressErrorTitle.tooltip('show');
+
                             btnEvolucionar.fadeIn('slow');
                         });
                     }
@@ -205,7 +211,7 @@ function FederarPaciente(id) {
         __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
     };
 
-    var ret = false;
+    var ret = "";
 
     //////////////////////////////////////
     //console.log(dataToPost);
@@ -229,7 +235,7 @@ function FederarPaciente(id) {
                 console.log('Error Federando el Paciente: ' + data.message);
             }
 
-            ret = data.success;
+            ret = { success: data.success, message: data.message };
         },
         error: function (request, status, error) {
             if (errorLabel) {
@@ -238,7 +244,7 @@ function FederarPaciente(id) {
                 alert(request.responseText);
             }
 
-            ret = false;
+            ret = { success: false, message: request.responseText };;
         }
     });
 
