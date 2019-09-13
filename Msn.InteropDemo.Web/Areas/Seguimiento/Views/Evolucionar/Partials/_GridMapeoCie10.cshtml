@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Snomed.Cie10MapResultViewModel>
+
+        <table class="table table-hover table-sm table-responsive-sm">
+            <thead>
+                <tr>
+                    <th colspan="3" class="text-left">Descripción CIE-10</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.MapAdvice)
+                    </td>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.MapTarget)
+                    </td>
+                    <td class="text-center">
+                        <button onclick="mapeoCie10Selected(this)"
+                                class="btn btn-sm btn-outline-primary"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Seleccionar"
+                                data-delay='{ "show": 1000, "hide": 50 }' data-maptarget="@item.MapTarget" data-term="@item.Description">
+                            <i class="fa fa-file-medical"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>

@@ -59,7 +59,7 @@ function showSearchSnowstormModal(st) {
     } else if (searchTypeSelected == SearchType.VACUNAS) {
         theModal.find('.modal-title').text('Vacunas');
     } else if (searchTypeSelected == SearchType.MEDICAMENTOS) {
-        theModal.find('.modal-title').text('Medicamentos');        
+        theModal.find('.modal-title').text('Medicamentos');
     }
 
     theModal.modal('show');
@@ -72,7 +72,7 @@ function seachSnowstorm() {
     if (!term) {
         return;
     }
-  
+
     var loc = window.rootUrl + "Seguimiento/Evolucionar/SearchByExpressionTerm";
     var seachSnowstormResultContainer = $('#seachSnowstormResultContainer');
     var btnSeachSnowstorm = $('#btnSeachSnowstorm');
@@ -122,16 +122,16 @@ function snowstomResultItemSelected(obj) {
         table = $('#tableVacunas');
     }
 
-    
+
     trHTML += '<tr id="' + obj.dataset.conceptid + '" class="tr-evolucion">';
 
     if (searchTypeSelected == SearchType.HALLAZGOS) {
-        trHTML +=   '<td>' +
-                        '<div class="sctTerm">' + obj.dataset.term + '</div>' +
-                        '<div class="text-muted small">SctId: ' + obj.dataset.conceptid + ' --> ' +
-                            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Maperar a CIE10</a></span>' +
-                        '</div> ' +
-                    '</td>';
+        trHTML += '<td>' +
+            '<div class="sctTerm">' + obj.dataset.term + '</div>' +
+            '<div class="text-muted small">SctId: ' + obj.dataset.conceptid + ' --> ' +
+            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Maperar a CIE10</a></span>' +
+            '</div> ' +
+            '</td>';
     }
     else {
         trHTML += '<td>' + obj.dataset.term + '</td>';
@@ -139,7 +139,7 @@ function snowstomResultItemSelected(obj) {
 
     trHTML += '<td class="text-right">';
     trHTML += '<div class="deleteItemContent">';
-    trHTML += '<i class="fas fa-times" onClick="deleteItem(' + obj.dataset.conceptid +')">&nbsp;</i>';
+    trHTML += '<i class="fas fa-times" onClick="deleteItem(' + obj.dataset.conceptid + ')">&nbsp;</i>';
     trHTML += '</div>';
     trHTML += '</td>';
     trHTML += '</tr>';
@@ -149,7 +149,7 @@ function snowstomResultItemSelected(obj) {
 
 
 function mapToCie10(id) {
-    
+
     var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10?conceptId=" + id;
 
     $.ajax({
@@ -161,18 +161,10 @@ function mapToCie10(id) {
 
             var container = $('#mapContainer' + id);
 
-            if (data.success) {
-                var nexElement = '<span class="cie10MappedText text-success">' + data.item.subcategoriaNombre + '</span>';
-
-                var str = 'CIE10: ' + data.item.subcategoriaId + ' - ';
-                container.hide('slow', function () {
-                    container.attr('id', data.item.subcategoriaId);
-                    container.text(str);
-                    container.addClass('cie10MappedId text-success');
-                    container.show('slow');
-                    $(nexElement).insertAfter(container).hide().show('slow');
-                });
-
+            if (data.count == 1) {
+                mapToCie10Item(id, data.items[0]);
+            } else if (data.count > 1) {
+                showCie10MapperSelectorModal(id, data);
             } else {
                 container.text('CIE10: No Encontrado');
                 container.addClass('text-danger');
@@ -182,6 +174,51 @@ function mapToCie10(id) {
             console.log(request.responseText);
             alert(request.responseText);
         }
+    });
+}
+
+
+function showCie10MapperSelectorModal(containerId, data) {
+    var theModal = $('#modalMapeoCie10');
+    theModal.modal('show');
+
+    var trHTML = '';
+    trHTML += '<table class="table table-hover table-responsive-sm">';
+    trHTML += '<tr class="font-weight-light"><th>Recomendación para el mapeo</th><th>&nbsp;</th><th>Código CIE10</th><th>&nbsp;</th></tr>'
+
+    $.each(data.items, function (i, item) {
+        trHTML += '<tr id="' + item.subcategoriaId + '" class="font-weight-light">'
+        trHTML += '<td><div>' + item.mapAdvice + '</div></td>';
+        trHTML += '<td class="text-center"><div>' + item.subcategoriaNombre + '</div></td>';
+        trHTML += '<td class="text-center"><div>' + item.subcategoriaId + '</div></td>';
+
+        trHTML += '<td class="text-center">';
+        trHTML += '     <button class="btn btn-outline-primary" data-dismiss="modal" onclick="javascript:mapToCie10Item(' + containerId + ',{subcategoriaId:\'' + item.subcategoriaId + '\', subcategoriaNombre:\'' + item.subcategoriaNombre + '\'})"> <i class="fas fa-arrow-right"></i></button>';
+        trHTML += '</td>';
+
+        trHTML += '</tr>';
+    });
+
+    trHTML += '</table>';
+
+    //console.log(data);
+    //console.log(trHTML);
+
+    $('#modalMapeoCie10GridContainer').html(trHTML);
+
+}
+
+function mapToCie10Item(containerId, item) {
+    var container = $('#mapContainer' + containerId);
+    var nexElement = '<span class="cie10MappedText text-success">' + item.subcategoriaNombre + '</span>';
+    var str = 'CIE10: ' + item.subcategoriaId + ' - ';
+
+    container.hide('slow', function () {
+        container.attr('id', item.subcategoriaId);
+        container.text(str);
+        container.addClass('cie10MappedId text-success');
+        container.show('slow');
+        $(nexElement).insertAfter(container).hide().show('slow');
     });
 }
 

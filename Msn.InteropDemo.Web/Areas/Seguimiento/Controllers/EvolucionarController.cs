@@ -138,11 +138,11 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                 //TODO: Modificar con la implementacion del modal para seleccion multiple
                 if(lstitems.Any())
                 {
-                    var item = lstitems.ToList()[0];
-                    return new JsonResult(new { success = true,  item }) { StatusCode = 200 };
+                    //var item = lstitems.ToList()[0];
+                    return new JsonResult(new { success = true,  items = lstitems, count = lstitems.Count()}) { StatusCode = 200 };
                 }
 
-                return new JsonResult(new { success = false }) { StatusCode = 200 };
+                return new JsonResult(new { success = false, count = 0 }) { StatusCode = 200 };
             }
             catch (Exception ex)
             {

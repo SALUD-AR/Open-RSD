@@ -106,6 +106,7 @@ function loadEvolucion(id) {
                 //trHTML += '<td></td></tr>';
             });
 
+
             $('#tableHallazgos').append(trHTML);
             $("#tableHallazgos > tbody").show('slow');
 
