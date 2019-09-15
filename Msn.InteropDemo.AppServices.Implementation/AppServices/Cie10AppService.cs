@@ -2,6 +2,7 @@
 using Msn.InteropDemo.AppServices.Core;
 using Msn.InteropDemo.Snowstorm;
 using Msn.InteropDemo.ViewModel.Snomed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,13 +20,35 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             _snowstormManager = snowstormManager;
         }
 
+        private void SetMapeoPreferido(IEnumerable<Cie10MapResultViewModel> items,
+                                       string sexo,
+                                       int edad)
+        {
+            foreach (var item in items)
+            {
+                item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
+            }
+        }
+
+        public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId,
+                                                                        string sexo,
+                                                                        int edad)
+        {
+            var lst = GetCie10MappedItems(conceptId);
+
+            SetMapeoPreferido(lst, sexo, edad);
+
+            return lst;
+        }
+
+
         public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId)
         {
             var lst = new List<Cie10MapResultViewModel>();
 
             var cie10lst = _snowstormManager.RunQueryCie10MapRefset(conceptId);
 
-            //se seleccionan solo aquellos que tienen un MapTarget, es decir, un Mapeo Esistente.
+            //se seleccionan solo aquellos que tienen un MapTarget, es decir, un Mapeo Existente.
             cie10lst.Items = cie10lst.Items.Where(x => !string.IsNullOrWhiteSpace(x.additionalFields.mapTarget)).ToList();
 
             //Customization para el formato de la codificacion de la DEIS
@@ -37,10 +60,10 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 }
             }
 
-            //Mapeo  a nuestros ViewModels
+            //Mapeo a nuestros ViewModels
             var cie10Maplst = Mapper.Map<List<Cie10MapResultViewModel>>(cie10lst.Items);
 
-            //Se seleccionadn los distintos MApTargue para is a buscar en la DB
+            //Se seleccionadn los distintos MapTarguet para is a buscar en la DB
             var cie102search = cie10Maplst.Select(x => x.MapTarget).Distinct();
 
             //obtenidos de la DB

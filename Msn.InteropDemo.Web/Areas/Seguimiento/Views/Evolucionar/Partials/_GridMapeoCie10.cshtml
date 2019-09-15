@@ -1,22 +1,35 @@
 ﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Snomed.Cie10MapResultViewModel>
 
         <table class="table table-hover table-sm table-responsive-sm">
-            <thead>
-                <tr>
-                    <th colspan="3" class="text-left">Descripción CIE-10</th>
-                </tr>
-            </thead>
+            <tr class="small">
+                <th>Recomendación para el mapeo</th>
+                <th colspan="2" class="text-center">Código CIE10</th>
+                <th>&nbsp;</th>
+            </tr>
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
+                    var rp = item.EsMapeoPreferido ? "row-mapeoPreferido" : "";
+                <tr id="@item.SubcategoriaId" class="small @rp">
                     <td class="text-left">
-                        @Html.DisplayFor(modelItem => item.MapAdvice)
+                        <div>@Html.DisplayFor(modelItem => item.MapAdvice)</div>
                     </td>
                     <td class="text-left">
-                        @Html.DisplayFor(modelItem => item.MapTarget)
+                        <div>@Html.DisplayFor(modelItem => item.SubcategoriaNombre)</div>
                     </td>
                     <td class="text-center">
+                        <dvi>@Html.DisplayFor(modelItem => item.SubcategoriaId)</dvi>
+                    </td>
+                    <td class="text-center">
+                        <button 
+                                class="btn btn-sm btn-outline-primary" 
+                                data-dismiss="modal" 
+                                onclick="javascript:mapToCie10Item(@item.ConceptId,{subcategoriaId:'@item.SubcategoriaId', subcategoriaNombre:'@item.SubcategoriaNombre'})">
+                                <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </td>
+
+                    @*<td class="text-center">
                         <button onclick="mapeoCie10Selected(this)"
                                 class="btn btn-sm btn-outline-primary"
                                 data-toggle="tooltip"
@@ -25,7 +38,8 @@
                                 data-delay='{ "show": 1000, "hide": 50 }' data-maptarget="@item.MapTarget" data-term="@item.Description">
                             <i class="fa fa-file-medical"></i>
                         </button>
-                    </td>
+                    </td>*@
+
                 </tr>
                 }
             </tbody>

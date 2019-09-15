@@ -150,11 +150,19 @@ function snowstomResultItemSelected(obj) {
 
 function mapToCie10(id) {
 
-    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10?conceptId=" + id;
+    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10";
+    
+    var dataToPost = {
+        conceptId: id,
+        sexo: $('#pacienteSexo').val(),
+        edad: $('#pacienteEdad').val(),
+        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+    };
 
     $.ajax({
         url: loc,
-        type: 'GET',
+        type: 'POST',
+        data: dataToPost,
         dataType: 'json',
         cache: false,
         success: function (data) {
@@ -162,9 +170,14 @@ function mapToCie10(id) {
             var container = $('#mapContainer' + id);
 
             if (data.count == 1) {
-                mapToCie10Item(id, data.items[0]);
+                mapToCie10Item(id, data.item);
+
             } else if (data.count > 1) {
-                showCie10MapperSelectorModal(id, data);
+
+                var theModal = $('#modalMapeoCie10');
+                theModal.modal('show');
+                $('#modalMapeoCie10GridContainer').html(data.table);
+
             } else {
                 container.text('CIE10: No Encontrado');
                 container.addClass('text-danger');
@@ -177,36 +190,6 @@ function mapToCie10(id) {
     });
 }
 
-
-function showCie10MapperSelectorModal(containerId, data) {
-    var theModal = $('#modalMapeoCie10');
-    theModal.modal('show');
-
-    var trHTML = '';
-    trHTML += '<table class="table table-hover table-responsive-sm">';
-    trHTML += '<tr class="font-weight-light"><th>Recomendación para el mapeo</th><th>&nbsp;</th><th>Código CIE10</th><th>&nbsp;</th></tr>'
-
-    $.each(data.items, function (i, item) {
-        trHTML += '<tr id="' + item.subcategoriaId + '" class="font-weight-light">'
-        trHTML += '<td><div>' + item.mapAdvice + '</div></td>';
-        trHTML += '<td class="text-center"><div>' + item.subcategoriaNombre + '</div></td>';
-        trHTML += '<td class="text-center"><div>' + item.subcategoriaId + '</div></td>';
-
-        trHTML += '<td class="text-center">';
-        trHTML += '     <button class="btn btn-outline-primary" data-dismiss="modal" onclick="javascript:mapToCie10Item(' + containerId + ',{subcategoriaId:\'' + item.subcategoriaId + '\', subcategoriaNombre:\'' + item.subcategoriaNombre + '\'})"> <i class="fas fa-arrow-right"></i></button>';
-        trHTML += '</td>';
-
-        trHTML += '</tr>';
-    });
-
-    trHTML += '</table>';
-
-    //console.log(data);
-    //console.log(trHTML);
-
-    $('#modalMapeoCie10GridContainer').html(trHTML);
-
-}
 
 function mapToCie10Item(containerId, item) {
     var container = $('#mapContainer' + containerId);
