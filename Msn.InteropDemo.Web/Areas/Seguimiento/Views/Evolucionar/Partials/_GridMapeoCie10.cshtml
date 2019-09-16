@@ -9,7 +9,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    var rp = item.EsMapeoPreferido ? "row-mapeoPreferido" : "";
+                    var rp = item.EsMapeoPreferido ? "bg-success text-white" : "";
                 <tr id="@item.SubcategoriaId" class="small @rp">
                     <td class="text-left">
                         <div>@Html.DisplayFor(modelItem => item.MapAdvice)</div>
