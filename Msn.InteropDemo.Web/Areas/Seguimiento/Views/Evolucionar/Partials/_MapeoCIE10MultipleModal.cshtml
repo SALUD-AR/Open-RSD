@@ -13,17 +13,20 @@
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body pt-2">
+                <div class="mb-2 alert alert-primary small">
+                   <span><b>Snomed CT:</b> </span> <span id="sctIdToMap"></span> - <span id="sctTermToMap"></span>
+                </div>
                 <div id="modalMapeoCie10GridContainer">
 
                 </div>
             </div>
 
             <!-- Modal footer -->
-            @*<div class="modal-footer">
-                <button id="btnEvolucionar" type="button" onclick="redirect2Evolucion()" class="btn btn-success" data-dismiss="modal"><span class="fa fa-file-medical"></span>&nbsp;Historia Clínica</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>*@
+            <div class="modal-footer">
+                <button id="btnConfirmMapeo" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"><span class="fas fa-file-import"></span>&nbsp;Confirmar Mapeo</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>

@@ -24,10 +24,36 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                                        string sexo,
                                        int edad)
         {
-            foreach (var item in items)
+
+            var groups = from i in items
+                         group i by i.MapGroup into newGroup
+                         orderby newGroup.Key
+                         select newGroup;
+
+            foreach (var g in groups)
             {
-                item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
+                foreach (var item in g)
+                {
+                    if(((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F")))
+                    {
+                        item.RankingPreferido++;
+                    }
+                    //item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
+                }
+
+                var maxRank = g.Max(x => x.RankingPreferido);
+                var preferidos = g.Where(x => x.RankingPreferido == maxRank);
+
+                foreach (var item in preferidos)
+                {
+                    item.EsMapeoPreferido = true;
+                }
             }
+
+            //foreach (var item in items)
+            //{
+            //    item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
+            //}
         }
 
         public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId,
@@ -78,7 +104,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                     item.SubcategoriaNombre = dbitem.SubcategoriaNombre;
                     item.CategoriaNombre = dbitem.CategoriaNombre;
                 }
-            } 
+            }
+
+            cie10Maplst = cie10Maplst.OrderBy(x => x.MapGroup).ThenBy(x => x.MapPriority).ToList();
 
             return cie10Maplst;
         }

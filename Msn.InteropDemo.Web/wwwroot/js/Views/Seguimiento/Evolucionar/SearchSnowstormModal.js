@@ -7,6 +7,10 @@ $(function () {
         textSearch.focus();
     })
 
+    $('#modalMapeoCie10').on('shown.bs.modal', function (e) {
+        resetCheckBoxes();
+    })
+
     SearchType = {
         HALLAZGOS: {
             Value: 1,
@@ -127,9 +131,9 @@ function snowstomResultItemSelected(obj) {
 
     if (searchTypeSelected == SearchType.HALLAZGOS) {
         trHTML += '<td>' +
-            '<div class="sctTerm">' + obj.dataset.term + '</div>' +
+            '<div id="sctTerm' + obj.dataset.conceptid +   '" class="sctTerm">' + obj.dataset.term + '</div>' +
             '<div class="text-muted small">SctId: ' + obj.dataset.conceptid + ' --> ' +
-            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Maperar a CIE10</a></span>' +
+            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Mapear a CIE10</a></span>' +
             '</div> ' +
             '</td>';
     }
@@ -175,8 +179,14 @@ function mapToCie10(id) {
             } else if (data.count > 1) {
 
                 var theModal = $('#modalMapeoCie10');
-                theModal.modal('show');
+
+                $('#sctIdToMap').text(id);
+                $('#sctTermToMap').text($('#sctTerm' + id).text());
+
+                $('#modalMapeoCie10GridContainer').css('display', 'none');
                 $('#modalMapeoCie10GridContainer').html(data.table);
+                theModal.modal('show');
+                $('#modalMapeoCie10GridContainer').show('slow');
 
             } else {
                 container.text('CIE10: No Encontrado');
@@ -190,6 +200,10 @@ function mapToCie10(id) {
     });
 }
 
+function resetCheckBoxes() {
+    //$('#toggle-demo').bootstrapToggle()
+    $('.swith_mapping_cie10').bootstrapToggle()
+}
 
 function mapToCie10Item(containerId, item) {
     var container = $('#mapContainer' + containerId);

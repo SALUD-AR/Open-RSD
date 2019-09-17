@@ -19,5 +19,6 @@ namespace Msn.InteropDemo.ViewModel.Snomed
         public string MapRule { get; set; }
         public string MapTarget { get; set; }
         public bool EsMapeoPreferido { get; set; }
+        public int RankingPreferido { get; set; }
     }
 }

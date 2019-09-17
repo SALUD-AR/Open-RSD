@@ -5,6 +5,10 @@
     var pacienteSexoClass = Model.Sexo == "M" ? "fa-male" : "fa-female";
 }
 
+@section AddToHead {
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+}
+
 <partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
 
 <hr />
@@ -38,7 +42,7 @@
     <div class="col-md-2">
         <div class="card">
             <div class="card-header text-center">
-                
+
                 <b>Consultas</b>
             </div>
             <div class="card-body" style="padding-top:10px;">
@@ -141,6 +145,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
     <script src="~/js/Views/Seguimiento/Evolucionar/EvolucionarPaciente.js"></script>
     <script src="~/js/Views/Seguimiento/Evolucionar/SearchSnowstormModal.js"></script>
     <script src="~/js/Views/ConfirmDialog.js"></script>

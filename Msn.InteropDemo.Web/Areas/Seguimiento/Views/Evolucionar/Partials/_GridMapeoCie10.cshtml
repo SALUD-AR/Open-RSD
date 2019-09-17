@@ -2,6 +2,7 @@
 
         <table class="table table-hover table-sm table-responsive-sm">
             <tr class="small">
+                <th>Grupo</th>
                 <th>Recomendación para el mapeo</th>
                 <th colspan="2" class="text-center">Código CIE10</th>
                 <th>&nbsp;</th>
@@ -9,34 +10,40 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    var rp = item.EsMapeoPreferido ? "bg-success text-white" : "";
-                <tr id="@item.SubcategoriaId" class="small @rp">
-                    <td class="text-left">
+                    var esPref = item.EsMapeoPreferido ? "bg-success text-white" : "";
+                    var chk = item.EsMapeoPreferido ? "checked" : "";
+
+                <tr id="@item.SubcategoriaId" class="small" >
+                    <td class="text-left text-center @esPref">
+                        <div>@Html.DisplayFor(modelItem => item.MapGroup)</div>
+                    </td>
+                    <td class="text-left @esPref">
                         <div>@Html.DisplayFor(modelItem => item.MapAdvice)</div>
                     </td>
-                    <td class="text-left">
+                    <td class="text-left @esPref">
                         <div>@Html.DisplayFor(modelItem => item.SubcategoriaNombre)</div>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center @esPref">
                         <dvi>@Html.DisplayFor(modelItem => item.SubcategoriaId)</dvi>
                     </td>
-                    <td class="text-center">
-                        <button 
-                                class="btn btn-sm btn-outline-primary" 
-                                data-dismiss="modal" 
-                                onclick="javascript:mapToCie10Item(@item.ConceptId,{subcategoriaId:'@item.SubcategoriaId', subcategoriaNombre:'@item.SubcategoriaNombre'})">
-                                <i class="fas fa-arrow-right"></i>
-                        </button>
+                    <td class="align-middle">
+                        <input id="toggle-demo" 
+                               class="swith_mapping_cie10"
+                               type="checkbox" 
+                               data-toggle="toggle" 
+                               data-on="Mapear" 
+                               data-off="No Mapear" 
+                               data-onstyle="outline-success" 
+                               data-offstyle="outline-secondary"
+                               data-size="xs" 
+                               data-width="100" @chk>
                     </td>
 
                     @*<td class="text-center">
-                        <button onclick="mapeoCie10Selected(this)"
-                                class="btn btn-sm btn-outline-primary"
-                                data-toggle="tooltip"
-                                data-placement="top"
-                                title="Seleccionar"
-                                data-delay='{ "show": 1000, "hide": 50 }' data-maptarget="@item.MapTarget" data-term="@item.Description">
-                            <i class="fa fa-file-medical"></i>
+                        <button class="btn btn-sm btn-outline-primary"
+                                data-dismiss="modal"
+                                onclick="javascript:mapToCie10Item(@item.ConceptId,{subcategoriaId:'@item.SubcategoriaId', subcategoriaNombre:'@item.SubcategoriaNombre'})">
+                            <i class="fas fa-arrow-right"></i>
                         </button>
                     </td>*@
 
