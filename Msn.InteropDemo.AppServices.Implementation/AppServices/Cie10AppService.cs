@@ -20,49 +20,50 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             _snowstormManager = snowstormManager;
         }
 
-        private void SetMapeoPreferido(IEnumerable<Cie10MapResultViewModel> items,
-                                       string sexo,
-                                       int edad)
-        {
+        //private void SetMapeoPreferido(IEnumerable<Cie10MapResultViewModel> items,
+        //                               string sexo,
+        //                               int edad)
+        //{
 
-            var groups = from i in items
-                         group i by i.MapGroup into newGroup
-                         orderby newGroup.Key
-                         select newGroup;
+        //    var groups = from i in items
+        //                 group i by i.MapGroup into newGroup
+        //                 orderby newGroup.Key
+        //                 select newGroup;
 
-            foreach (var g in groups)
-            {
-                foreach (var item in g)
-                {
-                    if(((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F")))
-                    {
-                        item.RankingPreferido++;
-                    }
-                    //item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
-                }
+        //    foreach (var g in groups)
+        //    {
+        //        foreach (var item in g)
+        //        {
+        //            //Condicion por Sexo
+        //            if(((item.MapRule.Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F")))
+        //            {
+        //                item.RankingPreferido++;
+        //            }
+        //            //Condicion por Edad
+        //            if(item.MapRule.Contains("424144002"))
+        //            {
 
-                var maxRank = g.Max(x => x.RankingPreferido);
-                var preferidos = g.Where(x => x.RankingPreferido == maxRank);
+        //            }
+        //        }
 
-                foreach (var item in preferidos)
-                {
-                    item.EsMapeoPreferido = true;
-                }
-            }
+        //        var maxRank = g.Max(x => x.RankingPreferido);
+        //        var preferidos = g.Where(x => x.RankingPreferido == maxRank);
 
-            //foreach (var item in items)
-            //{
-            //    item.EsMapeoPreferido = ((item.MapRule.ToUpper().Contains("248153007") && sexo == "M") || (item.MapRule.Contains("248152002") && sexo == "F"));
-            //}
-        }
+        //        foreach (var item in preferidos)
+        //        {
+        //            item.EsMapeoPreferido = true;
+        //        }
+        //    }
+
+        //}
 
         public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId,
                                                                         string sexo,
                                                                         int edad)
         {
             var lst = GetCie10MappedItems(conceptId);
-
-            SetMapeoPreferido(lst, sexo, edad);
+            var cie10Mapper = new Internal.SnomedToCie10Mapper();
+            cie10Mapper.SetMapeoPreferido(lst, sexo, edad);
 
             return lst;
         }

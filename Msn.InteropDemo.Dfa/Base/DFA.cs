@@ -31,15 +31,33 @@ namespace Msn.InteropDemo.Dfa.Base
             StateBase nextState = null;
             foreach (var c in caracters)
             {
-                nextState = currentState.GetNextState(c);
+                nextState = CollectToken(currentState, c, matchNotificator);
                 if (nextState != null)
                 {
-                    matchNotificator.Notificate(c);
                     currentState = nextState;
                 }
+
+                //nextState = currentState.GetNextState(c);
+                //if (nextState != null)
+                //{
+                //    matchNotificator.Notificate(c);
+                //    currentState = nextState;
+                //}
             }
 
-            return nextState != null && nextState.IsFinalState;
+            return currentState != null && currentState.IsFinalState;
+            //return nextState != null && nextState.IsFinalState;
+        }
+
+        public virtual StateBase CollectToken(StateBase currentState, char c, IMatchNotificator matchNotificator)
+        {
+            var nextState = currentState.GetNextState(c);
+            if (nextState != null)
+            {
+                matchNotificator.Notificate(c);
+            }
+
+            return nextState;
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Msn.InteropDemo.Dfa.Notifications
             CollectorResult += c;
         }
 
-        public string CollectorResult { get; private set; }
+        public string CollectorResult { get; set; }
 
 
     }

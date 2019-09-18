@@ -13,18 +13,18 @@
                     var esPref = item.EsMapeoPreferido ? "bg-success text-white" : "";
                     var chk = item.EsMapeoPreferido ? "checked" : "";
 
-                <tr id="@item.SubcategoriaId" class="small" >
-                    <td class="text-left text-center @esPref">
+                <tr id="@item.SubcategoriaId" class="small align-middle">
+                    <td class="text-center align-middle @esPref">
                         <div>@Html.DisplayFor(modelItem => item.MapGroup)</div>
                     </td>
-                    <td class="text-left @esPref">
+                    <td class="text-left align-middle @esPref">
                         <div>@Html.DisplayFor(modelItem => item.MapAdvice)</div>
                     </td>
-                    <td class="text-left @esPref">
+                    <td class="text-left align-middle @esPref">
                         <div>@Html.DisplayFor(modelItem => item.SubcategoriaNombre)</div>
                     </td>
-                    <td class="text-center @esPref">
-                        <dvi>@Html.DisplayFor(modelItem => item.SubcategoriaId)</dvi>
+                    <td class="text-center align-middle @esPref">
+                        <div><b>@Html.DisplayFor(modelItem => item.SubcategoriaId)</b></div>
                     </td>
                     <td class="align-middle">
                         <input id="toggle-demo" 
@@ -38,15 +38,6 @@
                                data-size="xs" 
                                data-width="100" @chk>
                     </td>
-
-                    @*<td class="text-center">
-                        <button class="btn btn-sm btn-outline-primary"
-                                data-dismiss="modal"
-                                onclick="javascript:mapToCie10Item(@item.ConceptId,{subcategoriaId:'@item.SubcategoriaId', subcategoriaNombre:'@item.SubcategoriaNombre'})">
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </td>*@
-
                 </tr>
                 }
             </tbody>

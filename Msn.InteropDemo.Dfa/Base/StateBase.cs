@@ -8,8 +8,6 @@ namespace Msn.InteropDemo.Dfa.Base
     {
         private List<Transition> transitions = new List<Transition>();
 
-        public StateBase() { }
-
         public StateBase(string stateName, int stateIndex, bool isFinalState = false)
         {
             StateName = stateName;
@@ -21,6 +19,8 @@ namespace Msn.InteropDemo.Dfa.Base
         public int StateIndex { get; set; }
 
         public bool IsFinalState { get; set; }
+
+        public bool IsErrorState { get; protected set; }
 
         public virtual void AddTransition(Transition transition)
         {
