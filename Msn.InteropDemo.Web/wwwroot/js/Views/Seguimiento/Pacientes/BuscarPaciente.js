@@ -376,7 +376,13 @@ function RegistrarPacienteLocal() {
     return ret;    
 }
 
-
+function redirectFromPacientePrueba() {
+    var pacienteId = $('#pacientesPruebaSelect').val();
+    if (pacienteId) {
+        $('#pacienteId').val(pacienteId);
+        redirect2Evolucion();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// REDIRECCION A LA VIEW DE EVOLUCION /////////////////////////////////////////////////////////

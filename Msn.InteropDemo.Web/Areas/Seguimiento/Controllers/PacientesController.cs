@@ -93,6 +93,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         [Helpers.Attributes.Breadcrumb("Pacientes")]        
         public ActionResult BuscarPaciente()
         {
+            ViewBag.PacientesPrueba = _selectListHelper.GetPacientesPrueba();
             var model = new BuscarPacienteRequestModel();
             SetupModel(model);
             return View(model);
