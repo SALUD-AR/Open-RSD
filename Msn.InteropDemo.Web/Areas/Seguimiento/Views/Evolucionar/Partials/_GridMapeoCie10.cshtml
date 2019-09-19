@@ -1,17 +1,20 @@
 ﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Snomed.Cie10MapResultViewModel>
 
-        <table class="table table-hover table-sm table-responsive-sm">
-            <tr class="small">
-                <th>Grupo</th>
-                <th>Recomendación para el mapeo</th>
-                <th colspan="2" class="text-center">Código CIE10</th>
-                <th>&nbsp;</th>
-            </tr>
+        <table id="tableMultipleMapeoCie10" class="table table-hover table-sm table-responsive-sm">
+            <thead>
+                <tr class="small">
+                    <th>Grupo</th>
+                    <th>Recomendación para el mapeo</th>
+                    <th colspan="2" class="text-center">Código CIE10</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     var esPref = item.EsMapeoPreferido ? "bg-success text-white" : "";
                     var chk = item.EsMapeoPreferido ? "checked" : "";
+                    var subcatTextId = "tableMapCie10SubcategoriaNombre-" + item.SubcategoriaId;
 
                 <tr id="@item.SubcategoriaId" class="small align-middle">
                     <td class="text-center align-middle @esPref">
@@ -20,14 +23,14 @@
                     <td class="text-left align-middle @esPref">
                         <div>@Html.DisplayFor(modelItem => item.MapAdvice)</div>
                     </td>
-                    <td class="text-left align-middle @esPref">
-                        <div>@Html.DisplayFor(modelItem => item.SubcategoriaNombre)</div>
+                    <td id="@subcatTextId" class="text-left align-middle @esPref">
+                        <div class="SubcategoriaNombre">@Html.DisplayFor(modelItem => item.SubcategoriaNombre)</div>
                     </td>
                     <td class="text-center align-middle @esPref">
                         <div><b>@Html.DisplayFor(modelItem => item.SubcategoriaId)</b></div>
                     </td>
                     <td class="align-middle">
-                        <input id="toggle-demo" 
+                        <input id="checkbox-@item.SubcategoriaId" 
                                class="swith_mapping_cie10"
                                type="checkbox" 
                                data-toggle="toggle" 

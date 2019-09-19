@@ -153,9 +153,7 @@ function snowstomResultItemSelected(obj) {
 
 
 function mapToCie10(id) {
-
     var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10";
-    
     var dataToPost = {
         conceptId: id,
         sexo: $('#pacienteSexo').val(),
@@ -171,13 +169,19 @@ function mapToCie10(id) {
         cache: false,
         success: function (data) {
 
-            var container = $('#mapContainer' + id);
-
             if (data.count == 1) {
-                mapToCie10Item(id, data.item);
+
+                var mappedItems = {
+                    containerId: id,
+                    items: []
+                };
+                mappedItems.items.push(data.item);
+
+                mapToCie10Items(id, mappedItems.items);
 
             } else if (data.count > 1) {
 
+                $('#sctConceptIdtoMap').val(id);
                 var theModal = $('#modalMapeoCie10');
 
                 $('#sctIdToMap').text(id);
@@ -189,6 +193,7 @@ function mapToCie10(id) {
                 $('#modalMapeoCie10GridContainer').show('slow');
 
             } else {
+                var container = $('#mapContainer' + id);
                 container.text('CIE10: No Encontrado');
                 container.addClass('text-danger');
             }
@@ -201,24 +206,44 @@ function mapToCie10(id) {
 }
 
 function resetCheckBoxes() {
-    //$('#toggle-demo').bootstrapToggle()
     $('.swith_mapping_cie10').bootstrapToggle()
 }
 
-function mapToCie10Item(containerId, item) {
-    var container = $('#mapContainer' + containerId);
-    var nexElement = '<span class="cie10MappedText text-success">' + item.subcategoriaNombre + '</span>';
-    var str = 'CIE10: ' + item.subcategoriaId + ' - ';
+function mapToCie10MultiplesItems() {
+    var sctConceptId = $('#sctConceptIdtoMap').val();
 
-    container.hide('slow', function () {
-        container.attr('id', item.subcategoriaId);
-        container.text(str);
-        container.addClass('cie10MappedId text-success');
-        container.show('slow');
-        $(nexElement).insertAfter(container).hide().show('slow');
+    var mappedItems = {
+        containerId: sctConceptId,
+        items: []
+    };
+
+    $('#tableMultipleMapeoCie10 > tbody > tr').each(function () {
+
+        var codCie10 = this.id;
+        //si está seleccionado el checkBox en "Mapear"
+        if ($(this).find('#checkbox-' + codCie10).is(':checked')) {
+            var item = {
+                subcategoriaId: codCie10,
+                subcategoriaNombre: $(this).find('div.SubcategoriaNombre').text()
+            }
+            mappedItems.items.push(item);    
+        }
     });
+
+    mapToCie10Items(mappedItems.containerId, mappedItems.items);
 }
 
+function mapToCie10Items(containerId, items) {
+    var container = $('#mapContainer' + containerId);
+    container.text('CIE10: ');
+
+    items.forEach(function (item) {
+        var nexElement = '<span id="' + item.subcategoriaId + '" class="cie10MappedCode text-success">' + item.subcategoriaId + ': </span>';
+        nexElement += '<span id="cie10MappedText-' + item.subcategoriaId + '" class="cie10MappedText text-success">' + item.subcategoriaNombre + '</span>';
+        nexElement += '<span> | </span>';
+        $(nexElement).insertAfter(container);
+    });
+}
 
 function deleteItem(rowId) {
     var tr = $('#' + rowId);
