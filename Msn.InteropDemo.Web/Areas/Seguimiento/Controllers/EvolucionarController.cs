@@ -13,10 +13,8 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
     [Authorize]
     public class EvolucionarController : Web.Controllers.Base.ControllerBase
     {
-        private readonly IPacienteAppService _pacienteAppService;
         private readonly IEvolucionAppService _evolucionAppService;
         private readonly ICie10AppService _cie10AppService;
-        private readonly ISelectListHelper _selectListHelper;
         private readonly ILogger<EvolucionarController> _logger;
 
         public EvolucionarController(IPacienteAppService pacienteAppService,
@@ -26,10 +24,8 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                                      ILogger<EvolucionarController> logger
             )
         {
-            _pacienteAppService = pacienteAppService;
             _evolucionAppService = evolucionAppService;
             _cie10AppService = cie10AppService;
-            _selectListHelper = selectListHelper;
             _logger = logger;
         }
         // GET: Evolucionar

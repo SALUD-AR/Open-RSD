@@ -23,7 +23,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
         public EvolucionViewModel GetById(int evolucionId)
         {
             var entity = GetById<EvolucionViewModel>(criteria: x => x.Id == evolucionId,
-                                                     includeProperties: "Diagnosticos,Medicamentos,Vacunas,CreatedUser");
+                                                     includeProperties: "Diagnosticos.Cie10Mapeos,Medicamentos,Vacunas,CreatedUser");
             return entity;
         }
 
