@@ -7,6 +7,10 @@ $(function () {
         textSearch.focus();
     })
 
+    $('#modalMapeoCie10').on('shown.bs.modal', function (e) {
+        resetCheckBoxes();
+    })
+
     SearchType = {
         HALLAZGOS: {
             Value: 1,
@@ -59,7 +63,7 @@ function showSearchSnowstormModal(st) {
     } else if (searchTypeSelected == SearchType.VACUNAS) {
         theModal.find('.modal-title').text('Vacunas');
     } else if (searchTypeSelected == SearchType.MEDICAMENTOS) {
-        theModal.find('.modal-title').text('Medicamentos');        
+        theModal.find('.modal-title').text('Medicamentos');
     }
 
     theModal.modal('show');
@@ -72,7 +76,7 @@ function seachSnowstorm() {
     if (!term) {
         return;
     }
-  
+
     var loc = window.rootUrl + "Seguimiento/Evolucionar/SearchByExpressionTerm";
     var seachSnowstormResultContainer = $('#seachSnowstormResultContainer');
     var btnSeachSnowstorm = $('#btnSeachSnowstorm');
@@ -122,16 +126,16 @@ function snowstomResultItemSelected(obj) {
         table = $('#tableVacunas');
     }
 
-    
+
     trHTML += '<tr id="' + obj.dataset.conceptid + '" class="tr-evolucion">';
 
     if (searchTypeSelected == SearchType.HALLAZGOS) {
-        trHTML +=   '<td>' +
-                        '<div class="sctTerm">' + obj.dataset.term + '</div>' +
-                        '<div class="text-muted small">SctId: ' + obj.dataset.conceptid + ' --> ' +
-                            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Maperar a CIE10</a></span>' +
-                        '</div> ' +
-                    '</td>';
+        trHTML += '<td>' +
+            '<div id="sctTerm' + obj.dataset.conceptid +   '" class="sctTerm">' + obj.dataset.term + '</div>' +
+            '<div class="text-muted small">SctId: ' + obj.dataset.conceptid + ' --> ' +
+            '<span id="mapContainer' + obj.dataset.conceptid + '"><a href="#!" onClick="mapToCie10(' + obj.dataset.conceptid + ')">Mapear a CIE10</a></span>' +
+            '</div> ' +
+            '</td>';
     }
     else {
         trHTML += '<td>' + obj.dataset.term + '</td>';
@@ -139,7 +143,7 @@ function snowstomResultItemSelected(obj) {
 
     trHTML += '<td class="text-right">';
     trHTML += '<div class="deleteItemContent">';
-    trHTML += '<i class="fas fa-times" onClick="deleteItem(' + obj.dataset.conceptid +')">&nbsp;</i>';
+    trHTML += '<i class="fas fa-times" onClick="deleteItem(' + obj.dataset.conceptid + ')">&nbsp;</i>';
     trHTML += '</div>';
     trHTML += '</td>';
     trHTML += '</tr>';
@@ -149,31 +153,47 @@ function snowstomResultItemSelected(obj) {
 
 
 function mapToCie10(id) {
-    
-    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10?conceptId=" + id;
+    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetMapeoCie10";
+    var dataToPost = {
+        conceptId: id,
+        sexo: $('#pacienteSexo').val(),
+        edad: $('#pacienteEdad').val(),
+        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+    };
 
     $.ajax({
         url: loc,
-        type: 'GET',
+        type: 'POST',
+        data: dataToPost,
         dataType: 'json',
         cache: false,
         success: function (data) {
 
-            var container = $('#mapContainer' + id);
+            if (data.count == 1) {
 
-            if (data.success) {
-                var nexElement = '<span class="cie10MappedText text-success">' + data.item.subcategoriaNombre + '</span>';
+                var mappedItems = {
+                    containerId: id,
+                    items: []
+                };
+                mappedItems.items.push(data.item);
 
-                var str = 'CIE10: ' + data.item.subcategoriaId + ' - ';
-                container.hide('slow', function () {
-                    container.attr('id', data.item.subcategoriaId);
-                    container.text(str);
-                    container.addClass('cie10MappedId text-success');
-                    container.show('slow');
-                    $(nexElement).insertAfter(container).hide().show('slow');
-                });
+                mapToCie10Items(id, mappedItems.items);
+
+            } else if (data.count > 1) {
+
+                $('#sctConceptIdtoMap').val(id);
+                var theModal = $('#modalMapeoCie10');
+
+                $('#sctIdToMap').text(id);
+                $('#sctTermToMap').text($('#sctTerm' + id).text());
+
+                $('#modalMapeoCie10GridContainer').css('display', 'none');
+                $('#modalMapeoCie10GridContainer').html(data.table);
+                theModal.modal('show');
+                $('#modalMapeoCie10GridContainer').show('slow');
 
             } else {
+                var container = $('#mapContainer' + id);
                 container.text('CIE10: No Encontrado');
                 container.addClass('text-danger');
             }
@@ -185,6 +205,45 @@ function mapToCie10(id) {
     });
 }
 
+function resetCheckBoxes() {
+    $('.swith_mapping_cie10').bootstrapToggle()
+}
+
+function mapToCie10MultiplesItems() {
+    var sctConceptId = $('#sctConceptIdtoMap').val();
+
+    var mappedItems = {
+        containerId: sctConceptId,
+        items: []
+    };
+
+    $('#tableMultipleMapeoCie10 > tbody > tr').each(function () {
+
+        var codCie10 = this.id;
+        //si está seleccionado el checkBox en "Mapear"
+        if ($(this).find('#checkbox-' + codCie10).is(':checked')) {
+            var item = {
+                subcategoriaId: codCie10,
+                subcategoriaNombre: $(this).find('div.SubcategoriaNombre').text()
+            }
+            mappedItems.items.push(item);    
+        }
+    });
+
+    mapToCie10Items(mappedItems.containerId, mappedItems.items);
+}
+
+function mapToCie10Items(containerId, items) {
+    var container = $('#mapContainer' + containerId);
+    container.text('CIE10: ');
+
+    items.forEach(function (item) {
+        var nexElement = '<span id="' + item.subcategoriaId + '" class="cie10MappedCode text-success">' + item.subcategoriaId + ': </span>';
+        nexElement += '<span id="cie10MappedText-' + item.subcategoriaId + '" class="cie10MappedText text-success">' + item.subcategoriaNombre + '</span>';
+        nexElement += '<span> | </span>';
+        $(nexElement).insertAfter(container);
+    });
+}
 
 function deleteItem(rowId) {
     var tr = $('#' + rowId);

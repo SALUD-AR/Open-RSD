@@ -23,7 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Msn.InteropDemo.AppServices.Implementation\Msn.InteropDemo.AppServices.Implementation.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.AppServices\Msn.InteropDemo.AppServices.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Common\Msn.InteropDemo.Common.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Data\Msn.InteropDemo.Data.csproj" />
+    <ProjectReference Include="..\Msn.InteropDemo.Dfa\Msn.InteropDemo.Dfa.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Fhir.Implementacion\Msn.InteropDemo.Fhir.Implementacion.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Fhir\Msn.InteropDemo.Fhir.csproj" />
     <ProjectReference Include="..\Msn.InteropDemo.Integration\Msn.InteropDemo.Integration.csproj" />

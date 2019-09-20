@@ -4,7 +4,32 @@
     ViewData["Title"] = "Buscar Paciente";
 }
 
-<partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
+<div class="form-row">
+    <div class="col-md-6">
+        <partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
+    </div>
+    <div class="col-md-6">
+        
+        <div class="input-group">
+            <select 
+                    class="custom-select border-primary" 
+                    id="pacientesPruebaSelect" 
+                    asp-items="@ViewBag.PacientesPrueba" 
+                    aria-label="acceso directo a pacientes de prueba">                
+            </select>
+            <div class="input-group-append">
+                <button
+                        onclick="redirectFromPacientePrueba()" 
+                        class="btn btn-outline-primary" 
+                        type="button">Historia Clínica</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 <hr />
 

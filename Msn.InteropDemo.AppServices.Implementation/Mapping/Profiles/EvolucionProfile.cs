@@ -27,6 +27,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
                 .ForMember(dest => dest.FechaEvolucion, orig => orig.MapFrom(x => x.CreatedDateTime.ToString("dd/MM/yyyy")));
 
             CreateMap<Entities.Evoluciones.EvolucionDiagnostico, ViewModel.Evoluciones.EvolucionDiagnosticoViewModel>();
+            CreateMap<Entities.Evoluciones.EvolucionDiagnosticoCie10, ViewModel.Evoluciones.EvolucionDiagnosticoCie10ViewModel>();
             CreateMap<Entities.Evoluciones.EvolucionMedicamento, ViewModel.Evoluciones.EvolucionMedicamentoViewModel>();
             CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Evoluciones.EvolucionVacunaAplicacionViewModel>();
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,6 +36,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
             CreateMap<ViewModel.Evoluciones.EvolucionViewModel, Entities.Evoluciones.Evolucion>();
             CreateMap<ViewModel.Evoluciones.EvolucionDiagnosticoViewModel, Entities.Evoluciones.EvolucionDiagnostico>();
+            CreateMap<ViewModel.Evoluciones.EvolucionDiagnosticoCie10ViewModel, Entities.Evoluciones.EvolucionDiagnosticoCie10>();
             CreateMap<ViewModel.Evoluciones.EvolucionMedicamentoViewModel, Entities.Evoluciones.EvolucionMedicamento>();
             CreateMap<ViewModel.Evoluciones.EvolucionVacunaAplicacionViewModel, Entities.Evoluciones.EvolucionVacunaAplicacion>();
             ///////////////////////////////////////////////////////////////////////////////////////////////////////

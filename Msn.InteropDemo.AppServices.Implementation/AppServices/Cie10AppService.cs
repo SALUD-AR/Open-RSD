@@ -2,6 +2,7 @@
 using Msn.InteropDemo.AppServices.Core;
 using Msn.InteropDemo.Snowstorm;
 using Msn.InteropDemo.ViewModel.Snomed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +19,18 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
         {
             _snowstormManager = snowstormManager;
         }
+        
+        public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId,
+                                                                        string sexo,
+                                                                        int edad)
+        {
+            var lst = GetCie10MappedItems(conceptId);
+            var cie10Mapper = new Internal.SnomedToCie10Mapper();
+            cie10Mapper.SetMapeoPreferido(lst, sexo, edad);
+
+            return lst;
+        }
+
 
         public IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId)
         {
@@ -25,7 +38,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             var cie10lst = _snowstormManager.RunQueryCie10MapRefset(conceptId);
 
-            //se seleccionan solo aquellos que tienen un MapTarget, es decir, un Mapeo Esistente.
+            //se seleccionan solo aquellos que tienen un MapTarget, es decir, un Mapeo Existente.
             cie10lst.Items = cie10lst.Items.Where(x => !string.IsNullOrWhiteSpace(x.additionalFields.mapTarget)).ToList();
 
             //Customization para el formato de la codificacion de la DEIS
@@ -37,10 +50,10 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 }
             }
 
-            //Mapeo  a nuestros ViewModels
+            //Mapeo a nuestros ViewModels
             var cie10Maplst = Mapper.Map<List<Cie10MapResultViewModel>>(cie10lst.Items);
 
-            //Se seleccionadn los distintos MApTargue para is a buscar en la DB
+            //Se seleccionadn los distintos MapTarguet para is a buscar en la DB
             var cie102search = cie10Maplst.Select(x => x.MapTarget).Distinct();
 
             //obtenidos de la DB
@@ -55,7 +68,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                     item.SubcategoriaNombre = dbitem.SubcategoriaNombre;
                     item.CategoriaNombre = dbitem.CategoriaNombre;
                 }
-            } 
+            }
+
+            cie10Maplst = cie10Maplst.OrderBy(x => x.MapGroup).ThenBy(x => x.MapPriority).ToList();
 
             return cie10Maplst;
         }

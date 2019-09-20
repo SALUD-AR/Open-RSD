@@ -1,7 +1,13 @@
-﻿namespace Msn.InteropDemo.AppServices
+﻿using Msn.InteropDemo.ViewModel.Snomed;
+using System.Collections.Generic;
+
+namespace Msn.InteropDemo.AppServices
 {
     public interface ICie10AppService : Core.IGenericServiceReadOnly<Entities.Codificacion.Cie10>
     {
-        System.Collections.Generic.IEnumerable<ViewModel.Snomed.Cie10MapResultViewModel> GetCie10MappedItems(string conceptId);
+        IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId);
+        IEnumerable<Cie10MapResultViewModel> GetCie10MappedItems(string conceptId,
+                                                                 string sexo,
+                                                                 int edad);
     }
 }

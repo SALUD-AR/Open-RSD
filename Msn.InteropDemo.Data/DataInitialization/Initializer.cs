@@ -39,10 +39,43 @@ namespace Msn.InteropDemo.Data.DataInitialization
                 await SeedRoles();
                 await SeedDefaultAdminUser();
                 await SeedActivityTypeDescriptorsAsync();
+                await SeedPacientesPrueba();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error inicializando datos:");
+            }
+        }
+
+        private async Task SeedPacientesPrueba()
+        {
+            await InsertPacientePrueba("Matilde",   1111111, "F", 75);
+            await InsertPacientePrueba("Juan",      1111112, "M", 50);
+            await InsertPacientePrueba("Mateo",     1111113, "M", 17);
+            await InsertPacientePrueba("Valentina", 1111114, "F", 3);
+        }
+
+        private async Task InsertPacientePrueba(string nombre, int nroDocumento, string sexo, int edad)
+        {
+            var apellido = "Prueba";
+
+            if (!_dataContext.Pacientes.Any(x => x.PrimerApellido == apellido
+                                            && x.PrimerNombre == nombre
+                                            && x.NroDocumento == nroDocumento))
+            {
+                var p = new Paciente
+                {
+                    PrimerApellido = apellido,
+                    PrimerNombre = nombre,
+                    TipoDocumentoId = 1, //DNI
+                    NroDocumento = nroDocumento,
+                    FechaNacimiento = DateTime.Today.AddYears(edad * (-1)),
+                    Sexo = sexo,
+                    CreatedUserId = "1"
+                };
+
+                _dataContext.Pacientes.Add(p);
+                await _dataContext.SaveChangesAsync();
             }
         }
 

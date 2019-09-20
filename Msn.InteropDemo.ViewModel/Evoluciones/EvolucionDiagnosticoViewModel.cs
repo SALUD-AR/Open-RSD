@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Msn.InteropDemo.ViewModel.Evoluciones
 {
     public class EvolucionDiagnosticoViewModel
@@ -16,5 +18,7 @@ namespace Msn.InteropDemo.ViewModel.Evoluciones
         public string Cie10SubcategoriaId { get; set; }
 
         public string Cie10SubcategoriaNombre { get; set; }
+
+        public List<EvolucionDiagnosticoCie10ViewModel> Cie10Mapeos { get; set; }
     }
 }

@@ -33,6 +33,27 @@ namespace Msn.InteropDemo.Web.Helpers
             return new SelectList(lst, "Value", "Text", selectedValue);
         }
 
+
+        public SelectList GetPacientesPrueba()
+        {
+            var nroDoc = new List<int> { 1111111, 1111112, 1111113, 1111114 };
+
+            var lst = _dataContext.Pacientes
+                      .Where(x => x.PrimerApellido == "Prueba" && nroDoc.Contains(x.NroDocumento))
+                      .OrderBy(o => o.NroDocumento)
+                      .Select(x =>
+                          new SelectListItem
+                          {
+                              Text = $"{x.PrimerApellido}, {x.PrimerNombre} {Common.Utils.Helpers.DateTimeHelper.CalculateAge(x.FechaNacimiento)} años",
+                              Value = x.Id.ToString()
+                          }
+            ).ToList();
+
+            lst.Insert(0, GetDefaultItem("Seleccione pacientes de prueba..."));
+
+            return new SelectList(lst, "Value", "Text");
+        }
+
         private SelectListItem GetDefaultItem(string text = "-- Seleccione --")
         {
             return new SelectListItem { Value = null, Text = text };

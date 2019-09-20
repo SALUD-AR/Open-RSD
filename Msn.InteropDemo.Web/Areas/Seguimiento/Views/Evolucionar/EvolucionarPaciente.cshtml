@@ -5,14 +5,20 @@
     var pacienteSexoClass = Model.Sexo == "M" ? "fa-male" : "fa-female";
 }
 
+@section AddToHead {
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+}
+
 <partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
 
 <hr />
 
 <input asp-for="PacienteId" type="hidden" />
+<input id="pacienteSexo" value="@Model.Sexo" type="hidden" />
+<input id="pacienteEdad" value="@Model.PacienteEdad" type="hidden" />
+<input id="sctConceptIdtoMap" type="hidden" />
+
 <input id="evolucionId" type="hidden" value="@Model.PredefEvolucionId" />
-
-
 
 @Html.AntiForgeryToken()
 
@@ -37,7 +43,7 @@
     <div class="col-md-2">
         <div class="card">
             <div class="card-header text-center">
-                
+
                 <b>Consultas</b>
             </div>
             <div class="card-body" style="padding-top:10px;">
@@ -122,7 +128,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -137,8 +142,11 @@
 
 <partial name="Partials/_SearchSnowstormModal" />
 
+<partial name="Partials/_MapeoCIE10MultipleModal" />
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
     <script src="~/js/Views/Seguimiento/Evolucionar/EvolucionarPaciente.js"></script>
     <script src="~/js/Views/Seguimiento/Evolucionar/SearchSnowstormModal.js"></script>
     <script src="~/js/Views/ConfirmDialog.js"></script>

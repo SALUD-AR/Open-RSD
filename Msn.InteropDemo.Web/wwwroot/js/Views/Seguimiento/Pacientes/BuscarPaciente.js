@@ -1,9 +1,9 @@
 ﻿
 //On document Ready
 $(function () {
-    $('#FechaNacimiento').mask('99/99/9999');    
+    $('#FechaNacimiento').mask('99/99/9999');  
 })
-
+   
 //////////////////////////////////////////////////////////////////////////////////////
 /////////// POST PARA BUSCAR PACIENTES ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
@@ -54,18 +54,22 @@ function doPost() {
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-/// MUESTRA EL MODAL Y EJECUTA LAS OPEACIONES DE BUSQUEDA DE PACIENTE ////////////////
+/// MUESTRA EL MODAL Y EJECUTA LAS OPEACIONES DE FEDERACION DE PACIENTE ////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-function MostarPacienteExistente(id) {
-    var progressRegistrandoPacienteLocal = $('#progressRegistrandoPacienteLocal');
-    var progressPacienteLocalRegistrado = $('#progressPacienteLocalRegistrado');
-    var progressPacienteLocalRegistradoNuevo = $('#progressPacienteLocalRegistradoNuevo');
+function MostarPaciente(id, preExistenteEnDB = false) {
+    var progressPacienteLocal = $('#progressPacienteLocal');
+    var progressPacienteLocalText = $('#progressPacienteLocalText');
+    var progressPacienteLocalCheck = $('#progressPacienteLocalCheck');
+    var progressErrorTitle = $('#progressErrorTitle');
+    
     var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
-    var progressExistenciaEnElBUSVerificada = $('#progressExistenciaEnElBUSVerificada');
+    
     var progressPacienteYaFederado = $('#progressPacienteYaFederado');
+    var progressPacienteNoFederado = $('#progressPacienteNoFederado');
     var btnEvolucionar = $('#btnEvolucionar');
     var progressAltaPacienteBUS = $('#progressAltaPacienteBUS');
     var progressAltaPacienteBUSFinalizada = $('#progressAltaPacienteBUSFinalizada');
+    var progressAltaPacienteBUSFinalizadaError = $('#progressAltaPacienteBUSFinalizadaError');
     var pacienteId = $('#pacienteId');
     
     var loc = window.rootUrl + "Seguimiento/Pacientes/GetById/?id=" + id;
@@ -76,9 +80,7 @@ function MostarPacienteExistente(id) {
         url: loc,
         type: 'GET',
         dataType: 'json',
-        //data: dataToPost,
         cache: false,
-        //async: false,
         success: function (data) {
             $('#modalPacienteId').val(data.paciente.id);
             $('#modalPrimerApellido').val(data.paciente.primerApellido);
@@ -97,42 +99,62 @@ function MostarPacienteExistente(id) {
         }
     });
 
-    progressPacienteLocalRegistrado.show();
-    progressPacienteLocalRegistradoNuevo.css('display', 'none');
-    progressRegistrandoPacienteLocal.css('display', 'none');
+    if (preExistenteEnDB) {
+        progressPacienteLocalText.text(' Paciente ya registrado en la BBDD local ');
+        progressPacienteLocalCheck.css('display', 'none');
+    } else {
+        progressPacienteLocalText.text(' Creado exitosamente en la BBDD local ');
+        progressPacienteLocalCheck.show();
+    }
+
+    progressPacienteLocal.show();    
     progressAltaPacienteBUS.css('display', 'none');
     progressVerificandoExistenciaEnElBUS.css('display', 'none');
     progressAltaPacienteBUSFinalizada.css('display', 'none');
+    progressAltaPacienteBUSFinalizadaError.css('display', 'none');
     progressPacienteYaFederado.css('display', 'none');
-    progressExistenciaEnElBUSVerificada.css('display', 'none');
-
+    progressPacienteNoFederado.css('display', 'none');
     btnEvolucionar.css('display', 'none');
 
-    $('#modalPaciente').modal('show');
-    
+    var federaResult = false;
 
-    progressVerificandoExistenciaEnElBUS.fadeIn('slow', () => {
+    $('#modalPaciente').modal('show');
+
+    progressVerificandoExistenciaEnElBUS.delay(500).fadeIn('slow', () => {
 
         //VERIFICAR EXISTENCIA EN EL BUS
         var pacienteFederado = VerificarExistenciaPacienteLocalEnBUS(id);
 
-        progressVerificandoExistenciaEnElBUS.delay(500).fadeOut('slow', () => {
-            progressExistenciaEnElBUSVerificada.fadeIn('slow');
+        progressVerificandoExistenciaEnElBUS.delay(1000).fadeOut('slow', () => {
 
-            //SI NO EXISTE EN EL BU
+            //SI EL PACIENTE NO ESTA FEDERADO
             if (!pacienteFederado) {
-                console.log('Paciente:' + id + ' No Federado, de procese a Federar');
-                progressAltaPacienteBUS.fadeIn('slow', () => {
-                    FederarPaciente(id);
+                console.log('Paciente:' + id + ' No Federado, se procede a Federar');
+                progressPacienteNoFederado.fadeIn('slow');
+                progressAltaPacienteBUS.delay(500).fadeIn('slow', () => {
+                    federaResult = FederarPaciente(id);
                 });
 
-                progressAltaPacienteBUS.fadeOut('slow', () => {
-                    progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
-                        btnEvolucionar.fadeIn('slow');
-                    });
+                progressAltaPacienteBUS.delay(2000).fadeOut('slow', () => {
+                    //SI LA FEDERACION FUE EXITOSA
+                    if (federaResult.success) {
+                        progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
+                            btnEvolucionar.fadeIn('slow');
+                        });
+                    } else {
+                        progressAltaPacienteBUSFinalizadaError.fadeIn('slow', () => {
+                            console.log(federaResult.message);
+                            progressErrorTitle.tooltip('hide');
+                            progressErrorTitle.attr('title', federaResult.message);
+                            $('[data-toggle="tooltip"]').tooltip(); //refresh del Tooltip
+                            progressErrorTitle.tooltip('show');
+
+                            btnEvolucionar.fadeIn('slow');
+                        });
+                    }
                 });
             }
-            //SI EXISTE EN EL BU
+            ////SI EL PACIENTE YA SE ENCUENTRA FEDERADO
             else {
                 progressAltaPacienteBUS.delay(500).fadeOut('slow', () => {
                     progressPacienteYaFederado.fadeIn('slow', () => {
@@ -189,6 +211,8 @@ function FederarPaciente(id) {
         __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
     };
 
+    var ret = "";
+
     //////////////////////////////////////
     //console.log(dataToPost);
     //alert($('#Enabled').is(':checked'));
@@ -204,11 +228,14 @@ function FederarPaciente(id) {
         type: 'POST',
         dataType: 'json',
         data: dataToPost,
+        async: false, //OJO Lo pongo sincronico para poder mosrar los avances en la simulacion de tiempo !! (No usar en produccion)
         cache: false,
         success: function (data) {
             if (!data.success) {
                 console.log('Error Federando el Paciente: ' + data.message);
             }
+
+            ret = { success: data.success, message: data.message };
         },
         error: function (request, status, error) {
             if (errorLabel) {
@@ -216,8 +243,12 @@ function FederarPaciente(id) {
             } else {
                 alert(request.responseText);
             }
+
+            ret = { success: false, message: request.responseText };;
         }
     });
+
+    return ret;
 }
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
@@ -278,83 +309,13 @@ function confirmNuevoPaciente() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-/// SE MUESTRA EL MODAL QUE REALIZA LAS VERIFICACIONES Y FEDERA EL PACIENTE SI ES NECESARIO ///
+/// REGISTRA EL NUEVO PACIENTE Y LO MUESTRA                                                 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////
 function MostarPacienteNuevo() {
     //1. Registrar el paciente en la DB Local
-    //2. Registrar el paciente en la DB Local
-
-    var progressRegistrandoPacienteLocal = $('#progressRegistrandoPacienteLocal');
-    var progressPacienteLocalRegistradoNuevo = $('#progressPacienteLocalRegistradoNuevo');
-    var progressPacienteLocalRegistrado = $('#progressPacienteLocalRegistrado');
-    var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
-    var progressExistenciaEnElBUSVerificada = $('#progressExistenciaEnElBUSVerificada');
-    var progressPacienteYaFederado = $('#progressPacienteYaFederado');
-    var btnEvolucionar = $('#btnEvolucionar');
-    var progressAltaPacienteBUS = $('#progressAltaPacienteBUS');
-    var progressAltaPacienteBUSFinalizada = $('#progressAltaPacienteBUSFinalizada');
-    var pacienteId = $('#pacienteId');
-
-   
-    $('#modalPrimerApellido').val($('#PrimerApellido').val());
-    $('#modalPrimerNombre').val($('#PrimerNombre').val());
-    $('#modalGeneroNombre').val($('#Sexo').children("option:selected").text());
-    $('#modalTipoDocumentoNombre').val($('#TipoDocumentoId').children("option:selected").text());
-    $('#modalNroDocumento').val($('#NroDocumento').val());
-    $('#modalFechaNacimiento').val($('#FechaNacimiento').val());
-
-    progressPacienteLocalRegistrado.css('display', 'none');
-    progressPacienteLocalRegistradoNuevo.css('display', 'none');
-    progressRegistrandoPacienteLocal.css('display', 'none');
-    progressVerificandoExistenciaEnElBUS.css('display', 'none');
-    progressExistenciaEnElBUSVerificada.css('display', 'none');
-    progressAltaPacienteBUS.css('display', 'none');
-    progressAltaPacienteBUSFinalizada.css('display', 'none');
-    progressPacienteYaFederado.css('display', 'none');
-
-    btnEvolucionar.css('display', 'none');
-
-    $('#modalPaciente').modal('show');
-
-    progressRegistrandoPacienteLocal.fadeIn('slow');
-
-    //DAR DE ALTA EL PACIENTE EN NUESTRA DB
-    RegistrarPacienteLocal();
-
-    progressRegistrandoPacienteLocal.delay(1000).fadeOut('slow', () => {
-        progressPacienteLocalRegistradoNuevo.fadeIn('slow', () => {
-
-            //VERIFICAR EXISTENCIA EN EL BUS
-            var pacienteFederado = VerificarExistenciaPacienteLocalEnBUS(pacienteId.val());
-
-            progressVerificandoExistenciaEnElBUS.fadeIn('slow', () => {
-                progressVerificandoExistenciaEnElBUS.delay(1000).fadeOut('slow', () => {
-                    progressExistenciaEnElBUSVerificada.fadeIn('slow');
-
-                    //SI NO EXISTE EN EL BU
-                    if (!pacienteFederado) {
-                        progressAltaPacienteBUS.fadeIn('slow', () => {
-                            FederarPaciente(pacienteId.val());
-                        });
-
-                        progressAltaPacienteBUS.fadeOut('slow', () => {
-                            progressAltaPacienteBUSFinalizada.fadeIn('slow', () => {
-                                btnEvolucionar.fadeIn('slow');
-                            });
-                        });
-                    }
-                    //SI EXISTE EN EL BU
-                    else {
-                        progressAltaPacienteBUS.fadeOut('slow', () => {
-                            progressPacienteYaFederado.fadeIn('slow', () => {
-                                btnEvolucionar.fadeIn('slow');
-                            });
-                        });
-                    }
-                });
-            });
-        });
-    });
+    //2. Muestra el paciente 
+    var pacienteId = RegistrarPacienteLocal();
+    MostarPaciente(pacienteId, false);
 }
 
 
@@ -362,7 +323,7 @@ function MostarPacienteNuevo() {
 /// REGISTRA UN NUEVO PACIENTE EN LA DB LOCAL //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 function RegistrarPacienteLocal() {
-    var ret;
+    var ret = 0;
     var pacienteId = $('#pacienteId');
 
     var dataToPost = {
@@ -391,14 +352,14 @@ function RegistrarPacienteLocal() {
         dataType: 'json',
         data: dataToPost,
         cache: false,
-        async: false, //Para la simulacion, en Produccion poner: True.
+        async: false, //OJO Lo pongo sincronico para poder mosrar los avances en la simulacion de tiempo !! (No usar en produccion)
         success: function (data) {
             if (data.success) {
                 pacienteId.val(data.pacienteId);
-                ret = true;
+                ret = data.pacienteId;
             }
             else {
-                ret = false;
+                ret = 0;
             }
         },
         error: function (request, status, error) {
@@ -408,14 +369,20 @@ function RegistrarPacienteLocal() {
                 alert(request.responseText);
             }
 
-            ret = false;
+            ret = 0;
         }
     });
 
     return ret;    
 }
 
-
+function redirectFromPacientePrueba() {
+    var pacienteId = $('#pacientesPruebaSelect').val();
+    if (pacienteId) {
+        $('#pacienteId').val(pacienteId);
+        redirect2Evolucion();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// REDIRECCION A LA VIEW DE EVOLUCION /////////////////////////////////////////////////////////

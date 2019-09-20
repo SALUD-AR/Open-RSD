@@ -13,23 +13,19 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
     [Authorize]
     public class EvolucionarController : Web.Controllers.Base.ControllerBase
     {
-        private readonly IPacienteAppService _pacienteAppService;
         private readonly IEvolucionAppService _evolucionAppService;
         private readonly ICie10AppService _cie10AppService;
-        private readonly ISelectListHelper _selectListHelper;
         private readonly ILogger<EvolucionarController> _logger;
 
-        public EvolucionarController(IPacienteAppService pacienteAppService, 
+        public EvolucionarController(IPacienteAppService pacienteAppService,
                                      IEvolucionAppService evolucionAppService,
                                      ICie10AppService cie10AppService,
                                      ISelectListHelper selectListHelper,
                                      ILogger<EvolucionarController> logger
             )
         {
-            _pacienteAppService = pacienteAppService;
             _evolucionAppService = evolucionAppService;
             _cie10AppService = cie10AppService;
-            _selectListHelper = selectListHelper;
             _logger = logger;
         }
         // GET: Evolucionar
@@ -44,9 +40,9 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         public ActionResult EvolucionarPaciente(int id)
         {
             var model = _evolucionAppService.GetEvolucionesHisto(id);
-            if(model.Items.Any())
+            if (model.Items.Any())
             {
-                model.Items = model.Items.OrderByDescending(x => x.FechaEvolucion).ToList();
+                model.Items = model.Items.OrderByDescending(x => x.CreatedDateTime).ToList();
                 model.PredefEvolucionId = model.Items[0].Id;
             }
 
@@ -58,7 +54,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             try
             {
                 var model = _evolucionAppService.GetEvolucionHistoDates(pacienteId);
-                if(model.Any())
+                if (model.Any())
                 {
                     model[0].Active = "active";
                 }
@@ -94,7 +90,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                 var items = _evolucionAppService.SearchSnowstormByExpressionTerm(expression,
                                                                                  term)
                                                                                 .ToList();
-                if(items.Any())
+                if (items.Any())
                 {
                     table = this.RenderViewToStringAsync("Partials/_GridSnowstormSearchResult", items).Result;
                 }
@@ -129,20 +125,25 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             }
         }
 
-        public JsonResult GetMapeoCie10(string conceptId)
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public JsonResult GetMapeoCie10(string conceptId, string sexo, int edad)
         {
             try
             {
-                var lstitems = _cie10AppService.GetCie10MappedItems(conceptId);
+                var lstitems = _cie10AppService.GetCie10MappedItems(conceptId, sexo, edad);
 
-                //TODO: Modificar con la implementacion del modal para seleccion multiple
-                if(lstitems.Any())
+                if(lstitems.Count() == 1)
                 {
-                    var item = lstitems.ToList()[0];
-                    return new JsonResult(new { success = true,  item }) { StatusCode = 200 };
+                    return new JsonResult(new { success = true,  item = lstitems.First(), count = lstitems.Count()}) { StatusCode = 200 };
+                }
+                else if (lstitems.Count() > 1)
+                {
+                    var table = this.RenderViewToStringAsync("Partials/_GridMapeoCie10", lstitems).Result;
+                    return new JsonResult(new { success = true, table, count = lstitems.Count() }) { StatusCode = 200 };
                 }
 
-                return new JsonResult(new { success = false }) { StatusCode = 200 };
+                return new JsonResult(new { success = false, count = 0 }) { StatusCode = 200 };
             }
             catch (Exception ex)
             {

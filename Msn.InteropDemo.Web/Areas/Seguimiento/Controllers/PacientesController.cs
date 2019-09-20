@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices;
@@ -97,6 +93,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         [Helpers.Attributes.Breadcrumb("Pacientes")]        
         public ActionResult BuscarPaciente()
         {
+            ViewBag.PacientesPrueba = _selectListHelper.GetPacientesPrueba();
             var model = new BuscarPacienteRequestModel();
             SetupModel(model);
             return View(model);
@@ -174,7 +171,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error Federando Paciente");
-                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+                return new JsonResult(new { success = false, message = ex.Message }) { StatusCode = 500 };
             }
         }
 

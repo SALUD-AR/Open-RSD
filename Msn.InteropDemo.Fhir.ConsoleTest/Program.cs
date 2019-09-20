@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Msn.InteropDemo.Fhir.ConsoleTest.Mock;
@@ -48,7 +47,9 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
                 //ShowPatient("1982708");
                 //TestExpressionAppService();
 
-                TestCie10Mapping();
+                //TestCie10Mapping();
+
+                TestAutomataFinito();
 
             }
             catch (Exception ex)
@@ -60,6 +61,18 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
             DisposeServices();
         }
 
+
+        public static void TestAutomataFinito()
+        {
+            string simbolo = " IFA <= 15 years";
+            //string simbolo = "<=";
+            var af = new Dfa.Dfas.NumberDfa();
+            var collector = new Msn.InteropDemo.Dfa.Notifications.MatchCollector();
+
+            var results = af.CollectTokens(simbolo.ToCharArray(), collector);
+
+            //var results = af.Validate(simbolo.ToCharArray());
+        }
 
         private static void TestCie10Mapping()
         {
