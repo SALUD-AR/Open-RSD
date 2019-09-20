@@ -42,7 +42,7 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "La {0} es requerida.")]
             [EmailAddress(ErrorMessage = "Debe ingresar una {0} válida." )]
-            [Display(Name = "Casila de Correo")]
+            [Display(Name = "Casilla de Correo")]
             public string Email { get; set; }
 
             [Required(ErrorMessage = "El {0} es requerido")]
