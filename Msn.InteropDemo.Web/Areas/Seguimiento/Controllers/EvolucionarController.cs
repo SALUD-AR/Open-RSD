@@ -42,7 +42,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             var model = _evolucionAppService.GetEvolucionesHisto(id);
             if (model.Items.Any())
             {
-                model.Items = model.Items.OrderByDescending(x => x.FechaEvolucion).ToList();
+                model.Items = model.Items.OrderByDescending(x => x.CreatedDateTime).ToList();
                 model.PredefEvolucionId = model.Items[0].Id;
             }
 

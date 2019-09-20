@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices.Core;
+using Msn.InteropDemo.Entities.Evoluciones;
 using Msn.InteropDemo.Snowstorm;
 using Msn.InteropDemo.ViewModel.Evoluciones;
 using System;
@@ -22,9 +23,39 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
         public EvolucionViewModel GetById(int evolucionId)
         {
-            var entity = GetById<EvolucionViewModel>(criteria: x => x.Id == evolucionId,
+            var entity_old = GetById<EvolucionViewModel>(criteria: x => x.Id == evolucionId,
                                                      includeProperties: "Diagnosticos.Cie10Mapeos,Medicamentos,Vacunas,CreatedUser");
-            return entity;
+
+            var entity = Get(filter: x => x.Id == evolucionId, includeProperties: "Diagnosticos.Cie10Mapeos,Medicamentos,Vacunas,CreatedUser").First();
+
+            //conversion al nuevo formato de mapeo multiple
+            if (entity.Diagnosticos.Any(x => x.Cie10SubcategoriaId != null))
+            {
+                foreach (var item in entity.Diagnosticos)
+                {
+                    //si existe un mapeo de la vieja forma, lo paso a la forma nueva
+                    if (!string.IsNullOrWhiteSpace(item.Cie10SubcategoriaId))
+                    {
+                        item.Cie10Mapeos = new List<EvolucionDiagnosticoCie10>
+                        {
+                            new EvolucionDiagnosticoCie10
+                            {
+                                Cie10SubcategoriaId = item.Cie10SubcategoriaId,
+                                Cie10SubcategoriaNombre = item.Cie10SubcategoriaNombre
+                            }
+                        };
+
+                        item.Cie10SubcategoriaId = null;
+                        item.Cie10SubcategoriaNombre = null;
+                    };
+                }
+
+                CurrentContext.DataContext.SaveChanges();
+            }
+
+            var model = Mapper.Map<EvolucionViewModel>(entity);
+
+            return model;
         }
 
         public IEnumerable<EvolucionDiagnosticoViewModel> GetDiagnosticos(int evolucionId)
