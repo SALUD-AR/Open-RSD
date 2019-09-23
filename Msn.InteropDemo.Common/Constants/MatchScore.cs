@@ -15,15 +15,15 @@
         /// </summary>
         public static decimal TipoDocumento = 0.1M;
         /// <summary>
-        /// Valor del roDocumento = 0.3
+        /// Valor del NroDocumento = 0.3
         /// </summary>
         public static decimal NroDocumento = 0.3M;
         /// <summary>
-        /// Valor del Seso = 0.1
+        /// Valor del Sexo = 0.1
         /// </summary>
         public static decimal Sexo = 0.1M;
         /// <summary>
-        /// Valos de la FechaNacimeinto = 0.2
+        /// Valos de la FechaNacimiento = 0.2
         /// </summary>
         public static decimal FechaNacimiento = 0.2M;
     }
