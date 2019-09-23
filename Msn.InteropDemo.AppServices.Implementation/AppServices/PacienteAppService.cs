@@ -147,42 +147,38 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             {
                 if (item.PrimerApellido.ToLower() == apellido.ToLower())
                 {
-                    item.Score += (decimal)0.2;
+                    item.Score += MatchScore.Apellido;
                     item.PrimerApellidoEsCoincidente = true;
                 }
                 if (item.PrimerNombre.ToLower() == nombre.ToLower())
                 {
-                    item.Score += (decimal)0.1;
+                    item.Score += MatchScore.Nombre;
                     item.PrimerNombreEsCoincidente = true;
                 }
                 if (item.TipoDocumentoId == (int)tipoDocumento)
                 {
-                    item.Score += (decimal)0.1;
+                    item.Score += MatchScore.TipoDocumento;
                     item.TipoDocumentoEsCoincidente = true;
                 }
                 if (item.NroDocumento == (int)nroDocumento)
                 {
-                    item.Score += (decimal)0.3;
+                    item.Score += MatchScore.NroDocumento;
                     item.NroDocumentoEsCoincidente = true;
                 }
                 if (item.Sexo.ToLower() == sexo.ToLower())
                 {
-                    item.Score += (decimal)0.1;
+                    item.Score += MatchScore.Sexo;
                     item.SexoEsCoincidente = true;
                 }
                 if (item.FechaNacimiento == dtFechaNac.ToString("dd/MM/yyyy"))
                 {
-                    item.Score += (decimal)0.2;
+                    item.Score += MatchScore.FechaNacimiento;
                     item.FechaNacimientoEsCoincidente = true;
                 }
             }
 
             lst = lst.OrderByDescending(x => x.Score).ToList();
 
-            //CurrentContext.RegisterActivityLog(Entities.Activity.ActivityType.SEARCH_PACIENTES_COINCIDENTES_DB_LOCAL,
-            //                                   filterExp.ToString(),
-            //                                   $"Pacientes obtenidos:{lst.Count}");
-            
             return lst;
         }
 
