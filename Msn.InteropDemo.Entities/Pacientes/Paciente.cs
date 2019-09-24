@@ -7,9 +7,13 @@ namespace Msn.InteropDemo.Entities.Pacientes
     {
         public string PrimerNombre { get; set; }
 
+        public string PrimerNombreSoundex { get; set; }
+
         public string OtrosNombres { get; set; }
 
         public string PrimerApellido { get; set; }
+
+        public string PrimerApellidoSoundex { get; set; }
 
         public string OtrosApellidos { get; set; }
 

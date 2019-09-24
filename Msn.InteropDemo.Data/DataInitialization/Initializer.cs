@@ -35,6 +35,8 @@ namespace Msn.InteropDemo.Data.DataInitialization
             {
                 _dataContext.Database.Migrate();
 
+                await GeneratePacienteSoundex();
+
                 await SeedTiposDocumentosAsync();
                 await SeedRoles();
                 await SeedDefaultAdminUser();
@@ -45,6 +47,21 @@ namespace Msn.InteropDemo.Data.DataInitialization
             {
                 _logger.LogError(ex, "Error inicializando datos:");
             }
+        }
+
+        //TODO: Eliminar en la Iteracion-5 dado que todos los pacientes estatan convertido a Soundex.
+        private async Task GeneratePacienteSoundex()
+        {
+            var pacientes = _dataContext.Pacientes.Where(x => string.IsNullOrWhiteSpace(x.PrimerApellidoSoundex)
+                                                           || string.IsNullOrWhiteSpace(x.PrimerNombreSoundex));
+            foreach (var item in pacientes)
+            {
+                item.PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(item.PrimerApellido);
+                item.PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(item.PrimerNombre);
+            }
+
+            var t  = await _dataContext.SaveChangesAsync();
+            _logger.LogInformation($"Se han actualizado {t.ToString()} pacientes a Soundex.");
         }
 
         private async Task SeedPacientesPrueba()
@@ -66,7 +83,9 @@ namespace Msn.InteropDemo.Data.DataInitialization
                 var p = new Paciente
                 {
                     PrimerApellido = apellido,
+                    PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(apellido),
                     PrimerNombre = nombre,
+                    PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(nombre),
                     TipoDocumentoId = 1, //DNI
                     NroDocumento = nroDocumento,
                     FechaNacimiento = DateTime.Today.AddYears(edad * (-1)),

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-namespace Msn.InteropDemo.AppServices.Implementation.Internal
+namespace Msn.InteropDemo.Common.Utils.Helpers
 {
-    public class Soundex
+    public static class Soundex
     {
-        public string GetSoundex(string data)
+        public static string GetSoundex(string data)
         {
             var result = new StringBuilder();
             if (data != null && data.Length > 0)
             {
                 string previousCode, currentCode;
-                result.Append(Char.ToUpper(data[0]));
+                result.Append(char.ToUpper(data[0]));
                 previousCode = string.Empty;
                 for (var i = 1; i < data.Length; i++)
                 {
@@ -34,14 +33,14 @@ namespace Msn.InteropDemo.AppServices.Implementation.Internal
             }
             if (result.Length < 4)
             {
-                result.Append(new String('0', 4 - result.Length));
+                result.Append(new string('0', 4 - result.Length));
             }
 
             return result.ToString();
         }
-        private string EncodeChar(char c)
+        private static string EncodeChar(char c)
         {
-            switch (Char.ToLower(c))
+            switch (char.ToLower(c))
             {
                 case 'b':
                 case 'f':
@@ -71,19 +70,38 @@ namespace Msn.InteropDemo.AppServices.Implementation.Internal
                     return string.Empty;
             }
         }
+
         //The difference function will match the two Soundex strings and return 0 to 4.
         //0 means Not Matched
         //4 means Strongly Matched
-        public int Difference(string data1, string data2)
+
+        /// <summary>
+        /// Calcula la diferencia entre dos Textoz planos dados (No deben ser Soundex)
+        /// </summary>
+        /// <param name="text1">Primer texto plano a comparar</param>
+        /// <param name="text2">Segundo texto plano a comparar</param>
+        /// <returns>un valor entre [0, 4] 0 si no coinciden y si coinciden plemanente</returns>
+        public static int Difference(string text1, string text2)
         {
-            var result = 0;
-            if (data1.Equals(string.Empty) || data2.Equals(string.Empty))
+            if (text1.Equals(string.Empty) || text2.Equals(string.Empty))
             {
                 return 0;
             }
 
-            var soundex1 = GetSoundex(data1);
-            var soundex2 = GetSoundex(data2);
+            var soundex1 = GetSoundex(text1);
+            var soundex2 = GetSoundex(text2);
+            return DifferenceSoundex(soundex1, soundex2);
+        }
+
+        /// <summary>
+        /// Calcula la diferencia entre dos Soundex dados
+        /// </summary>
+        /// <param name="soundex1">Primer Soundex a comparar</param>
+        /// <param name="soundex2">Segundo Soundex a comparar</param>
+        /// <returns>un valor entre [0, 4] 0 si no coinciden y si coinciden plemanente</returns>
+        public static int DifferenceSoundex(string soundex1, string soundex2)
+        {
+            var result = 0;
             if (soundex1.Equals(soundex2))
             {
                 result = 4;

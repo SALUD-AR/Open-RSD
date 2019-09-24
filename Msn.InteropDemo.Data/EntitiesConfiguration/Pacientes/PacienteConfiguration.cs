@@ -12,6 +12,11 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Pacientes
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(p => p.PrimerNombreSoundex)
+                .HasMaxLength(4)
+                .IsRequired()
+                .IsUnicode(false);
+
             builder.Property(p => p.OtrosNombres)
                 .HasMaxLength(50)
                 .IsRequired(false);
@@ -19,6 +24,11 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Pacientes
             builder.Property(p => p.PrimerApellido)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.Property(p => p.PrimerApellidoSoundex)
+                .HasMaxLength(4)
+                .IsRequired()
+                .IsUnicode(false);
 
             builder.Property(p => p.OtrosApellidos)
                 .HasMaxLength(50)

@@ -69,6 +69,21 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
         public bool ExistePacienteEnBUS(int pacienteId)
         {
+            //BUSQUEDA BY MATCH: NO UTULIZADA, SE DEJA A MODO DE DOCUENTACION
+            //var sexo = (model.Sexo == "M") ? Sexo.Masculino : Sexo.Femenido;
+            //var fn = DateTime.Parse(model.FechaNacimiento);
+            //var request = new Msn.InteropDemo.Fhir.Model.Request.ExistPatientRequest
+            //{
+            //    Dni = model.NroDocumento.Value,
+            //    FechaNacimiento = fn,
+            //    Sexo = sexo,
+            //    OtrosNombres = model.OtrosNombres,
+            //    PrimerApellido = model.PrimerApellido,
+            //    PrimerNombre = model.PrimerNombre
+            //};
+
+            //var exists = _patientManager.ExistsPatient(request);
+
             var model = GetById(pacienteId);
 
             if (model == null)
@@ -76,21 +91,6 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new Exception("No se ha encontrado el Paciente en la Base de datos Local");
             }
 
-            var sexo = (model.Sexo == "M") ? Sexo.Masculino : Sexo.Femenido;
-            var fn = DateTime.Parse(model.FechaNacimiento);
-
-            var request = new Msn.InteropDemo.Fhir.Model.Request.ExistPatientRequest
-            {
-                Dni = model.NroDocumento.Value,
-                FechaNacimiento = fn,
-                Sexo = sexo,
-                OtrosNombres = model.OtrosNombres,
-                PrimerApellido = model.PrimerApellido,
-                PrimerNombre = model.PrimerNombre
-            };
-
-            //Busqueda By Match
-            //var exists = _patientManager.ExistsPatient(request);
             var exists = _patientManager.ExistsPatient(DomainName.LocalDomain, pacienteId.ToString());
 
             return exists;
@@ -202,12 +202,11 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new Exception("El sexo es requerido.");
             }
 
+            entity.PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(entity.PrimerNombre);
+            entity.PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(entity.PrimerApellido);
+
             var op = base.Save(entity);
             op.Id = entity.Id;
-
-            //CurrentContext.RegisterActivityLog(Entities.Activity.ActivityType.CREATE_PACIENTE_EN_DB_LOCAL,
-            //                                   entity.ToString(),
-            //                                   $"Paciente generado:{entity.Id}");
 
             return op;
         }
