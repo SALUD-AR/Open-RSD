@@ -132,16 +132,24 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(fechaNacimiento));
             }
 
-            Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerNombre.ToLower().StartsWith(nombre.ToLower()) ||
-                                                                              x.PrimerApellido.ToLower().StartsWith(apellido.ToLower()) ||
-                                                                              x.NroDocumento == nroDocumento ||
-                                                                              //x.Sexo == sexo || (no tiene sentido buscar por sexo y Tipo doc.)
-                                                                              x.FechaNacimiento == dtFechaNac;
+            var nombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(nombre);
+            var apellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(apellido);
 
-            var lst = Get<ViewModel.Pacientes.PacienteListItemViewModel>(filter: filterExp,
-                                                                         includeProperties: "TipoDocumento",
-                                                                         take: 50) //Solo los primeros 50 coincidentes
-                                                                         .ToList();
+            //Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerNombre.ToLower().StartsWith(nombre.ToLower()) ||
+            //                                                                  x.PrimerApellido.ToLower().StartsWith(apellido.ToLower()) ||
+            //                                                                  x.NroDocumento == nroDocumento ||
+            //                                                                  //x.Sexo == sexo || (no tiene sentido buscar por sexo y Tipo doc.)
+            //                                                                  x.FechaNacimiento == dtFechaNac;
+
+            Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerApellidoSoundex == apellidoSoundex ||
+                                                                                 x.PrimerNombreSoundex == nombreSoundex ||
+                                                                                 x.NroDocumento == nroDocumento ||
+                                                                                 x.FechaNacimiento == dtFechaNac;
+
+            var lst = Get<PacienteListItemViewModel>(filter: filterExp,
+                                                             includeProperties: "TipoDocumento",
+                                                             take: 50) //Solo los primeros 50 coincidentes
+                                                             .ToList();
 
             foreach (var item in lst)
             {
