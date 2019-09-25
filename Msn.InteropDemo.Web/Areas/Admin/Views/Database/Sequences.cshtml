@@ -29,13 +29,16 @@
                 </td>
                 <td class="text-center">
                     <button class="btn btn-outline-primary"
-                            onclick="javascript:UpdateSecuence(@item.TableName)">
+                            onclick="javascript:UpdateSecuence('@item.TableName')">
                         <i class="fas fa-save"></i>
                     </button>
                 </td>
             </tr>
         }
     </tbody>
-
-
 </table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Admin/Database/Sequences.js"></script>
+}
