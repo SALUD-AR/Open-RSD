@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Msn.InteropDemo.Data.Extensions;
 using Msn.InteropDemo.Entities.Identity;
+using Msn.InteropDemo.Entities.Sqlite;
 using System.Linq;
 
 namespace Msn.InteropDemo.Data.Context
@@ -71,5 +72,8 @@ namespace Msn.InteropDemo.Data.Context
         public DbSet<Entities.Evoluciones.EvolucionVacunaAplicacion> EvolucionVacunaAplicaciones { get; set; }
 
         public DbSet<Entities.Codificacion.Cie10> Cie10 { get; set; }
+
+        public DbSet<SqliteSequence> SqliteSequences { get; set; }
+
     }
 }
