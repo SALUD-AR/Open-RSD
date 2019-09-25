@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Msn.InteropDemo.Common.Utils.Helpers
 {
-    public static class Soundex
+    public static class StringHelper
     {
-        public static string GetSoundex(string data)
+        public static string Soundex(string data)
         {
             var result = new StringBuilder();
             if (data != null && data.Length > 0)
@@ -81,15 +82,15 @@ namespace Msn.InteropDemo.Common.Utils.Helpers
         /// <param name="text1">Primer texto plano a comparar</param>
         /// <param name="text2">Segundo texto plano a comparar</param>
         /// <returns>un valor entre [0, 4] 0 si no coinciden y si coinciden plemanente</returns>
-        public static int Difference(string text1, string text2)
+        public static int DifferenceSoundexPlainText(string text1, string text2)
         {
             if (text1.Equals(string.Empty) || text2.Equals(string.Empty))
             {
                 return 0;
             }
 
-            var soundex1 = GetSoundex(text1);
-            var soundex2 = GetSoundex(text2);
+            var soundex1 = Soundex(text1);
+            var soundex2 = Soundex(text2);
             return DifferenceSoundex(soundex1, soundex2);
         }
 
@@ -154,5 +155,59 @@ namespace Msn.InteropDemo.Common.Utils.Helpers
             }
             return result;
         }
+
+        public static int LevenshteinDistance(string s, string t)
+        {
+            if (s is null)
+            {
+                throw new System.ArgumentNullException(nameof(s));
+            }
+
+            if (t is null)
+            {
+                throw new System.ArgumentNullException(nameof(t));
+            }
+
+            var n = s.Length;
+            var m = t.Length;
+            var d = new int[n + 1, m + 1];
+
+            // Step 1
+            if (n == 0)
+            {
+                return m;
+            }
+
+            if (m == 0)
+            {
+                return n;
+            }
+
+            // Step 2
+            for (int i = 0; i <= n; d[i, 0] = i++)
+            {
+            }
+
+            for (int j = 0; j <= m; d[0, j] = j++)
+            {
+            }
+
+            // Step 3
+            for (int i = 1; i <= n; i++)
+            {
+                //Step 4
+                for (int j = 1; j <= m; j++)
+                {
+                    // Step 5
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+
+                    // Step 6
+                    d[i, j] = Math.Min(Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1), d[i - 1, j - 1] + cost);
+                }
+            }
+            // Step 7
+            return d[n, m];
+        }
     }
 }
+

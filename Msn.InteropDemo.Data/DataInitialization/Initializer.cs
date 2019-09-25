@@ -56,8 +56,8 @@ namespace Msn.InteropDemo.Data.DataInitialization
                                                            || string.IsNullOrWhiteSpace(x.PrimerNombreSoundex));
             foreach (var item in pacientes)
             {
-                item.PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(item.PrimerApellido);
-                item.PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(item.PrimerNombre);
+                item.PrimerApellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(item.PrimerApellido);
+                item.PrimerNombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(item.PrimerNombre);
             }
 
             var t  = await _dataContext.SaveChangesAsync();
@@ -83,9 +83,9 @@ namespace Msn.InteropDemo.Data.DataInitialization
                 var p = new Paciente
                 {
                     PrimerApellido = apellido,
-                    PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(apellido),
+                    PrimerApellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(apellido),
                     PrimerNombre = nombre,
-                    PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(nombre),
+                    PrimerNombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(nombre),
                     TipoDocumentoId = 1, //DNI
                     NroDocumento = nroDocumento,
                     FechaNacimiento = DateTime.Today.AddYears(edad * (-1)),

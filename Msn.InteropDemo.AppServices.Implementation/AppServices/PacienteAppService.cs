@@ -8,6 +8,7 @@ using Msn.InteropDemo.Common.Constants;
 using Msn.InteropDemo.ViewModel.Pacientes;
 using Msn.InteropDemo.Fhir;
 using System.Linq.Expressions;
+using Msn.InteropDemo.Common.Utils.Helpers;
 
 namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 {
@@ -132,8 +133,8 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(fechaNacimiento));
             }
 
-            var nombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(nombre);
-            var apellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(apellido);
+            var nombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(nombre);
+            var apellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(apellido);
 
             //Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerNombre.ToLower().StartsWith(nombre.ToLower()) ||
             //                                                                  x.PrimerApellido.ToLower().StartsWith(apellido.ToLower()) ||
@@ -148,43 +149,42 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             var lst = Get<PacienteListItemViewModel>(filter: filterExp,
                                                              includeProperties: "TipoDocumento",
+                                                             orderBy: o=>o.OrderBy(n=>n.PrimerApellido).ThenBy(t=>t.PrimerNombre),
                                                              take: 50) //Solo los primeros 50 coincidentes
                                                              .ToList();
 
+            decimal tmpScore;
             foreach (var item in lst)
             {
-                if (item.PrimerApellido.ToLower() == apellido.ToLower())
-                {
-                    item.Score += MatchScore.Apellido;
-                    item.PrimerApellidoEsCoincidente = true;
-                }
-                if (item.PrimerNombre.ToLower() == nombre.ToLower())
-                {
-                    item.Score += MatchScore.Nombre;
-                    item.PrimerNombreEsCoincidente = true;
-                }
+                tmpScore = MatchScoreHelper.MatchApellido.CalculateScore(item.PrimerApellido.ToLower(), apellido.ToLower());
+                item.Score += tmpScore;
+                item.PrimerApellidoEsCoincidente = (tmpScore == MatchScoreHelper.MatchApellido.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchNombre.CalculateScore(item.PrimerNombre.ToLower(), nombre.ToLower());
+                item.Score += tmpScore;
+                item.PrimerNombreEsCoincidente = (tmpScore == MatchScoreHelper.MatchNombre.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchNroDocumento.CalculateScore(item.NroDocumento.Value.ToString(), nroDocumento.ToString());
+                item.Score += tmpScore;
+                item.NroDocumentoEsCoincidente = (tmpScore == MatchScoreHelper.MatchNroDocumento.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchFechaNacimiento.CalculateScore(item.FechaNacimiento, dtFechaNac.ToString("dd/MM/yyyy"));
+                item.Score += tmpScore;
+                item.FechaNacimientoEsCoincidente = (tmpScore == MatchScoreHelper.MatchFechaNacimiento.MatchValue);
+
                 if (item.TipoDocumentoId == (int)tipoDocumento)
                 {
-                    item.Score += MatchScore.TipoDocumento;
+                    item.Score += MatchScoreHelper.MatchTipoDocumento.MatchValue;
                     item.TipoDocumentoEsCoincidente = true;
                 }
-                if (item.NroDocumento == (int)nroDocumento)
-                {
-                    item.Score += MatchScore.NroDocumento;
-                    item.NroDocumentoEsCoincidente = true;
-                }
+
                 if (item.Sexo.ToLower() == sexo.ToLower())
                 {
-                    item.Score += MatchScore.Sexo;
+                    item.Score += MatchScoreHelper.MatchSexo.MatchValue;
                     item.SexoEsCoincidente = true;
                 }
-                if (item.FechaNacimiento == dtFechaNac.ToString("dd/MM/yyyy"))
-                {
-                    item.Score += MatchScore.FechaNacimiento;
-                    item.FechaNacimientoEsCoincidente = true;
-                }
             }
-
+            
             lst = lst.OrderByDescending(x => x.Score).ToList();
 
             return lst;
@@ -210,8 +210,8 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new Exception("El sexo es requerido.");
             }
 
-            entity.PrimerNombreSoundex = Common.Utils.Helpers.Soundex.GetSoundex(entity.PrimerNombre);
-            entity.PrimerApellidoSoundex = Common.Utils.Helpers.Soundex.GetSoundex(entity.PrimerApellido);
+            entity.PrimerNombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(entity.PrimerNombre);
+            entity.PrimerApellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(entity.PrimerApellido);
 
             var op = base.Save(entity);
             op.Id = entity.Id;
