@@ -135,13 +135,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             var nombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(nombre);
             var apellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(apellido);
-
-            //Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerNombre.ToLower().StartsWith(nombre.ToLower()) ||
-            //                                                                  x.PrimerApellido.ToLower().StartsWith(apellido.ToLower()) ||
-            //                                                                  x.NroDocumento == nroDocumento ||
-            //                                                                  //x.Sexo == sexo || (no tiene sentido buscar por sexo y Tipo doc.)
-            //                                                                  x.FechaNacimiento == dtFechaNac;
-
+           
             Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerApellidoSoundex == apellidoSoundex ||
                                                                                  x.PrimerNombreSoundex == nombreSoundex ||
                                                                                  x.NroDocumento == nroDocumento ||
@@ -168,7 +162,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 item.Score += tmpScore;
                 item.NroDocumentoEsCoincidente = (tmpScore == MatchScoreHelper.MatchNroDocumento.MatchValue);
 
-                tmpScore = MatchScoreHelper.MatchFechaNacimiento.CalculateScore(item.FechaNacimiento, dtFechaNac.ToString("dd/MM/yyyy"));
+                tmpScore = MatchScoreHelper.MatchFechaNacimiento.CalculateScore(item.FechaNacimientoPlane, dtFechaNac.ToString("yyyyMMdd"));
                 item.Score += tmpScore;
                 item.FechaNacimientoEsCoincidente = (tmpScore == MatchScoreHelper.MatchFechaNacimiento.MatchValue);
 
