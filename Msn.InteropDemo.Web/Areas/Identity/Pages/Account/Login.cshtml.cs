@@ -84,13 +84,19 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account
                     var sysUser = _userManager.FindByNameAsync(Input.UserName).Result;
                     if (sysUser != null)
                     {
+                        _logger.LogInformation($"User logged in:{sysUser.UserName}");
+
                         if (string.IsNullOrWhiteSpace(sysUser.Email) || !sysUser.CUIT.HasValue)
                         {
                             return RedirectToPage("Manage/Index", new { mustCongifAccount = true });
                         }
+
+                        if(_userManager.IsInRoleAsync(sysUser, "ADMINISTRADOR").Result)
+                        {
+                            return RedirectToAction("Index", "Home", new {Area = "Admin" });
+                        }
                     }
 
-                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
 

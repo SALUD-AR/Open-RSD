@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section AddToHead{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+}
+
+<h2>Log de Actividades</h2>
+<hr />
+
+<div class="card mb-3">
+    <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="input-group date" id="dateFrom" data-target-input="nearest">
+                            <input id="dateFromInput" type="text" class="form-control datetimepicker-input" data-target="#dateFrom"  value="@ViewBag.DateFrom"/>
+                            <div class="input-group-append" data-target="#dateFrom" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="input-group date" id="dateTo" data-target-input="nearest">
+                            <input id="dateToInput" type="text" class="form-control datetimepicker-input" data-target="#dateTo"  value="@ViewBag.DateTo" />
+                            <div class="input-group-append" data-target="#dateTo" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-right">
+                    <button id="btnSearch" type="button" onclick="seachActivities()" class="btn btn-outline-primary"><span class="fa fa-search"></span> Buscar</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+<div id="tableActivitiesContainer">
+    
+</div>
+
+<div class="modal fade" id="jsonModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Json - Detalle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <pre id="jsonContent">
+                </pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/moment.js-2240/moment.js"></script>
+    <script src="~/lib/moment.js-2240/es-us.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/js/Views/Admin/LogActividades/SearchActivities.js"></script>
+
+    <script>
+
+        $(function () {
+            $('#dateFrom').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+            $('#dateTo').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+
+            seachActivities();
+        });
+
+        function viewJson(id, isRequest) {
+            var loc = window.rootUrl + "Seguimiento/LogActividades/GetActivity/" + id;
+            var modalBox = $('#jsonModalScrollable');
+            var jsonContent = $('#jsonContent');
+
+            $.ajax({
+                url: loc,
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+
+                    var body = '';
+                    if (isRequest) {
+                        body = data.activityLog.activityRequestBody;
+                    }
+                    else {
+                        body = data.activityLog.activityResponseBody;
+                    }
+
+                    jsonContent.html(body);
+                    modalBox.modal('show');
+                },
+                error: function (request, status, error) {
+                    console.log(request.responseText);
+                    alert(request.responseText);
+                }
+            });
+        }
+
+    </script>
+
+
+}
