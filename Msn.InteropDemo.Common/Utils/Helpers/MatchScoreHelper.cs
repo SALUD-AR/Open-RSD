@@ -40,7 +40,7 @@
 
             //Si la distancia es igual al Len del string obtenido es porque no coincide absolutamente nada.
             //En este caso retorna 0. No ha coincidencia alguna. 
-            if(distance == strLen)
+            if(distance >= strLen)
             {
                 return 0;
             }
