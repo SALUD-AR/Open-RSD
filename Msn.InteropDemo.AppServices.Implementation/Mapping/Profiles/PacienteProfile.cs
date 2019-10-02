@@ -6,6 +6,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
     {
         public PacienteProfile()
         {
+            //TODO: Borrar cuando sea movido el Helper a AppServices
+            CreateMap<Common.Utils.Helpers.ScoreElement, ViewModel.Response.CoeficienteScoreElementResponse>();
+
             CreateMap<Entities.Pacientes.Paciente, ViewModel.Pacientes.PacienteListItemViewModel>()
                 .ForMember(dest => dest.TipoDocumentoId, orig => orig.MapFrom(x => x.TipoDocumentoId))
                 .ForMember(dest => dest.TipoDocumentoNombre, orig => orig.MapFrom(x => x.TipoDocumento.Nombre))

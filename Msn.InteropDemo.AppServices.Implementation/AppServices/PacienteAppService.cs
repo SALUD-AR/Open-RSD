@@ -9,6 +9,8 @@ using Msn.InteropDemo.ViewModel.Pacientes;
 using Msn.InteropDemo.Fhir;
 using System.Linq.Expressions;
 using Msn.InteropDemo.Common.Utils.Helpers;
+using Msn.InteropDemo.ViewModel.Request;
+using Msn.InteropDemo.ViewModel.Response;
 
 namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 {
@@ -23,6 +25,66 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             _patientManager = patientManager;
         }
 
+
+        public ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(CoeficienteBusquedaRequest request)
+        {
+            if (!Common.Utils.Helpers.DateTimeHelper.TryParseFromAR(request.FechaNacimientoIngresado, out var dtFechaIngrasada))
+            {
+                throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(request.FechaNacimientoIngresado));
+            }
+            if (!Common.Utils.Helpers.DateTimeHelper.TryParseFromAR(request.FechaNacimientoObtenido, out var dtFechaObtenida))
+            {
+                throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(request.FechaNacimientoObtenido));
+            }
+
+            var ret = new ViewModel.Response.CoeficienteBusquedaResponce();
+
+            var element = MatchScoreHelper.MatchApellido.GenerateScoreElement(request.ApellidoObtenido, request.ApellidoIngresado);
+            ret.ApellidoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.ApellidoScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchNombre.GenerateScoreElement(request.NombreObtenido, request.NombreIngresado);
+            ret.NombreScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.NombreScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchNroDocumento.GenerateScoreElement(request.NroDocumentoObtenido, request.NroDocumentoIngresado);
+            ret.NroDocumentoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.NroDocumentoScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchFechaNacimiento.GenerateScoreElement(dtFechaObtenida.ToString("yyyyMMdd"), dtFechaIngrasada.ToString("yyyyMMdd"));
+            ret.FechaNacimientoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.FechaNacimientoScoreElement.CoeficienteFinal;
+
+            ret.TipoDocumentoScoreElement = new CoeficienteScoreElementResponse
+            {
+                PesoValorUI = MatchScoreHelper.MatchTipoDocumento.MatchValue.ToString("P2"),
+                Ingresado = request.TipoDocumentoIngresado,
+                Obtenido = request.TipoDocumentoObtenido,
+                LevenshteinDistante = $"(no aplicable)",
+                CoeficienteParcialUI = $"(no aplicable)",
+                ObtenidoLen = $"(no aplicable)",
+                CoeficienteFinal = (request.TipoDocumentoIngresado == request.TipoDocumentoObtenido) ? MatchScoreHelper.MatchTipoDocumento.MatchValue : 0,
+                CoeficienteFinalUI = (request.TipoDocumentoIngresado == request.TipoDocumentoObtenido) ? MatchScoreHelper.MatchTipoDocumento.MatchValue.ToString("P2") : 0M.ToString("P2")
+            };
+            ret.CoeficienteTotalFinal += ret.TipoDocumentoScoreElement.CoeficienteFinal;
+
+            ret.SexoScoreElement = new CoeficienteScoreElementResponse
+            {
+                PesoValorUI = MatchScoreHelper.MatchSexo.MatchValue.ToString("P2"),
+                Ingresado = request.SexoIngresado,
+                Obtenido = request.SexoObtenido,
+                LevenshteinDistante = $"(no aplicable)",
+                CoeficienteParcialUI = $"(no aplicable)",
+                ObtenidoLen = $"(no aplicable)",
+                CoeficienteFinal = (request.SexoIngresado== request.SexoObtenido) ? MatchScoreHelper.MatchSexo.MatchValue : 0,
+                CoeficienteFinalUI = (request.SexoIngresado == request.SexoObtenido) ? MatchScoreHelper.MatchSexo.MatchValue.ToString("P2") : 0M.ToString("P2")
+            };
+            ret.CoeficienteTotalFinal += ret.SexoScoreElement.CoeficienteFinal;
+
+            ret.CoeficietneTotalFinalUI = ret.CoeficienteTotalFinal.ToString("P3");
+
+            return ret;
+        }
 
         public Common.OperationResults.OperationResult FederarPaciente(int pacienteId)
         {
@@ -135,7 +197,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             var nombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(nombre);
             var apellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(apellido);
-           
+
             Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerApellidoSoundex == apellidoSoundex ||
                                                                                  x.PrimerNombreSoundex == nombreSoundex ||
                                                                                  x.NroDocumento == nroDocumento ||
@@ -143,7 +205,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             var lst = Get<PacienteListItemViewModel>(filter: filterExp,
                                                              includeProperties: "TipoDocumento",
-                                                             orderBy: o=>o.OrderBy(n=>n.PrimerApellido).ThenBy(t=>t.PrimerNombre),
+                                                             orderBy: o => o.OrderBy(n => n.PrimerApellido).ThenBy(t => t.PrimerNombre),
                                                              take: 50) //Solo los primeros 50 coincidentes
                                                              .ToList();
 
@@ -178,7 +240,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                     item.SexoEsCoincidente = true;
                 }
             }
-            
+
             lst = lst.OrderByDescending(x => x.Score).ToList();
 
             return lst;

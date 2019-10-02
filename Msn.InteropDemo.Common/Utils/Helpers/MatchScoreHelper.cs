@@ -23,6 +23,63 @@
 
         public MatchField MatchType { get; private set; }
 
+        public ScoreElement GenerateScoreElement(string obtainedText, string searchedText)
+        {
+            if (string.IsNullOrWhiteSpace(obtainedText))
+            {
+                throw new System.ArgumentException("message", nameof(obtainedText));
+            }
+
+            if (string.IsNullOrWhiteSpace(searchedText))
+            {
+                throw new System.ArgumentException("message", nameof(searchedText));
+            }
+
+            var strLen = obtainedText.Length;
+            var distance = StringHelper.LevenshteinDistance(obtainedText, searchedText);
+
+            var element = new ScoreElement
+            {
+                Ingresado = searchedText,
+                Obtenido = obtainedText,
+                PesoValorUI = this.MatchValue.ToString("P2"),
+                ObtenidoLen = strLen.ToString(),
+                LevenshteinDistante = distance
+            };
+
+            //Si la distancia es igual al Len del string obtenido es porque no coincide absolutamente nada.
+            //En este caso retorna 0. No ha coincidencia alguna. 
+            if (distance >= strLen)
+            {
+                element.CoeficienteParcialUI = (0M).ToString("#0.00");
+                element.CoeficienteFinal = 0;
+                element.CoeficienteFinalUI = (0M).ToString("P3");
+                return element;
+            }
+
+            //Si los textos son iguales, retonra el valor del Coeficiente completo.
+            if (distance == 0)
+            {
+                element.CoeficienteParcialUI = (1M).ToString("#0.00");
+                element.CoeficienteFinal = this.MatchValue;
+                element.CoeficienteFinalUI = this.MatchValue.ToString("P3");
+                return element;
+            }
+
+            //Si la distancia es menor entonces es necesario el calculo porcentual del coeficiente.
+            if (distance < strLen)
+            {
+                var matchCoef = ((decimal)(strLen - distance) / (decimal)strLen);
+                var finalCoef = (matchCoef * this.MatchValue);
+
+                element.CoeficienteParcialUI = matchCoef.ToString("#0.00");
+                element.CoeficienteFinal = finalCoef;
+                element.CoeficienteFinalUI = finalCoef.ToString("P3");
+            }
+
+            return element;
+        }
+
         public decimal CalculateScore(string obtainedText, string searchedText)
         {
             if(string.IsNullOrWhiteSpace(obtainedText))
