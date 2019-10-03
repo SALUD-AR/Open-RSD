@@ -6,6 +6,7 @@ namespace Msn.InteropDemo.ViewModel.Response
 {
     public class CoeficienteScoreElementResponse
     {
+        public decimal PesoValor { get; set; }
         public string PesoValorUI { get; set; }
         public string LevenshteinDistante { get; set; }
         public string Ingresado { get; set; }

@@ -17,5 +17,6 @@ namespace Msn.InteropDemo.AppServices
         Common.OperationResults.OperationResult FederarPaciente(int pacienteId);
         PacienteViewModel GetById(int pacienteId);
         ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(ViewModel.Request.CoeficienteBusquedaRequest request);
+        ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(ViewModel.Request.CoeficienteBusquedaIngresadoRequest request);
     }
 }

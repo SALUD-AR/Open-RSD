@@ -25,6 +25,7 @@
     <tbody>
         @foreach (var item in Model.Items)
         {
+            var pacienteId = "p" + item.Id;
 
             if (item.Score <= Convert.ToDecimal(0.5))
             {
@@ -38,7 +39,7 @@
             {
                 css_score = "text-success";
             }
-            <tr>
+            <tr id="@pacienteId">
                 <td class="text-left @item.PrimerApellidoCss">
                     @Html.DisplayFor(modelItem => item.PrimerApellido)
                 </td>
@@ -64,6 +65,10 @@
                     </strong>
                 </td>
                 <td class="text-center">
+                    <button class="btn btn-outline-success"
+                            onclick="javascript:MostarCoeficienteBusqueda(@item.Id)">
+                            <i class="fas fa-list-ol"></i>
+                    </button>
                     <button class="btn btn-outline-primary"
                             onclick="javascript:MostarPaciente(@item.Id, true)">
                         <i class="fas fa-arrow-right"></i>

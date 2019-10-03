@@ -178,7 +178,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CreateByFrontEnd(ViewModel.Pacientes.PacienteViewModel entity)
+        public JsonResult CreateByFrontEnd(PacienteViewModel entity)
         {
             if (!ModelState.IsValid)
             {
@@ -206,7 +206,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GetCoeficienteBuqueda(ViewModel.Request.CoeficienteBusquedaRequest request)
+        public JsonResult GetCoeficienteBuqueda(CoeficienteBusquedaIngresadoRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -216,7 +216,8 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             try
             {
                 var resp = _pacienteAppService.GetCoeficienteBusqueda(request);
-                return new JsonResult(new { success = true, message = "", resp }) { StatusCode = 200 };
+                var table = this.RenderViewToStringAsync("Partials/_GridCoeficienteBusqueda", resp).Result;
+                return new JsonResult(new { success = true, message = "", table }) { StatusCode = 200 };
                 
             }
             catch (Exception ex)

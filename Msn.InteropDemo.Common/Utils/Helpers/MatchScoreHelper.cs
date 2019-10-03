@@ -35,13 +35,17 @@
                 throw new System.ArgumentException("message", nameof(searchedText));
             }
 
+            obtainedText = obtainedText.ToLower();
+            searchedText = searchedText.ToLower();
+
             var strLen = obtainedText.Length;
             var distance = StringHelper.LevenshteinDistance(obtainedText, searchedText);
 
             var element = new ScoreElement
-            {
+            {             
                 Ingresado = searchedText,
                 Obtenido = obtainedText,
+                PesoValor = this.MatchValue,
                 PesoValorUI = this.MatchValue.ToString("P2"),
                 ObtenidoLen = strLen.ToString(),
                 LevenshteinDistante = distance
@@ -53,7 +57,7 @@
             {
                 element.CoeficienteParcialUI = (0M).ToString("#0.00");
                 element.CoeficienteFinal = 0;
-                element.CoeficienteFinalUI = (0M).ToString("P3");
+                element.CoeficienteFinalUI = (0M).ToString("P2");
                 return element;
             }
 
@@ -62,7 +66,7 @@
             {
                 element.CoeficienteParcialUI = (1M).ToString("#0.00");
                 element.CoeficienteFinal = this.MatchValue;
-                element.CoeficienteFinalUI = this.MatchValue.ToString("P3");
+                element.CoeficienteFinalUI = this.MatchValue.ToString("P2");
                 return element;
             }
 
@@ -74,7 +78,7 @@
 
                 element.CoeficienteParcialUI = matchCoef.ToString("#0.00");
                 element.CoeficienteFinal = finalCoef;
-                element.CoeficienteFinalUI = finalCoef.ToString("P3");
+                element.CoeficienteFinalUI = finalCoef.ToString("P2");
             }
 
             return element;

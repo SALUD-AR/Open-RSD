@@ -1,0 +1,212 @@
+﻿@model Msn.InteropDemo.ViewModel.Response.CoeficienteBusquedaResponce
+
+
+@{
+    string css_score = "";
+    string css_score_item = "";
+
+    if (Model.CoeficienteTotalFinal <= Convert.ToDecimal(0.5))
+    {
+        css_score = "text-danger";
+    }
+    else if ((Model.CoeficienteTotalFinal > Convert.ToDecimal(0.5)) && (Model.CoeficienteTotalFinal < Convert.ToDecimal(0.9)))
+    {
+        css_score = "text-secondary";
+    }
+    else if (Model.CoeficienteTotalFinal > Convert.ToDecimal(0.9))
+    {
+        css_score = "text-success";
+    }
+
+}
+
+<table class="table table-hover table-bordered table-sm table-responsive-sm mb-0">
+    <thead>
+        <tr class="bg-light align-middle">
+            <th class="text-center">Elemento a Comparar</th>
+            <th class="text-center">Peso Relativo asignado (V)</th>
+            <th class="text-center">Texto Ingresado</th>
+            <th class="text-center">Texto Obtenido</th>
+            <th class="text-center">Distancia de Levenshtein (D)</th>
+            <th class="text-center">Largo del Texto Obtenido (L)</th>
+            <th class="text-center">
+                Coeficiente entre el texto obtenido y la Distancia (F):
+                <br />
+                ((L - D) / L)
+            </th>
+            <th class="text-right">
+                Coeficiente por Valor del Peso:
+                <br />
+                (F * V)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-left text-primary">
+                Apellido:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.PesoValorUI)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.Ingresado)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.ApellidoScoreElement.PesoValor == Model.ApellidoScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.ApellidoScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left text-primary">
+                Nombre:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.PesoValorUI)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.Ingresado)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.NombreScoreElement.PesoValor == Model.NombreScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.NombreScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left text-primary">
+                Sexo:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.PesoValorUI)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.Ingresado)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.SexoScoreElement.PesoValor == Model.SexoScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.SexoScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left text-primary">
+                Tipo Doc.:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.PesoValorUI)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.Ingresado)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.TipoDocumentoScoreElement.PesoValor == Model.TipoDocumentoScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.TipoDocumentoScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left text-primary">
+                Nro. Doc.:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.PesoValorUI)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.Ingresado)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.NroDocumentoScoreElement.PesoValor == Model.NroDocumentoScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.NroDocumentoScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left text-primary">
+                Fecha Nac.:
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.PesoValorUI)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.Ingresado)
+            </td>
+            <td class="text-left">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.Obtenido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.LevenshteinDistante)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.ObtenidoLen)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.CoeficienteParcialUI)
+            </td>
+            <td class="text-right @(Model.FechaNacimientoScoreElement.PesoValor == Model.FechaNacimientoScoreElement.CoeficienteFinal ? "" : " text-danger")">
+                @Html.DisplayFor(modelItem => Model.FechaNacimientoScoreElement.CoeficienteFinalUI)
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr class="bg-light align-middle">
+            <td class="text-center font-weight-bold text-secondary">Totales:</td>
+            <td class="text-center font-weight-bold text-secondary">@((1).ToString("P2"))</td>
+            <td colspan="5">&nbsp;</td>
+            <td class="text-right font-weight-bold @css_score">
+                @Html.DisplayFor(modelItem => Model.CoeficietneTotalFinalUI)
+            </td>
+        </tr>
+    </tfoot>
+</table>

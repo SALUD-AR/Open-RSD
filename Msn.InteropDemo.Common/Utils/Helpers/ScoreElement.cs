@@ -5,6 +5,7 @@ namespace Msn.InteropDemo.Common.Utils.Helpers
     //TODO: Eliminar al mover el Helper a AppService
     public class ScoreElement
     {
+        public decimal PesoValor { get; set; }
         public string PesoValorUI { get; set; }
         public int LevenshteinDistante { get; set; }
         public string Ingresado { get; set; }

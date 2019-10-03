@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using Msn.InteropDemo.Common.Utils.Helpers;
 using Msn.InteropDemo.ViewModel.Request;
 using Msn.InteropDemo.ViewModel.Response;
+using Microsoft.EntityFrameworkCore;
 
 namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 {
@@ -25,9 +26,48 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             _patientManager = patientManager;
         }
 
+        public ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(CoeficienteBusquedaIngresadoRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var entity = CurrentContext.DataContext.Pacientes.Include(x => x.TipoDocumento)
+                                                             .FirstOrDefault(x=>x.Id == request.PacienteId);
+            if(entity == null)
+            {
+                throw new Exception($"Paciente inexistente con ID:{request.PacienteId}");
+            }
+
+            var rq = new CoeficienteBusquedaRequest
+            {
+                ApellidoIngresado = request.ApellidoIngresado,
+                ApellidoObtenido = entity.PrimerApellido,
+                FechaNacimientoIngresado = request.FechaNacimientoIngresado,
+                FechaNacimientoObtenido = entity.FechaNacimiento.ToString("dd/MM/yyyy"),
+                NombreIngresado = request.NombreIngresado,
+                NombreObtenido = entity.PrimerNombre,
+                NroDocumentoIngresado = request.NroDocumentoIngresado,
+                NroDocumentoObtenido = entity.NroDocumento.ToString(),
+                SexoIngresado = request.SexoIngresado,
+                SexoObtenido = entity.Sexo,
+                TipoDocumentoIngresado = request.TipoDocumentoIngresado,
+                TipoDocumentoObtenido = entity.TipoDocumento.Nombre
+
+            };
+
+            var ret = GetCoeficienteBusqueda(rq);
+            return ret;
+        }
 
         public ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(CoeficienteBusquedaRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             if (!Common.Utils.Helpers.DateTimeHelper.TryParseFromAR(request.FechaNacimientoIngresado, out var dtFechaIngrasada))
             {
                 throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(request.FechaNacimientoIngresado));
@@ -52,11 +92,14 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             ret.CoeficienteTotalFinal += ret.NroDocumentoScoreElement.CoeficienteFinal;
 
             element = MatchScoreHelper.MatchFechaNacimiento.GenerateScoreElement(dtFechaObtenida.ToString("yyyyMMdd"), dtFechaIngrasada.ToString("yyyyMMdd"));
+            element.Ingresado = request.FechaNacimientoIngresado;
+            element.Obtenido = request.FechaNacimientoObtenido;
             ret.FechaNacimientoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
             ret.CoeficienteTotalFinal += ret.FechaNacimientoScoreElement.CoeficienteFinal;
 
             ret.TipoDocumentoScoreElement = new CoeficienteScoreElementResponse
             {
+                PesoValor = MatchScoreHelper.MatchTipoDocumento.MatchValue,
                 PesoValorUI = MatchScoreHelper.MatchTipoDocumento.MatchValue.ToString("P2"),
                 Ingresado = request.TipoDocumentoIngresado,
                 Obtenido = request.TipoDocumentoObtenido,
@@ -70,6 +113,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             ret.SexoScoreElement = new CoeficienteScoreElementResponse
             {
+                PesoValor = MatchScoreHelper.MatchSexo.MatchValue,
                 PesoValorUI = MatchScoreHelper.MatchSexo.MatchValue.ToString("P2"),
                 Ingresado = request.SexoIngresado,
                 Obtenido = request.SexoObtenido,
@@ -81,7 +125,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             };
             ret.CoeficienteTotalFinal += ret.SexoScoreElement.CoeficienteFinal;
 
-            ret.CoeficietneTotalFinalUI = ret.CoeficienteTotalFinal.ToString("P3");
+            ret.CoeficietneTotalFinalUI = ret.CoeficienteTotalFinal.ToString("P2");
 
             return ret;
         }
