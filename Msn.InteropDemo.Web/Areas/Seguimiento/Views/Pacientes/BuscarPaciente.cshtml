@@ -4,39 +4,36 @@
     ViewData["Title"] = "Buscar Paciente";
 }
 
+<input id="pacienteId" type="hidden" />
+
 <div class="form-row">
     <div class="col-md-6">
         <partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
     </div>
     <div class="col-md-6">
-        
+
         <div class="input-group">
-            <select 
-                    class="custom-select border-primary" 
-                    id="pacientesPruebaSelect" 
-                    asp-items="@ViewBag.PacientesPrueba" 
-                    aria-label="acceso directo a pacientes de prueba">                
+            <select class="custom-select border-primary"
+                    id="pacientesPruebaSelect"
+                    asp-items="@ViewBag.PacientesPrueba"
+                    aria-label="acceso directo a pacientes de prueba">
             </select>
             <div class="input-group-append">
-                <button
-                        onclick="redirectFromPacientePrueba()" 
-                        class="btn btn-outline-primary" 
-                        type="button">Historia Clínica</button>
+                <button onclick="redirectFromPacientePrueba()"
+                        class="btn btn-outline-primary"
+                        type="button">
+                    Historia Clínica
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
-
 <hr />
-
-<input id="pacienteId" type="hidden" />
 
 <partial name="Partials/_ModalCreatePaciente" model="@Model" />
 <partial name="Partials/_BuscarPaciente" model="@Model" />
+<partial name="Partials/_ModalCoeficienteBusqueda" />
 
 <div id="btnNuevoPaciente" class="form-row" style="display:none;">
     <div class="col-lg-4 col-md-4 col-sm-6">&nbsp;</div>

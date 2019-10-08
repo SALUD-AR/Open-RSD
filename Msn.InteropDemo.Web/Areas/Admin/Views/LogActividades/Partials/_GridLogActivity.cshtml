@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Activity.ActivityLogListItemViewModel>
+
+<table class="table table-hover table-sm table-responsive-sm">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Momento</th>
+            <th>Tipo Actividad</th>
+            <th>Requerimiento</th>
+            <th>Respuesta</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td class="text-left">
+                <span class="small">@item.CreatedUserName</span>
+            </td>
+            <td class="text-center">
+                <span class="small">@item.CreatedDateTimeUI</span>
+            </td>
+
+            <td class="text-left">
+                <span class="small">@item.ActivityTypeDescriptorName</span>
+            </td>
+            <td class="text-left">
+                @if (item.RequestIsURL)
+                {
+                    <a href="@item.ActivityRequestUI" target="_blank">
+                        <span class="small">@item.ActivityRequestUI</span>
+                    </a>
+                }
+                else if (item.RequestIsJson)
+                {
+                    <span class="small">@item.ActivityRequestUI</span>
+                    <br />
+                    <button class="btn btn-link" onclick="viewJson('@item.Id', true)" target="_blank">
+                        <span class="small">@item.ActivityRequestBody</span>
+                    </button>
+                }
+                else
+                {
+                    <span class="small">@item.ActivityRequest</span>
+                }
+
+
+            </td>
+            <td class="text-left">
+                @if (item.ResponseIsJson)
+                {
+                    <span class="small">@item.ActivityResponse</span>
+                    <br />
+                    <button class="btn btn-link" onclick="viewJson('@item.Id', false)" target="_blank">
+                        <span class="small">@item.ActivityResponseBody</span>
+                    </button>
+                }
+                else
+                {
+                    <span class="small">@item.ActivityResponse</span>
+                }
+
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

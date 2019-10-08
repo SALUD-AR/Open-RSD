@@ -39,15 +39,15 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             model.SexoList = _selectListHelper.GetSexoList();
         }
 
-        
-        
+
+
         // GET: Pacientes
         public ActionResult Index()
         {
             return RedirectToAction(nameof(BuscarPaciente));
         }
 
-    
+
         // GET: Pacientes/Create
         [Helpers.Attributes.Breadcrumb("Nuevo Paciente")]
         public ActionResult Create()
@@ -81,16 +81,16 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generando Paciente");
                 ModelState.AddModelError("", ex.Message);
                 SetupModel(model);
-                return View(model);                
+                return View(model);
             }
         }
 
-        [Helpers.Attributes.Breadcrumb("Pacientes")]        
+        [Helpers.Attributes.Breadcrumb("Pacientes")]
         public ActionResult BuscarPaciente()
         {
             ViewBag.PacientesPrueba = _selectListHelper.GetPacientesPrueba();
@@ -159,7 +159,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             try
             {
                 var op = _pacienteAppService.FederarPaciente(id);
-                if(op.OK)
+                if (op.OK)
                 {
                     return new JsonResult(new { success = true, message = "" }) { StatusCode = 200 };
                 }
@@ -178,9 +178,9 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CreateByFrontEnd(ViewModel.Pacientes.PacienteViewModel entity)
+        public JsonResult CreateByFrontEnd(PacienteViewModel entity)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return new JsonResult(new { success = false, message = FriendlyErrors() }) { StatusCode = 200 };
             }
@@ -204,6 +204,27 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetCoeficienteBuqueda(CoeficienteBusquedaIngresadoRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = FriendlyErrors() }) { StatusCode = 200 };
+            }
 
+            try
+            {
+                var resp = _pacienteAppService.GetCoeficienteBusqueda(request);
+                var table = this.RenderViewToStringAsync("Partials/_GridCoeficienteBusqueda", resp).Result;
+                return new JsonResult(new { success = true, message = "", table }) { StatusCode = 200 };
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
     }
 }

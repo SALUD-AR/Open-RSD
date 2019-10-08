@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Administración";
+}
+
+<h2>Administración</h2>
+
+<hr />
+
+<div class="text-center">
+    
+    <div class="form-group">
+
+        <a asp-area="Admin" asp-controller="Database" asp-action="Sequences" class="btn btn-cpi-metro metro-fucsia metro-size-150x150">
+            <div class="fa fa-database" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Base de Datos
+                <span class="small">Admin Secuence</span>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-controller="LogActividades" asp-action="Index" class="btn btn-cpi-metro metro-verde metro-size-150x150">
+            <div class="fas fa-clipboard-list" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Log de Actividades
+            </div>
+        </a>
+
+        <a asp-area="Administradores" asp-controller="Configuracion" asp-action="Index" class="btn btn-cpi-metro metro-celeste metro-size-150x150">
+            <div class="fa fa-cogs" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Configuración
+            </div>
+        </a>
+
+        @*<a href="#" class="btn btn-cpi-metro metro-celeste1 metro-size-150x150">
+            <div class="fa fa-dollar-sign" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Caja
+            </div>
+        </a>*@
+
+        @*<a asp-area="Administradores" asp-controller="Proveedores" asp-action="Index" class="btn btn-cpi-metro metro-olive metro-size-150x150">
+            <div class="fa fa-toolbox" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Proveedores
+            </div>
+        </a>*@
+
+        @*<a href="#" class="btn btn-cpi-metro metro-rojo metro-size-150x150">
+            <div class="fa fa-chart-bar" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">Dashboard General</div>
+        </a>*@
+
+        @*<a href="#" class="btn btn-cpi-metro metro-verdemar metro-size-150x150">
+            <div class="fa fa-cog" style="font-size: 40px; padding-top:5px; padding-left: 0px; padding-right: 0px;"></div>
+            <div style="padding-top:20px; padding-left:0px; padding-right:0px;">
+                Configuración
+            </div>
+        </a>*@
+
+    </div>
+</div>

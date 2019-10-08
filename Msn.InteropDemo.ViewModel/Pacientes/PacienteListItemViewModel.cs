@@ -34,6 +34,8 @@ namespace Msn.InteropDemo.ViewModel.Pacientes
 
         public string FechaNacimiento { get; set; }
 
+        public string FechaNacimientoPlane { get; set; }
+
         public decimal Score { get; set; }
 
         public string FrienlyScore

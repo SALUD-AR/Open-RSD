@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Msn.InteropDemo.Entities.Sqlite.SqliteSequence>
+
+@{
+    ViewData["Title"] = "Sequences";
+}
+
+<h2>Sequences</h2>
+<hr />
+
+@Html.AntiForgeryToken()
+
+<table class="table table-hover table-responsive-sm">
+    <thead>
+        <tr>
+            <th class="text-left w-50">Tabla</th>
+            <th class="text-left w-25">Sequence</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-left">
+                    @Html.DisplayFor(modelItem => item.TableName)
+                </td>
+                <td class="text-right">
+                    <input id="@item.TableName" type="text" class="form-control text-right" value="@item.Sequence" />
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-outline-primary"
+                            onclick="javascript:UpdateSecuence('@item.TableName')">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Admin/Database/Sequences.js"></script>
+}

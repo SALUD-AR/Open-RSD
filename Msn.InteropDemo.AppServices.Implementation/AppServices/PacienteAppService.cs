@@ -8,6 +8,10 @@ using Msn.InteropDemo.Common.Constants;
 using Msn.InteropDemo.ViewModel.Pacientes;
 using Msn.InteropDemo.Fhir;
 using System.Linq.Expressions;
+using Msn.InteropDemo.Common.Utils.Helpers;
+using Msn.InteropDemo.ViewModel.Request;
+using Msn.InteropDemo.ViewModel.Response;
+using Microsoft.EntityFrameworkCore;
 
 namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 {
@@ -22,6 +26,109 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             _patientManager = patientManager;
         }
 
+        public ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(CoeficienteBusquedaIngresadoRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var entity = CurrentContext.DataContext.Pacientes.Include(x => x.TipoDocumento)
+                                                             .FirstOrDefault(x=>x.Id == request.PacienteId);
+            if(entity == null)
+            {
+                throw new Exception($"Paciente inexistente con ID:{request.PacienteId}");
+            }
+
+            var rq = new CoeficienteBusquedaRequest
+            {
+                ApellidoIngresado = request.ApellidoIngresado,
+                ApellidoObtenido = entity.PrimerApellido,
+                FechaNacimientoIngresado = request.FechaNacimientoIngresado,
+                FechaNacimientoObtenido = entity.FechaNacimiento.ToString("dd/MM/yyyy"),
+                NombreIngresado = request.NombreIngresado,
+                NombreObtenido = entity.PrimerNombre,
+                NroDocumentoIngresado = request.NroDocumentoIngresado,
+                NroDocumentoObtenido = entity.NroDocumento.ToString(),
+                SexoIngresado = request.SexoIngresado,
+                SexoObtenido = entity.Sexo,
+                TipoDocumentoIngresado = request.TipoDocumentoIngresado,
+                TipoDocumentoObtenido = entity.TipoDocumento.Nombre
+
+            };
+
+            var ret = GetCoeficienteBusqueda(rq);
+            return ret;
+        }
+
+        public ViewModel.Response.CoeficienteBusquedaResponce GetCoeficienteBusqueda(CoeficienteBusquedaRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (!Common.Utils.Helpers.DateTimeHelper.TryParseFromAR(request.FechaNacimientoIngresado, out var dtFechaIngrasada))
+            {
+                throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(request.FechaNacimientoIngresado));
+            }
+            if (!Common.Utils.Helpers.DateTimeHelper.TryParseFromAR(request.FechaNacimientoObtenido, out var dtFechaObtenida))
+            {
+                throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(request.FechaNacimientoObtenido));
+            }
+
+            var ret = new ViewModel.Response.CoeficienteBusquedaResponce();
+
+            var element = MatchScoreHelper.MatchApellido.GenerateScoreElement(request.ApellidoObtenido, request.ApellidoIngresado);
+            ret.ApellidoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.ApellidoScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchNombre.GenerateScoreElement(request.NombreObtenido, request.NombreIngresado);
+            ret.NombreScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.NombreScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchNroDocumento.GenerateScoreElement(request.NroDocumentoObtenido, request.NroDocumentoIngresado);
+            ret.NroDocumentoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.NroDocumentoScoreElement.CoeficienteFinal;
+
+            element = MatchScoreHelper.MatchFechaNacimiento.GenerateScoreElement(dtFechaObtenida.ToString("yyyyMMdd"), dtFechaIngrasada.ToString("yyyyMMdd"));
+            element.Ingresado = request.FechaNacimientoIngresado;
+            element.Obtenido = request.FechaNacimientoObtenido;
+            ret.FechaNacimientoScoreElement = Mapper.Map<CoeficienteScoreElementResponse>(element);
+            ret.CoeficienteTotalFinal += ret.FechaNacimientoScoreElement.CoeficienteFinal;
+
+            ret.TipoDocumentoScoreElement = new CoeficienteScoreElementResponse
+            {
+                PesoValor = MatchScoreHelper.MatchTipoDocumento.MatchValue,
+                PesoValorUI = MatchScoreHelper.MatchTipoDocumento.MatchValue.ToString("P2"),
+                Ingresado = request.TipoDocumentoIngresado,
+                Obtenido = request.TipoDocumentoObtenido,
+                LevenshteinDistante = $"(no aplicable)",
+                CoeficienteParcialUI = $"(no aplicable)",
+                ObtenidoLen = $"(no aplicable)",
+                CoeficienteFinal = (request.TipoDocumentoIngresado == request.TipoDocumentoObtenido) ? MatchScoreHelper.MatchTipoDocumento.MatchValue : 0,
+                CoeficienteFinalUI = (request.TipoDocumentoIngresado == request.TipoDocumentoObtenido) ? MatchScoreHelper.MatchTipoDocumento.MatchValue.ToString("P2") : 0M.ToString("P2")
+            };
+            ret.CoeficienteTotalFinal += ret.TipoDocumentoScoreElement.CoeficienteFinal;
+
+            ret.SexoScoreElement = new CoeficienteScoreElementResponse
+            {
+                PesoValor = MatchScoreHelper.MatchSexo.MatchValue,
+                PesoValorUI = MatchScoreHelper.MatchSexo.MatchValue.ToString("P2"),
+                Ingresado = request.SexoIngresado,
+                Obtenido = request.SexoObtenido,
+                LevenshteinDistante = $"(no aplicable)",
+                CoeficienteParcialUI = $"(no aplicable)",
+                ObtenidoLen = $"(no aplicable)",
+                CoeficienteFinal = (request.SexoIngresado== request.SexoObtenido) ? MatchScoreHelper.MatchSexo.MatchValue : 0,
+                CoeficienteFinalUI = (request.SexoIngresado == request.SexoObtenido) ? MatchScoreHelper.MatchSexo.MatchValue.ToString("P2") : 0M.ToString("P2")
+            };
+            ret.CoeficienteTotalFinal += ret.SexoScoreElement.CoeficienteFinal;
+
+            ret.CoeficietneTotalFinalUI = ret.CoeficienteTotalFinal.ToString("P2");
+
+            return ret;
+        }
 
         public Common.OperationResults.OperationResult FederarPaciente(int pacienteId)
         {
@@ -69,6 +176,21 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
         public bool ExistePacienteEnBUS(int pacienteId)
         {
+            //BUSQUEDA BY MATCH: NO UTULIZADA, SE DEJA A MODO DE DOCUENTACION
+            //var sexo = (model.Sexo == "M") ? Sexo.Masculino : Sexo.Femenido;
+            //var fn = DateTime.Parse(model.FechaNacimiento);
+            //var request = new Msn.InteropDemo.Fhir.Model.Request.ExistPatientRequest
+            //{
+            //    Dni = model.NroDocumento.Value,
+            //    FechaNacimiento = fn,
+            //    Sexo = sexo,
+            //    OtrosNombres = model.OtrosNombres,
+            //    PrimerApellido = model.PrimerApellido,
+            //    PrimerNombre = model.PrimerNombre
+            //};
+
+            //var exists = _patientManager.ExistsPatient(request);
+
             var model = GetById(pacienteId);
 
             if (model == null)
@@ -76,21 +198,6 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new Exception("No se ha encontrado el Paciente en la Base de datos Local");
             }
 
-            var sexo = (model.Sexo == "M") ? Sexo.Masculino : Sexo.Femenido;
-            var fn = DateTime.Parse(model.FechaNacimiento);
-
-            var request = new Msn.InteropDemo.Fhir.Model.Request.ExistPatientRequest
-            {
-                Dni = model.NroDocumento.Value,
-                FechaNacimiento = fn,
-                Sexo = sexo,
-                OtrosNombres = model.OtrosNombres,
-                PrimerApellido = model.PrimerApellido,
-                PrimerNombre = model.PrimerNombre
-            };
-
-            //Busqueda By Match
-            //var exists = _patientManager.ExistsPatient(request);
             var exists = _patientManager.ExistsPatient(DomainName.LocalDomain, pacienteId.ToString());
 
             return exists;
@@ -132,57 +239,54 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new System.ArgumentException("Formato invalido debe ser: dd/mm/yyyy", nameof(fechaNacimiento));
             }
 
-            Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerNombre.ToLower().StartsWith(nombre.ToLower()) ||
-                                                                              x.PrimerApellido.ToLower().StartsWith(apellido.ToLower()) ||
-                                                                              x.NroDocumento == nroDocumento ||
-                                                                              //x.Sexo == sexo || (no tiene sentido buscar por sexo y Tipo doc.)
-                                                                              x.FechaNacimiento == dtFechaNac;
+            var nombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(nombre);
+            var apellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(apellido);
 
-            var lst = Get<ViewModel.Pacientes.PacienteListItemViewModel>(filter: filterExp,
-                                                                         includeProperties: "TipoDocumento",
-                                                                         take: 50) //Solo los primeros 50 coincidentes
-                                                                         .ToList();
+            Expression<Func<Entities.Pacientes.Paciente, bool>> filterExp = x => x.PrimerApellidoSoundex == apellidoSoundex ||
+                                                                                 x.PrimerNombreSoundex == nombreSoundex ||
+                                                                                 x.NroDocumento == nroDocumento ||
+                                                                                 x.FechaNacimiento == dtFechaNac;
 
+            var lst = Get<PacienteListItemViewModel>(filter: filterExp,
+                                                             includeProperties: "TipoDocumento",
+                                                             orderBy: o => o.OrderBy(n => n.PrimerApellido).ThenBy(t => t.PrimerNombre),
+                                                             take: 50) //Solo los primeros 50 coincidentes
+                                                             .ToList();
+
+            decimal tmpScore;
             foreach (var item in lst)
             {
-                if (item.PrimerApellido.ToLower() == apellido.ToLower())
-                {
-                    item.Score += (decimal)0.2;
-                    item.PrimerApellidoEsCoincidente = true;
-                }
-                if (item.PrimerNombre.ToLower() == nombre.ToLower())
-                {
-                    item.Score += (decimal)0.1;
-                    item.PrimerNombreEsCoincidente = true;
-                }
+                tmpScore = MatchScoreHelper.MatchApellido.CalculateScore(item.PrimerApellido.ToLower(), apellido.ToLower());
+                item.Score += tmpScore;
+                item.PrimerApellidoEsCoincidente = (tmpScore == MatchScoreHelper.MatchApellido.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchNombre.CalculateScore(item.PrimerNombre.ToLower(), nombre.ToLower());
+                item.Score += tmpScore;
+                item.PrimerNombreEsCoincidente = (tmpScore == MatchScoreHelper.MatchNombre.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchNroDocumento.CalculateScore(item.NroDocumento.Value.ToString(), nroDocumento.ToString());
+                item.Score += tmpScore;
+                item.NroDocumentoEsCoincidente = (tmpScore == MatchScoreHelper.MatchNroDocumento.MatchValue);
+
+                tmpScore = MatchScoreHelper.MatchFechaNacimiento.CalculateScore(item.FechaNacimientoPlane, dtFechaNac.ToString("yyyyMMdd"));
+                item.Score += tmpScore;
+                item.FechaNacimientoEsCoincidente = (tmpScore == MatchScoreHelper.MatchFechaNacimiento.MatchValue);
+
                 if (item.TipoDocumentoId == (int)tipoDocumento)
                 {
-                    item.Score += (decimal)0.1;
+                    item.Score += MatchScoreHelper.MatchTipoDocumento.MatchValue;
                     item.TipoDocumentoEsCoincidente = true;
                 }
-                if (item.NroDocumento == (int)nroDocumento)
-                {
-                    item.Score += (decimal)0.3;
-                    item.NroDocumentoEsCoincidente = true;
-                }
+
                 if (item.Sexo.ToLower() == sexo.ToLower())
                 {
-                    item.Score += (decimal)0.1;
+                    item.Score += MatchScoreHelper.MatchSexo.MatchValue;
                     item.SexoEsCoincidente = true;
-                }
-                if (item.FechaNacimiento == dtFechaNac.ToString("dd/MM/yyyy"))
-                {
-                    item.Score += (decimal)0.2;
-                    item.FechaNacimientoEsCoincidente = true;
                 }
             }
 
             lst = lst.OrderByDescending(x => x.Score).ToList();
 
-            //CurrentContext.RegisterActivityLog(Entities.Activity.ActivityType.SEARCH_PACIENTES_COINCIDENTES_DB_LOCAL,
-            //                                   filterExp.ToString(),
-            //                                   $"Pacientes obtenidos:{lst.Count}");
-            
             return lst;
         }
 
@@ -206,12 +310,11 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
                 throw new Exception("El sexo es requerido.");
             }
 
+            entity.PrimerNombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(entity.PrimerNombre);
+            entity.PrimerApellidoSoundex = Common.Utils.Helpers.StringHelper.Soundex(entity.PrimerApellido);
+
             var op = base.Save(entity);
             op.Id = entity.Id;
-
-            //CurrentContext.RegisterActivityLog(Entities.Activity.ActivityType.CREATE_PACIENTE_EN_DB_LOCAL,
-            //                                   entity.ToString(),
-            //                                   $"Paciente generado:{entity.Id}");
 
             return op;
         }

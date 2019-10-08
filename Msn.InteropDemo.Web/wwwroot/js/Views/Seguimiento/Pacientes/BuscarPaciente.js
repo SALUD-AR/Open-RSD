@@ -1,9 +1,9 @@
 ﻿
 //On document Ready
 $(function () {
-    $('#FechaNacimiento').mask('99/99/9999');  
+    $('#FechaNacimiento').mask('99/99/9999');
 })
-   
+
 //////////////////////////////////////////////////////////////////////////////////////
 /////////// POST PARA BUSCAR PACIENTES ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
@@ -61,9 +61,9 @@ function MostarPaciente(id, preExistenteEnDB = false) {
     var progressPacienteLocalText = $('#progressPacienteLocalText');
     var progressPacienteLocalCheck = $('#progressPacienteLocalCheck');
     var progressErrorTitle = $('#progressErrorTitle');
-    
+
     var progressVerificandoExistenciaEnElBUS = $('#progressVerificandoExistenciaEnElBUS');
-    
+
     var progressPacienteYaFederado = $('#progressPacienteYaFederado');
     var progressPacienteNoFederado = $('#progressPacienteNoFederado');
     var btnEvolucionar = $('#btnEvolucionar');
@@ -71,7 +71,7 @@ function MostarPaciente(id, preExistenteEnDB = false) {
     var progressAltaPacienteBUSFinalizada = $('#progressAltaPacienteBUSFinalizada');
     var progressAltaPacienteBUSFinalizadaError = $('#progressAltaPacienteBUSFinalizadaError');
     var pacienteId = $('#pacienteId');
-    
+
     var loc = window.rootUrl + "Seguimiento/Pacientes/GetById/?id=" + id;
 
     pacienteId.val(id);
@@ -107,7 +107,7 @@ function MostarPaciente(id, preExistenteEnDB = false) {
         progressPacienteLocalCheck.show();
     }
 
-    progressPacienteLocal.show();    
+    progressPacienteLocal.show();
     progressAltaPacienteBUS.css('display', 'none');
     progressVerificandoExistenciaEnElBUS.css('display', 'none');
     progressAltaPacienteBUSFinalizada.css('display', 'none');
@@ -344,7 +344,7 @@ function RegistrarPacienteLocal() {
     //return;
     //////////////////////////////////////
     var errorLabel = $('#errorLabel');
-    
+
     var loc = window.rootUrl + "Seguimiento/Pacientes/CreateByFrontEnd";
     $.ajax({
         url: loc,
@@ -373,7 +373,7 @@ function RegistrarPacienteLocal() {
         }
     });
 
-    return ret;    
+    return ret;
 }
 
 function redirectFromPacientePrueba() {
@@ -390,4 +390,44 @@ function redirectFromPacientePrueba() {
 function redirect2Evolucion() {
     var loc = window.rootUrl + "Seguimiento/Evolucionar/EvolucionarPaciente/" + $('#pacienteId').val();
     window.location.href = loc;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// MUESTRA LOS COEFICIENTES DE LA BUSQUEDA PAR UN PACIENTES /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function MostarCoeficienteBusqueda(id) {
+    var loc = window.rootUrl + "Seguimiento/Pacientes/GetCoeficienteBuqueda";
+    var theModal = $('#modalCoeficienteBusqueda');
+    var container = $('#gridCoeficienteBusquedaContainer');
+
+    let dataToPost = {
+        PacienteId: id,
+        ApellidoIngresado: $('#PrimerApellido').val(),
+        NombreIngresado: $('#PrimerNombre').val(),
+        SexoIngresado: $('#Sexo').val(),
+        TipoDocumentoIngresado: $("#TipoDocumentoId option:selected").text(),
+        NroDocumentoIngresado: $("#NroDocumento").val(),
+        FechaNacimientoIngresado: $("#FechaNacimiento").val(),
+        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+    };
+
+    $.ajax({
+        url: loc,
+        type: 'POST',
+        dataType: 'json',
+        data: dataToPost,
+        cache: false,
+        success: function (data) {
+            container.html(data.table);
+            theModal.modal('show');
+        },
+        error: function (request, status, error) {
+            if (errorLabel) {
+                errorLabel.text(request.responseText);
+            } else {
+                alert(request.responseText);
+            }
+        }
+    });
+
 }
