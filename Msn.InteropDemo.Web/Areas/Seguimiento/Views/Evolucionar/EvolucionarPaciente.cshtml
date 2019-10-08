@@ -39,110 +39,123 @@
     </div>
 </div>
 
-<div class="form-row mt-3">
-    <div class="col-md-2">
-        <div class="card">
-            <div class="card-header text-center">
 
-                <b>Consultas</b>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="consulta-tab-link" data-toggle="tab" href="#consulta-tab" role="tab" aria-controls="home" aria-selected="true">Consultas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#vacunas-tab-link" role="tab" aria-controls="vacunas-tab-link" aria-selected="false">Vacunas</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="consulta-tab" role="tabpanel" aria-labelledby="consulta-tab-link">
+        <div class="form-row mt-2">
+            <div class="col-md-2">
+                <div class="card">
+                    @*<div class="card-header text-center">
+                        <b>Consultas</b>
+                    </div>*@
+                    <div class="card-body" style="padding-top:10px;">
+                        <a href="#!" onclick="setupNuevaEvolucion()"><span class="fa fa-plus-circle mb-3"></span> Nueva consulta</a>
+                        <div id="evolucionListMenuContainer">
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="card-body" style="padding-top:10px;">
-                <a href="#!" onclick="setupNuevaEvolucion()"><span class="fa fa-plus-circle mb-3"></span> Nueva consulta</a>
-                <div id="evolucionListMenuContainer">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <div id="currentConsultaFecha" style="display:none;">
+                            <b><span id="currentFechaConsultaText"></span></b> - Consulta Ambulatoria - <span id="currentConsultaProfesionalFullname"></span>
+                        </div>
+                        <div id="nuevaConsultaTitulo" class="text-primary" style="display:none;">
+                            <span><b>Ingresando Nueva consulta</b></span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <div>
+                                    <b>Motivo de consulta:</b>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <table id="tableHallazgos" class="table table-sm table-responsive-sm">
+                                    <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2">
+                                                <a href="#!" id="btnSerachHallazgos" onclick="showSearchSnowstormHallagos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Diagóstico</a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <div>
+                                    <b>Evolución:</b>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <textarea id="textAreaObservacion" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-md-6">
+                                <div>
+                                    <b>Indicar Vacunas</b>
+                                </div>
+                                <table id="tableVacunas" class="table table-sm table-responsive-sm">
+                                    <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2">
+                                                <a href="#!" id="btnSearchVacunas" onclick="showSearchSnowstormVacunas()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Vacuna</a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <b>Indicar Medicamentos</b>
+                                </div>
+                                <table id="tableMedicamentos" class="table table-sm table-responsive-sm">
+                                    <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2">
+                                                <a href="#!" id="btnSearchMedicamentos" onclick="showSearchSnowstormMedicamentos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Medicamento</a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <div class="form-group float-right mt-3">
+            <button id="btnSaveEvolucion" onclick="saveEvolucion()" type="button" class="btn btn-outline-primary">Grabar Consulta</button>
+        </div>
+        <br />
+        <br />
+        <partial name="Partials/_SearchSnowstormModal" />
+        <partial name="Partials/_MapeoCIE10MultipleModal" />
     </div>
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-header">
-                <div id="currentConsultaFecha" style="display:none;">
-                    <b><span id="currentFechaConsultaText"></span></b> - Consulta Ambulatoria - <span id="currentConsultaProfesionalFullname"></span>
-                </div>
-                <div id="nuevaConsultaTitulo" class="text-primary" style="display:none;">
-                    <span><b>Ingresando Nueva consulta</b></span>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="col-md-2">
-                        <div>
-                            <b>Motivo de consulta:</b>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <table id="tableHallazgos" class="table table-sm table-responsive-sm">
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2">
-                                        <a href="#!" id="btnSerachHallazgos" onclick="showSearchSnowstormHallagos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Diagóstico</a>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-2">
-                        <div>
-                            <b>Evolución:</b>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <textarea id="textAreaObservacion" rows="5" class="form-control"></textarea>
-                    </div>
-                </div>
-                <div class="form-row mt-3">
-                    <div class="col-md-6">
-                        <div>
-                            <b>Indicar Vacunas</b>
-                        </div>
-                        <table id="tableVacunas" class="table table-sm table-responsive-sm">
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2">
-                                        <a href="#!" id="btnSearchVacunas" onclick="showSearchSnowstormVacunas()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Vacuna</a>
-                                    </td>
-                                </tr>
-                            </tfoot>
-
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <div>
-                            <b>Indicar Medicamentos</b>
-                        </div>
-                        <table id="tableMedicamentos" class="table table-sm table-responsive-sm">
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2">
-                                        <a href="#!" id="btnSearchMedicamentos" onclick="showSearchSnowstormMedicamentos()" style="font-size:14px;"><span class="fa fa-plus-circle"></span> Agregar Medicamento</a>
-                                    </td>
-                                </tr>
-                            </tfoot>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="tab-pane fade" id="vacunas-tab-link" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="form-row mt-2">
+            <span>SOLAPA DE VACUNAS</span>
         </div>
     </div>
 </div>
-
-<div class="form-group float-right mt-3">
-    <button id="btnSaveEvolucion" onclick="saveEvolucion()" type="button" class="btn btn-outline-primary">Grabar Consulta</button>
-</div>
-
-<br />
-<br />
-
-<partial name="Partials/_SearchSnowstormModal" />
-
-<partial name="Partials/_MapeoCIE10MultipleModal" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
