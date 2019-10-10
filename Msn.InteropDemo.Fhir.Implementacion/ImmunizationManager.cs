@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices.Core;
 using Msn.InteropDemo.Integration.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Msn.InteropDemo.Fhir.Implementacion
 {
@@ -22,7 +20,48 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             _currentContext = currentContext;
         }
 
+        /// <summary>
+        /// Registra una vacuna en Nomivac basandose en el ejemplo de: 
+        /// https://simplifier.net/saluddigital.ar/immunization-example
+        /// </summary>
+        /// <param name="request">Model con los datos para el registro</param>
         public void RegistrarAplicacionVacuna(Msn.InteropDemo.Fhir.Model.Request.RegistrarInmunizationRequest request)
+        {
+            var patient = GeneratePatient(request);
+            var location = GenerateLocation(request);
+            var vaccineCode = GenerateVaccineCode(request);
+
+            var immu = new Hl7.Fhir.Model.Immunization();
+            immu.Meta.Profile = new string[] { "http://fhir.msal.gov.ar/StructureDefinition/NomivacImmunization" };
+            immu.Contained = new List<Hl7.Fhir.Model.Resource>
+            {
+                patient,
+                location
+            };
+            immu.Status = Hl7.Fhir.Model.Immunization.ImmunizationStatusCodes.Completed;
+            immu.VaccineCode = vaccineCode;
+            immu.Patient = new Hl7.Fhir.Model.ResourceReference
+            {
+                Reference = "#Patiente-01"
+            };
+            immu.Occurrence = new Hl7.Fhir.Model.Date
+            {
+                Value = request.AplicacionVacunaFecha.ToString("yyyy-MM-dd")
+            };
+            immu.PrimarySource = true;
+            immu.Location = new Hl7.Fhir.Model.ResourceReference
+            {
+                Reference = "#Location-01"
+            };
+            immu.LotNumber = request.VacunaLote;
+            if (request.VacunaFechaVencimiento.HasValue)
+            {
+                immu.ExpirationDate = request.VacunaFechaVencimiento.Value.ToString("yyyy-MM-dd");
+            }
+            immu.ProtocolApplied.Add(GenerateProtocolApplied(request));
+        }
+
+        private Hl7.Fhir.Model.Patient GeneratePatient(Model.Request.RegistrarInmunizationRequest request)
         {
             var patientIdentifierDNI = new Hl7.Fhir.Model.Identifier
             {
@@ -35,7 +74,7 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             {
                 Use = Hl7.Fhir.Model.Identifier.IdentifierUse.Usual,
                 System = Common.Constants.DomainName.LocalDomain.Value,
-                Value = request.LocalId
+                Value = request.LocalPacienteId
             };
 
             var patientName = new Hl7.Fhir.Model.HumanName
@@ -48,37 +87,81 @@ namespace Msn.InteropDemo.Fhir.Implementacion
 
             var patient = new Hl7.Fhir.Model.Patient
             {
-                Id = request.LocalId, 
+                Id = "Patient-01",
                 Name = new List<Hl7.Fhir.Model.HumanName> { patientName },
                 Identifier = new List<Hl7.Fhir.Model.Identifier> { patientIdentifierLocal, patientIdentifierDNI },
                 BirthDate = request.FechaNacimiento.ToString("yyyy-MM-dd"),
                 Gender = (request.Sexo == Common.Constants.Sexo.Femenido) ? Hl7.Fhir.Model.AdministrativeGender.Female : Hl7.Fhir.Model.AdministrativeGender.Male
             };
 
-            var immu = new Hl7.Fhir.Model.Immunization();
+            return patient;
+        }
 
-            immu.Contained = new List<Hl7.Fhir.Model.Resource>
+        private Hl7.Fhir.Model.Location GenerateLocation(Model.Request.RegistrarInmunizationRequest request)
+        {
+            var location = new Hl7.Fhir.Model.Location
             {
-                patient
+                Id = "Location-01",
+                Identifier = new List<Hl7.Fhir.Model.Identifier>
+                {
+                    new Hl7.Fhir.Model.Identifier
+                    {
+                        System = "http://fhir.msal.gov.ar/refes",
+                        Value = "111111" //TODO: Ver cual es el ID del MSAL en el BUS
+                    }
+                },
+                Name = "Ministerio de Salud"
             };
 
-            immu.Status = Hl7.Fhir.Model.Immunization.ImmunizationStatusCodes.Completed;
+            return location;
+        }
 
-            immu.VaccineCode = new Hl7.Fhir.Model.CodeableConcept
+        private Hl7.Fhir.Model.CodeableConcept GenerateVaccineCode(Model.Request.RegistrarInmunizationRequest request)
+        {
+            var vaccineCode = new Hl7.Fhir.Model.CodeableConcept
             {
-                 Coding = new List<Hl7.Fhir.Model.Coding>
+                Coding = new List<Hl7.Fhir.Model.Coding>
                  {
                      new Hl7.Fhir.Model.Coding
                      {
-                         System = Common.Constants.DomainName.FederadorPatientDomain.Value,
-                         Code = "XXXX" //codigo de vacuna de SISA ??????
+                         System = "http://snomed.info/sct",
+                         Code = request.SctConceptId,
+                         Display = request.SctTerm
                      }
                  }
             };
 
-            
-
+            return vaccineCode;
         }
 
+        private Hl7.Fhir.Model.Immunization.ProtocolAppliedComponent GenerateProtocolApplied(Model.Request.RegistrarInmunizationRequest request)
+        {
+            var protocol = new Hl7.Fhir.Model.Immunization.ProtocolAppliedComponent
+            {
+                SeriesElement = new Hl7.Fhir.Model.FhirString
+                {
+                    Value = request.VacunaEsquemaNombre,
+                    Extension = new List<Hl7.Fhir.Model.Extension>
+                    {
+                        new Hl7.Fhir.Model.Extension
+                        {
+                             Url = "http://fhir.msal.gov.ar/StructureDefinition/NomivacEsquema",
+                             Value = new Hl7.Fhir.Model.Coding
+                             {
+                                 System = "http://fhir.msal.gov.ar/CodeSystem/NOMIVAC-esquema",
+                                 Code = request.VacunaEsquemaId,
+                                 Display = request.VacunaEsquemaNombre
+                             }
+                        }
+                    }
+                },
+                DoseNumber = new Hl7.Fhir.Model.PositiveInt
+                {
+                    Value = 1
+                }
+            };
+
+            return protocol;
+        }
     }
 }
