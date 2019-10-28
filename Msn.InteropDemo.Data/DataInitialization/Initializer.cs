@@ -60,15 +60,15 @@ namespace Msn.InteropDemo.Data.DataInitialization
                 item.PrimerNombreSoundex = Common.Utils.Helpers.StringHelper.Soundex(item.PrimerNombre);
             }
 
-            var t  = await _dataContext.SaveChangesAsync();
+            var t = await _dataContext.SaveChangesAsync();
             _logger.LogInformation($"Se han actualizado {t.ToString()} pacientes a Soundex.");
         }
 
         private async Task SeedPacientesPrueba()
         {
-            await InsertPacientePrueba("Matilde",   1111111, "F", 75);
-            await InsertPacientePrueba("Juan",      1111112, "M", 50);
-            await InsertPacientePrueba("Mateo",     1111113, "M", 17);
+            await InsertPacientePrueba("Matilde", 1111111, "F", 75);
+            await InsertPacientePrueba("Juan", 1111112, "M", 50);
+            await InsertPacientePrueba("Mateo", 1111113, "M", 17);
             await InsertPacientePrueba("Valentina", 1111114, "F", 3);
         }
 
@@ -119,7 +119,7 @@ namespace Msn.InteropDemo.Data.DataInitialization
 
         private async Task SeedDefaultAdminUser()
         {
-            if (!_dataContext.Users.Any(x => x.NormalizedUserName  == "ADMIN"))
+            if (!_dataContext.Users.Any(x => x.NormalizedUserName == "ADMIN"))
             {
                 _logger.LogInformation("Incializando usuario Admin");
 
@@ -174,23 +174,50 @@ namespace Msn.InteropDemo.Data.DataInitialization
         {
             try
             {
-                if (!_dataContext.ActivityTypeDescriptors.Any())
+                if (!_dataContext.ActivityTypeDescriptors.Any(x=>x.Id == 1))
                 {
-                    var lst = new List<Entities.Activity.ActivityTypeDescriptor>
-                {
-                    new ActivityTypeDescriptor { Id = 1, Nombre = "OBTENER PACIENTE: DB LOCAL", Enabled = true, Orden = 1 },
-                    new ActivityTypeDescriptor { Id = 2, Nombre = "BUSQUEDA PACIENTES COINCIDENTES: DB LOCAL", Enabled = true, Orden = 2 },
-                    new ActivityTypeDescriptor { Id = 3, Nombre = "ALTA PACIENTE: DB LOCAL", Enabled = true, Orden = 3 },
-                    new ActivityTypeDescriptor { Id = 4, Nombre = "OBTENER PACIENTE: BUS BY IDENTIFIER", Enabled = true, Orden = 4 },
-                    new ActivityTypeDescriptor { Id = 5, Nombre = "BUSQUEDA PACIENTES: BUS BY MATCH", Enabled = true, Orden = 5 },
-                    new ActivityTypeDescriptor { Id = 6, Nombre = "FEDERAR PACIENTE: BUS", Enabled = true, Orden = 6 },
-                    new ActivityTypeDescriptor { Id = 7, Nombre = "BUSQUEDA DE CONCEPTOS EN SNOWSTORM", Enabled = true, Orden = 7}
-                };
-
-                    await _dataContext.ActivityTypeDescriptors.AddRangeAsync(lst);
-                    await _dataContext.SaveChangesAsync();
-                    _logger.LogInformation("Datos de Tipos de Actividad Inicializados");
+                    var entity = new ActivityTypeDescriptor { Id = 1, Nombre = "OBTENER PACIENTE: DB LOCAL", Enabled = true, Orden = 1 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
                 }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 2))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 2, Nombre = "BUSQUEDA PACIENTES COINCIDENTES: DB LOCAL", Enabled = true, Orden = 2 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 3))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 3, Nombre = "ALTA PACIENTE: DB LOCAL", Enabled = true, Orden = 3 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 4))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 4, Nombre = "OBTENER PACIENTE: BUS BY IDENTIFIER", Enabled = true, Orden = 4 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 5))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 5, Nombre = "BUSQUEDA PACIENTES: BUS BY MATCH", Enabled = true, Orden = 5 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 6))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 6, Nombre = "FEDERAR PACIENTE: BUS", Enabled = true, Orden = 6 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 7))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 7, Nombre = "BUSQUEDA DE CONCEPTOS EN SNOWSTORM", Enabled = true, Orden = 7 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+                if (!_dataContext.ActivityTypeDescriptors.Any(x => x.Id == 8))
+                {
+                    var entity = new ActivityTypeDescriptor { Id = 8, Nombre = "INFORMAR VACUNA A NOMIVAC", Enabled = true, Orden = 8 };
+                    _dataContext.ActivityTypeDescriptors.Add(entity);
+                }
+
+                await _dataContext.SaveChangesAsync();
+                _logger.LogInformation("Datos de Tipos de Actividad Inicializados");
+
             }
             catch (Exception ex)
             {

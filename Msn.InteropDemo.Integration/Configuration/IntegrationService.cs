@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Msn.InteropDemo.Integration.Configuration
 {
@@ -17,7 +15,8 @@ namespace Msn.InteropDemo.Integration.Configuration
             PATIENT_POST_MATCH,
             PATIENT_POST_CREATE,
             SNOWSTORM_FIND_CONCEPTS,
-            SNOWSTORM_REFSET_MEMBERS
+            SNOWSTORM_REFSET_MEMBERS,
+            IMMUNIZATION_POST_NOMIVAC
         }
 
         [JsonProperty("baseURL")]

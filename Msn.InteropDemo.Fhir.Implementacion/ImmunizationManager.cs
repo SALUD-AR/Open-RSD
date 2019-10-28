@@ -1,7 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Hl7.Fhir.Rest;
+using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices.Core;
+using Msn.InteropDemo.Entities.Activity;
+using Msn.InteropDemo.Fhir.Model.Response;
 using Msn.InteropDemo.Integration.Configuration;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Msn.InteropDemo.Fhir.Implementacion
 {
@@ -25,7 +30,73 @@ namespace Msn.InteropDemo.Fhir.Implementacion
         /// https://simplifier.net/saluddigital.ar/immunization-example
         /// </summary>
         /// <param name="request">Model con los datos para el registro</param>
-        public void RegistrarAplicacionVacuna(Msn.InteropDemo.Fhir.Model.Request.RegistrarInmunizationRequest request)
+        public Model.Response.RegistrarImmunizationResponse RegistrarAplicacionVacuna(Model.Request.RegistrarInmunizationRequest request)
+        {
+            var immu = GenerateImmunization(request);
+
+            var service = _integrationServicesConfiguration.GetConfigurationService(IntegrationServicesConfiguration.ConfigurationServicesName.IMMUNIZATION);
+
+            var client = new FhirClient(service.BaseURL)
+            {
+                PreferredFormat = ResourceFormat.Json
+            };
+
+            var activity = new ActivityLog
+            {
+                ActivityTypeDescriptorId = (int)Entities.Activity.ActivityType.IMMUNIZATION_POST_VACUNA_NOMIVAC
+            };
+
+            client.OnBeforeRequest += (object sender, BeforeRequestEventArgs e) =>
+            {
+                if (e.Body != null)
+                {
+                    var requestAdderss = e.RawRequest.Address.ToString();
+                    var requestBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
+
+                    //Prettify !!!
+                    requestBody = JToken.Parse(requestBody).ToString();
+
+                    activity.RequestIsJson = true;
+                    activity.ActivityRequestUI = requestAdderss;
+                    activity.ActivityRequestBody = requestBody;
+
+                    _logger.LogInformation($"Send Request Address:{requestAdderss}");
+                    _logger.LogInformation($"Send Request Body:{requestBody}");
+                }
+            };
+
+            client.OnAfterResponse += (object sender, AfterResponseEventArgs e) =>
+            {
+                if (e.Body != null)
+                {
+                    var responseBody = Encoding.UTF8.GetString(e.Body, 0, e.Body.Length);
+
+                    //Prettify !!!
+                    responseBody = JToken.Parse(responseBody).ToString();
+
+                    activity.ResponseIsJson = true;
+                    activity.ActivityResponse = $"Status: {e.RawResponse.StatusCode}";
+                    activity.ActivityResponseBody = responseBody;
+
+                    _logger.LogInformation($"Received response with status: {e.RawResponse.StatusCode}");
+                    _logger.LogInformation($"Received response with body: {responseBody}");
+                }
+            };
+
+            var immuResp = client.Create(immu);
+
+            var ret = new RegistrarImmunizationResponse
+            {
+                Id = immuResp.Id
+            };
+
+            _currentContext.RegisterActivityLog(activity);
+
+            return ret;
+        }
+
+
+        private Hl7.Fhir.Model.Immunization GenerateImmunization(Model.Request.RegistrarInmunizationRequest request)
         {
             var patient = GeneratePatient(request);
             var location = GenerateLocation(request);
@@ -59,6 +130,8 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                 immu.ExpirationDate = request.VacunaFechaVencimiento.Value.ToString("yyyy-MM-dd");
             }
             immu.ProtocolApplied.Add(GenerateProtocolApplied(request));
+
+            return immu;
         }
 
         private Hl7.Fhir.Model.Patient GeneratePatient(Model.Request.RegistrarInmunizationRequest request)
