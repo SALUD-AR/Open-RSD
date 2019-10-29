@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Msn.InteropDemo.Fhir.Implementacion
 {
-    public class ImmunizationManager
+    public class ImmunizationManager : IImmunizationManager
     {
         private readonly ILogger<ImmunizationManager> _logger;
         private readonly IntegrationServicesConfiguration _integrationServicesConfiguration;
@@ -30,7 +30,7 @@ namespace Msn.InteropDemo.Fhir.Implementacion
         /// https://simplifier.net/saluddigital.ar/immunization-example
         /// </summary>
         /// <param name="request">Model con los datos para el registro</param>
-        public Model.Response.RegistrarImmunizationResponse RegistrarAplicacionVacuna(Model.Request.RegistrarInmunizationRequest request)
+        public RegistrarImmunizationResponse RegistrarAplicacionVacuna(Model.Request.RegistrarInmunizationRequest request)
         {
             var immu = GenerateImmunization(request);
 
@@ -180,10 +180,10 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                     new Hl7.Fhir.Model.Identifier
                     {
                         System = "http://fhir.msal.gov.ar/refes",
-                        Value = "111111" //TODO: Ver cual es el ID del MSAL en el BUS
+                        Value = request.CurrentLocationId
                     }
                 },
-                Name = "Ministerio de Salud"
+                Name = request.CurrentLocationName
             };
 
             return location;

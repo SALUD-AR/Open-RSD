@@ -33,5 +33,9 @@ namespace Msn.InteropDemo.Fhir.Model.Request
         public string VacunaEsquemaNombre { get; set; }
 
         public string VacunaEsquemaId { get; set; }
+
+        public string CurrentLocationId { get; set; }
+
+        public string CurrentLocationName { get; set; }
     }
 }
