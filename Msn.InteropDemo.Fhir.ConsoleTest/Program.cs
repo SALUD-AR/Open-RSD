@@ -24,43 +24,55 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
             catch (Exception ex)
             {
                 Console.WriteLine($"Error al registrar servicios:\n{ex.ToString()}");
+                Console.WriteLine("\nIngrese una tecla para terminar.");
                 Console.ReadKey();
                 return;
             }
 
             try
             {
-
-                //var service = _serviceProvider.GetService<IPatientManager>();
-                //service.GetPatientsByMatch(17287412,
-                //                           "amorese",
-                //                           "miguel",
-                //                           "angel",
-                //                           Common.Constants.Sexo.Masculino,
-                //                           new DateTime(1964, 6, 30));
-
-                //TestExpression();
-                //CreatePatient();
-                //ConfigureLogger();
-                //var bunble = GetPatient();
-                //ShowPatients();
-                //ShowPatient("1982708");
-                //TestExpressionAppService();
-
-                //TestCie10Mapping();
-
-                TestAutomataFinito();
-
+                TestImmunization();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Test ERROR");
+
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("\nIngrese una tecla para terminar.");
+                Console.ReadKey();
             }
 
             Log.CloseAndFlush();
             DisposeServices();
         }
 
+
+        public static void TestImmunization()
+        {
+            var service = _serviceProvider.GetService<Fhir.IImmunizationManager>();
+            var model = new Model.Request.RegistrarInmunizationRequest
+            {
+                AplicacionVacunaFecha = DateTime.Today,
+                CurrentLocationId = "10060492200870",
+                CurrentLocationName = "Hospital Municipal Hospital Doctor Ángel Pintos",
+                DNI = 17287412,
+                FechaNacimiento = new DateTime(1964, 6, 30),
+                LocalPacienteId = "1",
+                PrimerApellido = "Amorese",
+                PrimerNombre = "Miguel",
+                SctConceptId = "2211000221102",
+                SctTerm = "vacuna virus influenza A subtipos H1N1, H3 + virus influenza B 1 serotipo",
+                Sexo = Common.Constants.Sexo.Masculino,
+                VacunaEsquemaId = "81",
+                VacunaEsquemaNombre = "Antigripal Esquema Personal de Salud",
+                VacunaLote = "649718"
+            };
+
+            var response = service.RegistrarAplicacionVacuna(model);
+
+            Console.WriteLine($"response.Id={response.Id}");
+            Console.ReadKey();
+        }
 
         public static void TestAutomataFinito()
         {
@@ -105,7 +117,12 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
             services.AddTransient<AppServices.ICie10AppService, AppServices.Implementation.AppServices.Cie10AppService>();
+            services.AddTransient<IImmunizationManager, Implementacion.ImmunizationManager>();
 
+            //*** Set Local DomainName **********************************************
+            var domainName = configuration.GetValue<string>("DomainName");
+            Common.Constants.DomainName.LocalDomain.SetValue(domainName);
+            //***********************************************************************
 
             _serviceProvider = services.BuildServiceProvider();
         }

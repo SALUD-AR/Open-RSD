@@ -103,7 +103,10 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             var vaccineCode = GenerateVaccineCode(request);
 
             var immu = new Hl7.Fhir.Model.Immunization();
-            immu.Meta.Profile = new string[] { "http://fhir.msal.gov.ar/StructureDefinition/NomivacImmunization" };
+
+            //immu.Meta = new Hl7.Fhir.Model.Meta();
+            //immu.Meta.Profile = new string[] { "http://fhir.msal.gov.ar/StructureDefinition/NomivacImmunization" };
+
             immu.Contained = new List<Hl7.Fhir.Model.Resource>
             {
                 patient,
@@ -113,12 +116,14 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             immu.VaccineCode = vaccineCode;
             immu.Patient = new Hl7.Fhir.Model.ResourceReference
             {
-                Reference = "#Patiente-01"
+                Reference = "#Patient-01"
             };
-            immu.Occurrence = new Hl7.Fhir.Model.Date
-            {
+
+            immu.Occurrence = new Hl7.Fhir.Model.FhirDateTime
+            {              
                 Value = request.AplicacionVacunaFecha.ToString("yyyy-MM-dd")
             };
+
             immu.PrimarySource = true;
             immu.Location = new Hl7.Fhir.Model.ResourceReference
             {
@@ -155,8 +160,15 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                 Use = Hl7.Fhir.Model.HumanName.NameUse.Official,
                 Text = $"{request.PrimerNombre} {request.PrimerApellido}",
                 Family = $"{request.PrimerApellido}",
-                Given = new string[] { request.PrimerNombre, request.OtrosNombres },
+                Given = new string[] { request.PrimerNombre, request.OtrosNombres }
             };
+
+            patientName.FamilyElement.Extension.Add(
+            new Hl7.Fhir.Model.Extension
+            {
+                Url = "http://hl7.org/fhir/StructureDefinition/humanname-fathers-family",
+                Value = new Hl7.Fhir.Model.FhirString($"{request.PrimerApellido}")
+            });
 
             var patient = new Hl7.Fhir.Model.Patient
             {
