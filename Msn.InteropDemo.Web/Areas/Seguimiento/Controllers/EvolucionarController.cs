@@ -153,6 +153,23 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public JsonResult GetGridVacunas(int pacienteId)
+        {
+            try
+            {
+                var items = _evolucionAppService.GetVacunasAplicacion(pacienteId);
+                var table = this.RenderViewToStringAsync("Partials/_GridVacunas", items).Result;
+                return new JsonResult(new { success = true, table, count = items.Count() }) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult SaveEvolucion(ViewModel.Evoluciones.EvolucionViewModel model)
         {

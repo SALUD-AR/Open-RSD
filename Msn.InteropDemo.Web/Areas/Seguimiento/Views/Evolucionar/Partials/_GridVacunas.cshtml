@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Msn.InteropDemo.ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>
+
+        <table class="table table-hover table-responsive-sm">
+            <thead>
+                <tr>
+                    <th class="text-left">Snomed ID</th>
+                    <th class="text-left">Snomed Term</th>
+                    <th class="text-left">Esquema Aplicado</th>
+                    <th class="text-center">Fecha Aplicación</th>
+                    <th class="text-center">Lote</th>
+                    <th></th>
+                </tr>
+            </thead>    
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.SctConceptId)
+                    </td>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.SctDescriptionTerm)
+                    </td>
+                    <td class="text-left">
+                        &nbsp;
+                    </td>
+                    <td class="text-left">
+                        &nbsp;
+                    </td>
+                    <td class="text-left">
+                        &nbsp;
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary disabled"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Aplicar"
+                                data-delay='{ "show": 1000, "hide": 50 }' data-conceptid="@item.SctConceptId" data-id="@item.Id">
+                            Nomivac
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>

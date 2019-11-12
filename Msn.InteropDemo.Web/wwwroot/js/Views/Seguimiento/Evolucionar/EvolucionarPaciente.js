@@ -8,7 +8,38 @@ $(function () {
         setupNuevaEvolucion();
     }
 
+    $('#vacuna-tab-link').on('shown.bs.tab', function (e) {
+        loadGridVacunas();
+    })
+
 });
+
+function loadGridVacunas() {
+    var pacienteId = $('#PacienteId').val();
+    var container = $('#vacunasGridContainer');
+    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetGridVacunas";
+
+    var dataToPost = {
+        PacienteId: pacienteId,
+        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+    };
+
+    $.ajax({
+        url: loc,
+        type: 'POST',
+        dataType: 'json',
+        data: dataToPost,
+        cache: false,
+        success: function (data) {
+            container.html(data.table);
+            container.show('slow');
+        },
+        error: function (request, status, error) {
+            console.log(request.responseText);
+            alert(request.responseText);
+        }
+    });
+}
 
 
 function loadEvolucionMenuList() {

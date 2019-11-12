@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Evolucionar Paciente";
     var pacienteSexoClass = Model.Sexo == "M" ? "fa-male" : "fa-female";
+    var sexoNombre = Model.Sexo == "M" ? "Masculino" : "Femenino";
 }
 
 @section AddToHead {
@@ -28,7 +29,7 @@
     </div>
     <div class="col-md-11 text-left">
         <div>
-            <span>@Model.PacientePrimerApellido, @Model.PacientePrimerNombre, @Model.PacienteEdad años</span>
+            <span>@Model.PacientePrimerApellido, @Model.PacientePrimerNombre, @Model.PacienteEdad años - @sexoNombre</span>
         </div>
         <div>
             <span>Fecha de nacimiento: @Model.PacienteFechaNacimiento</span>
@@ -42,10 +43,22 @@
 
 <ul class="nav nav-tabs mt-2" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="consulta-tab-link" data-toggle="tab" href="#consulta-tab" role="tab" aria-controls="home" aria-selected="true">Consultas</a>
+        <a class="nav-link active" 
+           id="consulta-tab-link" 
+           data-toggle="tab" 
+           href="#consulta-tab" 
+           role="tab" 
+           aria-controls="home" 
+           aria-selected="true">Consultas</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#vacunas-tab-link" role="tab" aria-controls="vacunas-tab-link" aria-selected="false">Vacunas</a>
+        <a class="nav-link" 
+           id="vacuna-tab-link" 
+           data-toggle="tab" 
+           href="#vacunas-tab-link" 
+           role="tab" 
+           aria-controls="vacunas-tab-link" 
+           aria-selected="false">Vacunas</a>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -152,7 +165,9 @@
     </div>
     <div class="tab-pane fade" id="vacunas-tab-link" role="tabpanel" aria-labelledby="profile-tab">
         <div class="form-row mt-2">
-            <span>SOLAPA DE VACUNAS</span>
+            <div class="col-md-12">
+                <div id="vacunasGridContainer" style="display:none;"></div>
+            </div>
         </div>
     </div>
 </div>
