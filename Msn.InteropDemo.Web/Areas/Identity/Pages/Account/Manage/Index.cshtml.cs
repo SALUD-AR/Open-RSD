@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.Web.CustomValidators;
 
 namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
@@ -17,15 +18,18 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Entities.Identity.SystemUser> _userManager;
         private readonly SignInManager<Entities.Identity.SystemUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(
             UserManager<Entities.Identity.SystemUser> userManager,
             SignInManager<Entities.Identity.SystemUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, 
+            ILogger<IndexModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         public string Username { get; set; }
@@ -53,6 +57,14 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             [Required(ErrorMessage = "El CUIT es requerido")]
             [CuitValidator(ErrorMessage = "El CUIT ingresado es inválido")]
             public string CUIT { get; set; }
+
+            [Display(Name = "Apellido")]
+            [Required(ErrorMessage = "El Apellido es requerido")]
+            public string Apellido { get; set; }
+
+            [Display(Name = "Nombre")]
+            [Required(ErrorMessage = "El Nombre es requerido")]
+            public string Nombre { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(bool mustCongifAccount = false)
@@ -75,7 +87,9 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             {
                 Email = email,
                 PhoneNumber = phoneNumber,
-                CUIT = Common.Utils.Helpers.Cuit.ToUIFormat(user.CUIT) 
+                CUIT = Common.Utils.Helpers.Cuit.ToUIFormat(user.CUIT),
+                Apellido = user.Apellido,
+                Nombre = user.Nombre
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -119,9 +133,15 @@ namespace Msn.InteropDemo.Web.Areas.Identity.Pages.Account.Manage
             }
 
             user.CUIT = long.Parse(Common.Utils.Helpers.Cuit.ToCleanFormat(Input.CUIT));
+            user.Apellido = Input.Apellido;
+            user.Nombre = Input.Nombre;
+
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Su cuenta ha sido actualizada.";
+
+            _logger.LogInformation($"Usuario modificó sus datos Id:{user.Id}");
+
             return RedirectToPage(new { mustCongifAccount = false });
         }
 
