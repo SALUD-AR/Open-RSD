@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Msn.InteropDemo.Integration.Configuration
 {
@@ -12,7 +10,8 @@ namespace Msn.InteropDemo.Integration.Configuration
         public enum ConfigurationServicesName
         {
             BUS,
-            SNOWSTORM
+            SNOWSTORM,
+            IMMUNIZATION
         }
 
         [JsonProperty("services")]

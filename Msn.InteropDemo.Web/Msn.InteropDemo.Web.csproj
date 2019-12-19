@@ -11,15 +11,19 @@
     <Compile Remove="Areas\Seguimiento\Data\**" />
     <Compile Remove="Areas\Seguimiento\Models\**" />
     <Compile Remove="Data\**" />
+    <Compile Remove="Logs\**" />
     <Content Remove="Areas\Seguimiento\Data\**" />
     <Content Remove="Areas\Seguimiento\Models\**" />
     <Content Remove="Data\**" />
+    <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Areas\Seguimiento\Data\**" />
     <EmbeddedResource Remove="Areas\Seguimiento\Models\**" />
     <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Logs\**" />
     <None Remove="Areas\Seguimiento\Data\**" />
     <None Remove="Areas\Seguimiento\Models\**" />
     <None Remove="Data\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,7 +66,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Logs\" />
   </ItemGroup>
 
 

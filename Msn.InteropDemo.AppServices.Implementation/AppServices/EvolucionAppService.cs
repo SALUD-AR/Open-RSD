@@ -136,5 +136,22 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 
             return model;
         }
+
+        public IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId, bool soloNoAplicadas = true)
+        {
+            var model = new List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>();
+            var vacunas = CurrentContext.DataContext.EvolucionVacunaAplicaciones
+                                    .Include(p => p.Evolucion.Paciente)
+                                    .Where(x=>x.Evolucion.PacienteId == pacienteId)
+                                    .ToList();
+
+            if (!vacunas.Any())
+            {
+                return model;
+            }
+
+            model = Mapper.Map<List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>>(vacunas);
+            return model;
+        }
     }
 }

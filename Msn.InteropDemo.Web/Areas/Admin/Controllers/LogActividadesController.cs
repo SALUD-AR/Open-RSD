@@ -51,6 +51,7 @@ namespace Msn.InteropDemo.Web.Areas.Admin.Controllers
         {
             var dtFrom = Common.Utils.Helpers.DateTimeHelper.FromDateTimeAR(dateFrom);
             var dtTo   = Common.Utils.Helpers.DateTimeHelper.FromDateTimeAR(dateTo);
+            dtTo = dtTo.Value.AddHours(23).AddMinutes(59).AddSeconds(29);
 
             try
             {

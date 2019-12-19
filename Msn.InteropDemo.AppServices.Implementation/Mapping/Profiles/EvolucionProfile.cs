@@ -30,6 +30,10 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
             CreateMap<Entities.Evoluciones.EvolucionDiagnosticoCie10, ViewModel.Evoluciones.EvolucionDiagnosticoCie10ViewModel>();
             CreateMap<Entities.Evoluciones.EvolucionMedicamento, ViewModel.Evoluciones.EvolucionMedicamentoViewModel>();
             CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Evoluciones.EvolucionVacunaAplicacionViewModel>();
+
+            CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>()
+                .ForMember(dest => dest.SctConceptId, orig => orig.MapFrom(x => x.SctConceptId.HasValue ? x.SctConceptId.ToString() : ""));
+
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //VIEWMODEL TO ENTITIES

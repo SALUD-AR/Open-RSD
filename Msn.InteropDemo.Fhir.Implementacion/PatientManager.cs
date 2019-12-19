@@ -120,7 +120,7 @@ namespace Msn.InteropDemo.Fhir.Implementacion
             
             var patientRet = client.Create(patient);
 
-            var identifierBus = patient.Identifier.Where(x => x.System == Msn.InteropDemo.Common.Constants.DomainName.FederadorPatientDomain.Value).FirstOrDefault();
+            var identifierBus = patient.Identifier.Where(x => x.System == Msn.InteropDemo.Common.Constants.DomainName.LocalDomain.Value).FirstOrDefault();
 
             var resp = new Model.Response.FederarPacienteResponse();
 
