@@ -1,0 +1,42 @@
+﻿Id;Nombre;SctId;SctTerm
+127;Hepatitis B;41000221108;producto que contiene solamente antígeno de superficie de hepatitis B (producto medicinal)|
+128;BCG;1861000221106;producto que contiene solamente antígeno de bacilo Calmette-Guerin vivo atenuado (producto medicinal)|
+129;Neumococo Conjugada VCN 13;1871000221102;producto que contiene exactamente antígenos de polisacárido conjugado de neumococo 13 serotipos (producto medicinal)|
+130;Quintuple;2081000221102;producto que contiene solamente antígenos de Bordetella pertussis células enteras + toxoide diftérico + toxoide tetánico + Haemophilus influenzae tipo B Ag conjugado + hepatitis B HBsAg recombinante para uso pediátrico (producto medicinal)|
+131;Cuádruple Bacteriana;2071000221100;producto que contiene solamente antígenos Bordetella pertussis células enteras + toxoide diftérico + toxoide tetánico + polisacárido capsular conjugado de Haemophilus influenzae tipo B para uso pediátrico (producto medicinal)|
+132;OPV Sabín;1051000221104;producto que contiene solamente antígenos de poliovirus serotipos 1, 3 vivo atenuado para administración oral (forma farmacéutica de producto medicinal)|
+133;Triple Bacteriana Celular;2061000221109;producto que contiene solamente antígenos de Bordetella pertussis células enteras + toxoide diftérico + toxoide tetánico para uso pediátrico (producto medicinal)|
+134;Triple Viral;2241000221103;producto que contiene solamente antígenos de virus de parotiditis + virus de rubéola + virus de sarampión vivos atenuados (producto medicinal)|
+135;Hepatitis A;91000221102;producto que contiene solamente antígeno de virus hepatitis A inactivado (producto medicinal)|
+136;Triple Bacteriana Acelular;2051000221107;producto que contiene solamente antígenos de Bordetella pertussis acelular + toxoide diftérico + toxoide tetánico para uso en adultos (producto medicinal)|
+137;Doble Viral;2231000221105;producto que contiene solamente antígenos de virus de rubéola + virus de sarampión vivos atenuados (producto medicinal)|
+138;VPH Bivalente;1991000221106;producto que contiene solamente antígenos de papilomavirus humano tipos 16,18 (producto medicinal)|
+139;Fiebre Amarilla;1121000221106;producto que contiene solamente antígeno de virus de la fiebre amarilla vivo atenuado (producto medicinal)|
+140;Fiebre Hemorrágica  Argentina;1111000221101;producto que contiene solamente antígeno de virus Junín vivo atenuado (producto medicinal)|
+141;Doble Bacteriana;2031000221103;producto que contiene solamente antígenos de toxoide diftérico + toxoide tetánico para uso en adultos (producto medicinal)|
+142;Neumococo Polisacarida 23 Valente;1911000221104;producto que contiene exactamente antígenos de polisacárido capsular de neumococo 23 serotipos (producto medicinal)|
+143;Antigripal;1181000221105;producto que contiene solamente antígeno de virus de la influenza (producto medicinal)|
+144;IPV SALK;2011000221106;producto que contiene solamente antígenos de poliovirus serotipos 1, 2, 3 inactivado para administración parenteral (forma farmacéutica de producto medicinal)|
+147;Rotavirus Monovalente;2121000221100;producto que contiene solamente antígeno de rotavirus G1 P8 vivo atenuado (producto medicinal)|
+161;Varicela;1171000221107;producto que contiene antígeno de virus varicela-zóster vivo atenuado (producto medicinal)|
+162;Antimeningocócica Tetravalente Conjugada;1971000221105;producto que contiene exactamente antígenos de polisacárido conjugado de meningococo grupo A,C,Y,W135 (producto medicinal)|
+165;Rotavirus Pentavalente;2141000221109;producto que contiene solamente antígenos de rotavirus serotipos G1, G2, G3, G4, P1 vivo atenuado (producto medicinal)|
+167;Fiebre Tifoidea Parenteral;2171000221104;producto que contiene solamente antígeno polisacárido de Salmonella Typhi en forma farmacéutica para administración parenteral (forma farmacéutica de producto medicinal)|
+168;Fiebre Tifoidea Oral;971000221109;|producto que contiene solamente antígeno de Salmonella Typhi vivo atenuado en forma farmacéutica para administración oral (forma farmacéutica de producto medicinal)|
+169;Colera Oral;2181000221101;producto que contiene solamente antígeno de cólera en forma farmacéutica para administración oral (forma farmacéutica de producto medicinal)|
+171;Antirrábica Cultivo en Lineas Celulares;2191000221103;producto que contiene solamente antígeno de virus de la rabia inactivado cultivado en células Vero (producto medicinal)|
+172;Antirrábica Fuenzalida Palacios;2201000221100;producto que contiene solamente antígeno de virus de la rabia inactivado cultivado en tejido nervioso (producto medicinal)|
+173;Séxtuple;2101000221107;producto que contiene solamente antígenos de B. pertussis acelular + toxoide diftérico + toxoide tetánico + H. influenzae tipo B conjugado + hepatitis B recombinante + poliovirus 3 serotipos inactivado para uso pediátrico (producto medicinal)|
+175;Antimeningocócica Monovalente Conjugada Grupo C;951000221102;producto que contiene exactamente antígeno de polisacárido conjugado de meningococo grupo C (producto medicinal)|
+176;Quintuple Acelular;2091000221104;producto que contiene solamente antígenos de Bordetella pertussis acelular + toxoide diftérico + toxoide tetánico + Haemophilus influenzae tipo B Ag conjugado + poliovirus serotipos 1, 2, 3 inactivado para uso pediátrico (producto medicinal)|
+177;Hepatitis A y B;121000221105;producto que contiene solamente antígeno de virus hepatitis A inactivado + antígeno de superfice de virus hepatitis B recombinante (producto medicinal)|
+178;Anti Haemophilus Influenzae;2041000221105;producto que contiene solamente antígeno de polisacárido capsular conjugado de Haemophilus influenzae tipo B (producto medicinal)|
+182;Neumococo Conjugada VCN 10;1801000221105;producto que contiene solamente antígeno de polisacárido capsular conjugado de neumococo (producto medicinal)|
+183;VPH Cuadrivalente;2001000221108;producto que contiene solamente antígenos de papilomavirus humano tipos 6, 11, 16, 18 (producto medicinal)|
+184;Antitetánica;2021000221101;producto que contiene solamente antígeno de toxoide tetánico (producto medicinal)|
+185;Palivizumab;108725001;producto que contiene palivizumab (producto medicinal)|
+186;Inmunoglobulina Antihepatitis B;9542007;|producto que contiene inmunoglobulina contra antígeno de superficie de la hepatitis B (producto medicinal)|
+187;Inmunoglobulina Antirrábica Humana;80834004;producto que contiene inmunoglobulina antirrábica humana (producto medicinal)|
+188;Inmunoglobulina Antivaricela Zoster;62294009;producto que contiene anticuerpo contra virus varicela-zóster (producto medicinal)|
+189;Inmunoglobulina Hiperinmune Antitetánica;86337009;producto que contiene inmunoglobulina antitetánica humana (producto medicinal)|
+190;Inmunoglobulina Polivalente  Profilaxis Sarampión;714569001;producto que contiene inmunoglobulina humana normal (producto medicinal)|

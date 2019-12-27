@@ -69,6 +69,8 @@
     <Compile Remove="Migrations\20191227172548_add_NomivacEntities.Designer.cs" />
     <Compile Remove="Migrations\20191227173833_add_NomivacEntities.cs" />
     <Compile Remove="Migrations\20191227173833_add_NomivacEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191227174132_add_NomivacEntities.cs" />
+    <Compile Remove="Migrations\20191227174132_add_NomivacEntities.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -91,6 +93,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataInitialization\Files\" />
   </ItemGroup>
 
 </Project>

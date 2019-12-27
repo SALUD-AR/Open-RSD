@@ -1,0 +1,147 @@
+﻿Id;Nombre;AplicacionDiaMin;AplicacionDiaMax
+62;Regular;0;7
+63;Recién Nacido;0;2
+69;Alterno;3650;16426
+70;Personal de Salud;7665;36500
+71;Regular;241;4380
+72;Viaje a Zona Endémica;241;22265
+74;Regular;42;1824
+75;Regular;42;578
+76;Regular;366;579
+77;Regular;360;6570
+78;Calendario Nacional;181;749
+79;Embarazadas;4381;41610
+81;Personal de Salud;6570;41610
+82;Regular;360;729
+83;Regular;1826;2555
+86;Regular;2556;36500
+87;Embarazo;3650;21900
+88;Puerperio;4280;40515
+89;Regular;5475;36500
+90;Residencia en Zona Endémica;5475;36500
+99;Regular;42;2555
+100;Atrasado;2556;6570
+104;Incompleto;6571;40515
+105;Atrasado;8;2555
+108;Rápido;4015;36500
+109;Regular;2190;36500
+110;Regular;3651;36500
+112;Personal de Salud;7665;36500
+113;Embarazo;4280;21900
+116;Atrasado;577;2555
+121;Incompleto;2556;36500
+123;Puerperio;4381;41610
+124;Regular 9 a 64 Años con F de Riesgo;3285;23741
+125;Grupos de Riesgo;1096;36500
+126;Niños con Factores de Riesgo;730;3650
+127;Regular;360;36500
+128;Atrasado;730;1095
+129;Niños de 2 Años Adolescentes y Adultos;730;20075
+131;Regular;56;42000
+132;Adultos;181;40515
+134;Esquema de Excepción;;
+135;Esquema de Excepción;;
+136;Esquema de Excepción;2556;36500
+137;Esquema de Excepción;;
+138;Esquema de Excepción;;
+139;Esquema de Excepción;5111;36500
+140;Esquema de Excepción;;
+141;Esquema de Excepción;;
+142;Esquema de Excepción;;
+143;Esquema de Excepción;;
+144;Esquema de Excepción;;
+145;Esquema de Excepción;;
+146;Esquema de Excepción;;
+147;Esquema de Excepción;;
+148;Esquema de Excepción;;
+149;Esquema de Excepción;;
+150;Esquema de Excepción;;
+151;Esquema de Excepción;;
+152;Esquema de Excepción;;
+154;Esquema de Excepción;;
+155;Esquema de Excepción;;
+158;Regular;42;240
+159;Regular;42;240
+160;Esquema de Excepción;;
+164;Esquema de Excepción;;
+165;Regular;721;36500
+166;Esquema de Excepción;;
+167;Regular;1826;36500
+168;Esquema de Excepción;;
+169;Regular Adultos;1826;36500
+170;Regular Niños;721;1825
+172;Regular Pre Exposición;0;36500
+173;Regular Pre Exposición;0;36500
+174;Esquema de Excepción;0;36500
+175;Esquema de Excepción;;
+176;Regular Post Exposición de Animal Observado;0;36500
+177;Regular Post Exposición Animal Muerto o Desaparecido;0;36500
+178;Regular Post Exposición de Animal Observado;0;36500
+179;Regular Post Exposición Animal Muerto o Desaparecido;0;36500
+180;Regular 25 Meses a 8 Años con F Riesgo;759;3284
+181;Regular Mayores de 65 Años;23742;40515
+182;Atrasado;2556;36500
+183;Atrasado;365;1095
+184;Atrasado;579;2555
+185;Prematuro;60;180
+186;Esquema de Excepción;;
+188;Prematuros;42;1080
+191;Niños y Adultos con Factores de Riesgo;3651;23725
+193;Mayores de 65 Años;23726;36500
+196;Regular Niños y Adultos;54;36500
+197;Esquema de Excepcion;54;36500
+198;Regular;54;36500
+199;Esquema de Excepción;;
+200;Regular;360;36500
+201;Esquema de Excepción;;
+202;Regular;42;36500
+203;Esquema de Excepción;;
+210;Niños de 2 a 6 Meses;56;510
+211;Niños de 6 a 23 Meses;180;730
+251;Esquema de Excepción;0;36500
+252;Alterno;42;1824
+253;Esquema de Excepción;;
+255;Esquema de Excepción;;
+257;Alterno;3286;16426
+259;Anual 6 a 24 Meses;181;758
+260;Anual 25 Meses a 8 Años con F Riesgo;759;3284
+261;Personal Esencial;6570;41610
+262;Huéspedes Especiales;3651;9855
+263;Huéspedes Especiales;3651;9855
+264;Prematuro;0;217
+265;Displasia Broncopulmonar;0;403
+266;Cardiopatía congénita;0;496
+267;Esquema de Excepción;;
+269;Recien Nacido;0;1
+270;Post exposición;0;42000
+271;Embarazadas;4381;36500
+272;Inmunocomprometidos;3;42000
+273;Neonatos;0;2
+274;Post exposición;0;42000
+275;Post exposición en inmunocomprometido;0;42000
+276;Post exposición en embarazo;4381;36500
+277;Post exposición;1;42000
+278;Situaciones Especiales;360;42000
+279;Regular;3650;5110
+280;Regular;3650;5110
+288;Secuencial;56;730
+289;Secuencial;180;6935
+337;ANUAL;30;60
+338;ANUAL;30;60
+339;ANUAL;30;60
+342;Regular lactantes;0;20000
+360;Conviviente Inmunocomprometido;750;23724
+361;Cardiologico;750;23724
+362;Mayor de 65 años;23741;41610
+363;Diabético;750;23724
+364;Inmunocomprometido;750;23724
+365;Inmunodeficiencia;750;23724
+366;Obesidad Morbida;750;23724
+367;Respiratorio;750;23740
+368;13 a 23 meses;;
+369;2 años;;
+370;3 años;;
+371;4 años;;
+372;Adicional;395;1825
+373;6 a 11 meses;;
+374;Adicional;472;1849

@@ -9,7 +9,7 @@ using Msn.InteropDemo.Data.Context;
 namespace Msn.InteropDemo.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191227174132_add_NomivacEntities")]
+    [Migration("20191227233620_add_NomivacEntities")]
     partial class add_NomivacEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

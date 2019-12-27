@@ -50,8 +50,8 @@ namespace Msn.InteropDemo.Data.Migrations
                 name: "NomivacVacunaEsquema",
                 columns: table => new
                 {
-                    NomivacEsquemaId = table.Column<int>(nullable: false),
-                    NomivacVacunaId = table.Column<int>(nullable: false)
+                    NomivacVacunaId = table.Column<int>(nullable: false),
+                    NomivacEsquemaId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,8 +87,8 @@ namespace Msn.InteropDemo.Data.Migrations
             migrationBuilder.DropTable(
                 name: "NomivacVacunaEsquema");
 
-            migrationBuilder.DropTable(
-                name: "sqlite_sequence");
+            //migrationBuilder.DropTable(
+            //    name: "sqlite_sequence");
 
             migrationBuilder.DropTable(
                 name: "NomivacEsquema");
