@@ -63,6 +63,12 @@
     <Compile Remove="Migrations\20190831194858_add_Cie10.Designer.cs" />
     <Compile Remove="Migrations\20190831200800_Evolucion_Diagnostico_add_SubCatNombre.cs" />
     <Compile Remove="Migrations\20190831200800_Evolucion_Diagnostico_add_SubCatNombre.Designer.cs" />
+    <Compile Remove="Migrations\20191227171826_add_NomivacEntities.cs" />
+    <Compile Remove="Migrations\20191227171826_add_NomivacEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191227172548_add_NomivacEntities.cs" />
+    <Compile Remove="Migrations\20191227172548_add_NomivacEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191227173833_add_NomivacEntities.cs" />
+    <Compile Remove="Migrations\20191227173833_add_NomivacEntities.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
