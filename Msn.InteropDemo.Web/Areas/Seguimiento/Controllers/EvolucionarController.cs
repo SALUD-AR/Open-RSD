@@ -126,7 +126,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         public JsonResult GetMapeoCie10(string conceptId, string sexo, int edad)
         {
             try
@@ -153,7 +153,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         public JsonResult GetGridVacunas(int pacienteId)
         {
             try
