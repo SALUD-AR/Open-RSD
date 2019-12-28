@@ -85,6 +85,7 @@ namespace Msn.InteropDemo.Web
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
             services.AddTransient<AppServices.ICie10AppService, AppServices.Implementation.AppServices.Cie10AppService>();
             services.AddTransient<AppServices.ILogActivityAppService, AppServices.Implementation.AppServices.LogActivityAppService>();
+            services.AddTransient<AppServices.INomivacAppService, AppServices.Implementation.AppServices.NomivacAppService>();
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
             //**************************************************************************************
 

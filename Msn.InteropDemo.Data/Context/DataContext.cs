@@ -75,5 +75,11 @@ namespace Msn.InteropDemo.Data.Context
 
         public DbSet<SqliteSequence> SqliteSequences { get; set; }
 
+        public DbSet<Entities.Nomivac.NomivacEsquema> NomivacEsquemas { get; set; }
+
+        public DbSet<Entities.Nomivac.NomivacVacuna> NomivacVacunas { get; set; }
+
+        public DbSet<Entities.Nomivac.NomivacVacunaEsquema> NomivacVacunaEsquemas { get; set; }
+
     }
 }
