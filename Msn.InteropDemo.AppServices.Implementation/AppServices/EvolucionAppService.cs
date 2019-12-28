@@ -153,5 +153,18 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             model = Mapper.Map<List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>>(vacunas);
             return model;
         }
+
+        public EvolucionVacunaAplicacion GetVacunaAplicacion(int evolucionAplicacionId)
+        {
+            var vacuna = CurrentContext.DataContext.EvolucionVacunaAplicaciones
+                                    .FirstOrDefault(x => x.Id == evolucionAplicacionId);
+
+            if (vacuna== null)
+            {
+                throw new Exception($"No se ha encontrado la vaciona para le EvolucionAplicacionId{evolucionAplicacionId}");
+            }
+            
+            return vacuna;
+        }
     }
 }

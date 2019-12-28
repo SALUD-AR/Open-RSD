@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Msn.InteropDemo.Entities.Evoluciones;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,5 +14,6 @@ namespace Msn.InteropDemo.AppServices
         ViewModel.Evoluciones.EvolucionViewModel GetById(int evolucionId);
         List<ViewModel.Evoluciones.EvolucionHistoItemViewModel> GetEvolucionHistoDates(int pacienteId);
         IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId, bool soloNoAplicadas = true);
+        EvolucionVacunaAplicacion GetVacunaAplicacion(int evolucionAplicacionId);
     }
 }

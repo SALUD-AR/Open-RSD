@@ -13,17 +13,19 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
     [Authorize]
     public class EvolucionarController : Web.Controllers.Base.ControllerBase
     {
+        private readonly INomivacAppService _nomivacAppService;
         private readonly IEvolucionAppService _evolucionAppService;
         private readonly ICie10AppService _cie10AppService;
         private readonly ILogger<EvolucionarController> _logger;
 
-        public EvolucionarController(IPacienteAppService pacienteAppService,
+        public EvolucionarController(INomivacAppService nomivacAppService,
                                      IEvolucionAppService evolucionAppService,
                                      ICie10AppService cie10AppService,
                                      ISelectListHelper selectListHelper,
                                      ILogger<EvolucionarController> logger
             )
         {
+            _nomivacAppService = nomivacAppService;
             _evolucionAppService = evolucionAppService;
             _cie10AppService = cie10AppService;
             _logger = logger;
@@ -161,6 +163,25 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                 var items = _evolucionAppService.GetVacunasAplicacion(pacienteId);
                 var table = this.RenderViewToStringAsync("Partials/_GridVacunas", items).Result;
                 return new JsonResult(new { success = true, table, count = items.Count() }) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo datos");
+                return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async System.Threading.Tasks.Task<JsonResult> GetEsquemasVacunasAsync(int pacienteId, int evolucionAplicacionVacunaId, decimal vacunaSctId)
+        {
+            try
+            {
+                var esquemas = await _nomivacAppService.GetEsquemasForVacunaSctIdAsync(vacunaSctId);
+                var vacuna = _evolucionAppService.GetVacunaAplicacion(evolucionAplicacionVacunaId);
+                var data = new { esquemas, vacuna };
+                
+                return new JsonResult(data) { StatusCode = 200 };
             }
             catch (Exception ex)
             {
