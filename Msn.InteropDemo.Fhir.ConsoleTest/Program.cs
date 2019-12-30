@@ -68,7 +68,7 @@ namespace Msn.InteropDemo.Fhir.ConsoleTest
                 VacunaLote = "649718"
             };
 
-            var response = service.RegistrarAplicacionVacuna(model);
+            var response = service.RegistrarAplicacionVacunaAsync(model).Result;
 
             Console.WriteLine($"response.Id={response.Id}");
             Console.ReadKey();

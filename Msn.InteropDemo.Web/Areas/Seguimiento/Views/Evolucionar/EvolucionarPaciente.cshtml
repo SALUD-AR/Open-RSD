@@ -8,6 +8,7 @@
 
 @section AddToHead {
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css">
 }
 
 <partial name="_Breadcrumb" model="@ViewBag.Breadcrumb" />
@@ -43,21 +44,21 @@
 
 <ul class="nav nav-tabs mt-2" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" 
-           id="consulta-tab-link" 
-           data-toggle="tab" 
-           href="#consulta-tab" 
-           role="tab" 
-           aria-controls="home" 
+        <a class="nav-link active"
+           id="consulta-tab-link"
+           data-toggle="tab"
+           href="#consulta-tab"
+           role="tab"
+           aria-controls="home"
            aria-selected="true">Consultas</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" 
-           id="vacuna-tab-link" 
-           data-toggle="tab" 
-           href="#vacunas-tab-link" 
-           role="tab" 
-           aria-controls="vacunas-tab-link" 
+        <a class="nav-link"
+           id="vacuna-tab-link"
+           data-toggle="tab"
+           href="#vacunas-tab-link"
+           role="tab"
+           aria-controls="vacunas-tab-link"
            aria-selected="false">Vacunas</a>
     </li>
 </ul>
@@ -67,8 +68,8 @@
             <div class="col-md-2">
                 <div class="card">
                     @*<div class="card-header text-center">
-                        <b>Consultas</b>
-                    </div>*@
+                            <b>Consultas</b>
+                        </div>*@
                     <div class="card-body" style="padding-top:10px;">
                         <a href="#!" onclick="setupNuevaEvolucion()"><span class="fa fa-plus-circle mb-3"></span> Nueva consulta</a>
                         <div id="evolucionListMenuContainer">
@@ -160,8 +161,6 @@
         </div>
         <br />
         <br />
-        <partial name="Partials/_SearchSnowstormModal" />
-        <partial name="Partials/_MapeoCIE10MultipleModal" />
     </div>
     <div class="tab-pane fade" id="vacunas-tab-link" role="tabpanel" aria-labelledby="profile-tab">
         <div class="form-row mt-2">
@@ -172,10 +171,24 @@
     </div>
 </div>
 
+<partial name="Partials/_SearchSnowstormModal" />
+<partial name="Partials/_MapeoCIE10MultipleModal" />
+<partial name="Partials/_AplicarVacunaModal" />
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/moment.js-2240/moment.js"></script>
+    <script src="~/lib/moment.js-2240/es-us.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+
     <script src="~/js/Views/Seguimiento/Evolucionar/EvolucionarPaciente.js"></script>
     <script src="~/js/Views/Seguimiento/Evolucionar/SearchSnowstormModal.js"></script>
+    <script src="~/js/Views/Seguimiento/Evolucionar/VacunasPaciente.js"></script>
     <script src="~/js/Views/ConfirmDialog.js"></script>
+    <script src="~/js/Views/DropDownHelper.js"></script>
+    <script src="~/js/Views/DateTimeHelper.js"></script>
 }

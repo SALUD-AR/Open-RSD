@@ -8,6 +8,9 @@ namespace Msn.InteropDemo.AppServices
     public interface INomivacAppService
     {
         Task<IEnumerable<NomivacEsquema>> GetEsquemasForVacunaSctIdAsync(decimal sctId);
-        int RegistrarAplicacionNomivac(int pacienteId, int evolucionVacunaAplicacionId, decimal vacunaSctId, int nomivacEsquemaId, DateTime fechaAplicacion);
+
+        Task<int> RegistrarAplicacionNomivacAsync(int evolucionVacunaAplicacionId, 
+                                       int nomivacEsquemaId, 
+                                       DateTime fechaAplicacion);
     }
 }

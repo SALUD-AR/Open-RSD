@@ -17,6 +17,15 @@ namespace Msn.InteropDemo.Data.EntitiesConfiguration.Pacientes
                 .IsRequired();
 
             builder.HasIndex(x => x.SctConceptId);
+
+            builder.Property(p => p.Lote)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .IsRequired(false);
+
+            builder.Property(p => p.FechaAplicacion)
+                .HasColumnType("smalldatetime")
+                .IsRequired(false);
         }
     }
 }

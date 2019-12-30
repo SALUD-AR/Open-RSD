@@ -143,6 +143,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             var vacunas = CurrentContext.DataContext.EvolucionVacunaAplicaciones
                                     .Include(p => p.Evolucion.Paciente)
                                     .Where(x=>x.Evolucion.PacienteId == pacienteId)
+                                    .OrderByDescending(x=>x.Evolucion.CreatedDateTime)
                                     .ToList();
 
             if (!vacunas.Any())

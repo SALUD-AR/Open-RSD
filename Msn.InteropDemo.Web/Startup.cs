@@ -80,6 +80,7 @@ namespace Msn.InteropDemo.Web
             services.AddTransient<Emailing.IEmailGenerator, Emailing.EmailGenerator>();
             services.AddTransient<Helpers.ISelectListHelper, Helpers.SelectListHelper>();
             services.AddTransient<Fhir.IPatientManager, Fhir.Implementacion.PatientManager>();
+            services.AddTransient<Fhir.IImmunizationManager, Fhir.Implementacion.ImmunizationManager>();
             services.AddTransient<AppServices.Core.ICurrentContext, Security.CurrentContext>();
             services.AddTransient<AppServices.IPacienteAppService, AppServices.Implementation.AppServices.PacienteAppService>();
             services.AddTransient<AppServices.IEvolucionAppService, AppServices.Implementation.AppServices.EvolucionAppService>();
@@ -87,6 +88,7 @@ namespace Msn.InteropDemo.Web
             services.AddTransient<AppServices.ILogActivityAppService, AppServices.Implementation.AppServices.LogActivityAppService>();
             services.AddTransient<AppServices.INomivacAppService, AppServices.Implementation.AppServices.NomivacAppService>();
             services.AddTransient<Snowstorm.ISnowstormManager, Snowstorm.Implementation.SnowstormManager>();
+            
             //**************************************************************************************
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

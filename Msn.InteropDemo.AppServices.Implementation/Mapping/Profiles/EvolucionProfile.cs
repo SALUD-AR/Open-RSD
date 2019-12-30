@@ -32,7 +32,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
             CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Evoluciones.EvolucionVacunaAplicacionViewModel>();
 
             CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>()
-                .ForMember(dest => dest.SctConceptId, orig => orig.MapFrom(x => x.SctConceptId.HasValue ? x.SctConceptId.ToString() : ""));
+                .ForMember(dest => dest.FechaConsultaUI, orig => orig.MapFrom(x => x.Evolucion.CreatedDateTime.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.SctConceptId, orig => orig.MapFrom(x => x.SctConceptId.HasValue ? x.SctConceptId.ToString() : ""))
+                .ForMember(dest => dest.EstaAplicada, orig => orig.MapFrom(x => x.FechaAplicacion.HasValue));
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
 

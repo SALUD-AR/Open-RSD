@@ -30,7 +30,7 @@ namespace Msn.InteropDemo.Fhir.Implementacion
         /// https://simplifier.net/saluddigital.ar/immunization-example
         /// </summary>
         /// <param name="request">Model con los datos para el registro</param>
-        public RegistrarImmunizationResponse RegistrarAplicacionVacuna(Model.Request.RegistrarInmunizationRequest request)
+        public async System.Threading.Tasks.Task<RegistrarImmunizationResponse> RegistrarAplicacionVacunaAsync(Model.Request.RegistrarInmunizationRequest request)
         {
             var immu = GenerateImmunization(request);
 
@@ -83,7 +83,7 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                 }
             };
 
-            var immuResp = client.Create(immu);
+            var immuResp = await client.CreateAsync(immu);
 
             var ret = new RegistrarImmunizationResponse
             {

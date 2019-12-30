@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Msn.InteropDemo.Data.Context;
 
 namespace Msn.InteropDemo.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191230130153_add_VacunaAplicacionDatos")]
+    partial class add_VacunaAplicacionDatos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,8 +375,6 @@ namespace Msn.InteropDemo.Data.Migrations
                     b.Property<string>("Lote")
                         .HasMaxLength(200)
                         .IsUnicode(false);
-
-                    b.Property<int?>("NomivanImmunizationId");
 
                     b.Property<decimal?>("SctConceptId")
                         .IsRequired()

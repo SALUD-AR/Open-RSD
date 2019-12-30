@@ -28,6 +28,7 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
         public async Task<IEnumerable<Entities.Nomivac.NomivacEsquema>> GetEsquemasForVacunaSctIdAsync(decimal sctId)
         {
             var lst = await _currentContext.DataContext.NomivacVacunaEsquemas
+                                                    .AsNoTracking()
                                                     .Include(p => p.NomivacVacuna)
                                                     .Include(p => p.NomivacEsquema)
                                                     .Where(x => x.NomivacVacuna.SctId == sctId)
@@ -36,80 +37,89 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             return lst;
         }
 
-        public int RegistrarAplicacionNomivac(int pacienteId,
-                                              int evolucionVacunaAplicacionId,
-                                              decimal vacunaSctId,
+        public async Task<int> RegistrarAplicacionNomivacAsync(int evolucionVacunaAplicacionId,
                                               int nomivacEsquemaId,
                                               DateTime fechaAplicacion)
         {
 
-
-            var paciente = _currentContext.DataContext.Pacientes.Find(pacienteId);
-            if (paciente == null)
-            {
-                throw new Exception($"Paciente no encontrado con el ID:{pacienteId}");
-            }
-
-            var vacuna = _currentContext.DataContext.NomivacVacunas.FirstOrDefault(x => x.SctId == vacunaSctId);
-            if (vacuna == null)
-            {
-                throw new Exception($"Vacuna Nomivac no encontrada con el SctID:{vacunaSctId}");
-            }
-
             var nomivacEsquema = _currentContext.DataContext.NomivacEsquemas.Find(nomivacEsquemaId);
             if (nomivacEsquema == null)
             {
+                _logger.LogError($"Esquema no encontrado para el ID:{nomivacEsquemaId}");
                 throw new Exception($"Esquema no encontrado para el ID:{nomivacEsquemaId}");
+            }
+            
+            var evolucionVacuna = _currentContext.DataContext.EvolucionVacunaAplicaciones
+                                                    .Include(e => e.Evolucion.Paciente)
+                                                    .FirstOrDefault(p => p.Id == evolucionVacunaAplicacionId);
+            if (evolucionVacuna == null)
+            {
+                _logger.LogError($"No se ha encontrado la Evolucion para ID:{evolucionVacunaAplicacionId}, PacienteID:{evolucionVacuna.Evolucion.Paciente.Id}, VacunaSctId{evolucionVacuna.SctConceptId}");
+                throw new Exception($"No se ha encontrado la Evolucion para ID:{evolucionVacunaAplicacionId}, PacienteID:{evolucionVacuna.Evolucion.Paciente.Id}, VacunaSctId{evolucionVacuna.SctConceptId}");
+            }
+
+            var vacuna = _currentContext.DataContext.NomivacVacunas.FirstOrDefault(x => x.SctId == evolucionVacuna.SctConceptId);
+            if (vacuna == null)
+            {
+                _logger.LogError($"Vacuna Nomivac no encontrada con el SctID:{evolucionVacuna.SctConceptId}");
+                throw new Exception($"Vacuna Nomivac no encontrada con el SctID:{evolucionVacuna.SctConceptId}");
             }
 
             var nomivacVacunaId = vacuna.Id;
             if (!_currentContext.DataContext.NomivacVacunaEsquemas.Any(x => x.NomivacEsquemaId == nomivacEsquemaId && x.NomivacVacunaId == nomivacVacunaId))
             {
+                _logger.LogError($"Esquema Nomivac no encontrado para la Vacuna ID:{nomivacVacunaId} y el Esquema ID:{nomivacEsquemaId}");
                 throw new Exception($"Esquema Nomivac no encontrado para la Vacuna ID:{nomivacVacunaId} y el Esquema ID:{nomivacEsquemaId}");
             }
-
-            //TODO: Falta filtar por las que No estan aplicadas, falta agregar las columnas en la Tabla para 
-            //Los datos del registro de la Aplicacion
-            var evolucionVacuna = _currentContext.DataContext.EvolucionVacunaAplicaciones
-                                                    .Include(e => e.Evolucion)
-                                                    .FirstOrDefault(p => p.Id == evolucionVacunaAplicacionId
-                                                                        && p.Evolucion.PacienteId == pacienteId
-                                                                        && p.SctConceptId.Value == vacunaSctId);
-            if (evolucionVacuna == null)
-            {
-                throw new Exception($"No se ha encontrado la Evolucion para ID:{evolucionVacunaAplicacionId}, PacienteID:{pacienteId}, VacunaSctId{vacunaSctId}");
-            }
-
 
             var model = new Fhir.Model.Request.RegistrarInmunizationRequest
             {
                 AplicacionVacunaFecha = fechaAplicacion,
                 CurrentLocationId = "10060492200870",
                 CurrentLocationName = "Hospital Municipal Hospital Doctor Ángel Pintos",
-                DNI = paciente.NroDocumento,
-                FechaNacimiento = paciente.FechaNacimiento,
-                LocalPacienteId = paciente.Id.ToString(),
-                PrimerApellido = paciente.PrimerApellido,
-                PrimerNombre = paciente.PrimerNombre,
+                DNI =  evolucionVacuna.Evolucion.Paciente.NroDocumento,
+                FechaNacimiento = evolucionVacuna.Evolucion.Paciente.FechaNacimiento,
+                LocalPacienteId = evolucionVacuna.Evolucion.Paciente.Id.ToString(),
+                PrimerApellido = evolucionVacuna.Evolucion.Paciente.PrimerApellido,
+                PrimerNombre = evolucionVacuna.Evolucion.Paciente.PrimerNombre,
                 SctConceptId = vacuna.SctId.ToString(),
                 SctTerm = vacuna.SctTerm,
-                Sexo = paciente.Sexo == "M" ? Common.Constants.Sexo.Masculino : Common.Constants.Sexo.Femenido,
+                Sexo = evolucionVacuna.Evolucion.Paciente.Sexo == "M" ? Common.Constants.Sexo.Masculino : Common.Constants.Sexo.Femenido,
                 VacunaEsquemaId = nomivacEsquemaId.ToString(),
                 VacunaEsquemaNombre = nomivacEsquema.Nombre
-                //VacunaLote = "649718"
+                //VacunaLote = string.Empty
             };
 
-            var response = _immunizationManager.RegistrarAplicacionVacuna(model);
+            Fhir.Model.Response.RegistrarImmunizationResponse response;
+            try
+            {
+                response = await _immunizationManager.RegistrarAplicacionVacunaAsync(model);
+            }
+            catch (Hl7.Fhir.Rest.FhirOperationException ex)
+            {
+                string msg = string.Empty;
+                foreach (var item in ex.Outcome.Issue)
+                {
+                    msg += item.Diagnostics;
+                }
+
+                _logger.LogError(ex, "Error no controlado registrando Aplicacion Nomivac.");
+                throw new Exception($"{msg}");
+            }
 
             if (string.IsNullOrWhiteSpace(response.Id))
             {
-                throw new Exception("No se ha obtenido una respuesta del Servicio Nomivac");
+                _logger.LogError("No se ha obtenido una respuesta del Servicio Nomivac.");
+                throw new Exception("No se ha obtenido una respuesta del Servicio Nomivac.");
             }
 
-
             var immunizationId = int.Parse(response.Id);
+            evolucionVacuna.AplicacionNomivacEsquemaId = nomivacEsquemaId;
+            evolucionVacuna.AplicacionNomivacVacunaId = nomivacVacunaId;
+            evolucionVacuna.FechaAplicacion = fechaAplicacion;
+            evolucionVacuna.NomivanImmunizationId = immunizationId;
 
-            //TODO: Actualizar en la tabla la Entity evolucionVacuna con la info. obtenida. 
+            _currentContext.DataContext.SaveChanges();
 
             return immunizationId;
         }

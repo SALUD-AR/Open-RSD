@@ -71,6 +71,22 @@
     <Compile Remove="Migrations\20191227173833_add_NomivacEntities.Designer.cs" />
     <Compile Remove="Migrations\20191227174132_add_NomivacEntities.cs" />
     <Compile Remove="Migrations\20191227174132_add_NomivacEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191230121922_add-VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230121922_add-VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230121958_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230121958_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230122304_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230122304_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230123041_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230123041_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230125212_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230125212_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230125332_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230125332_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230125457_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230125457_add_VacunaAplicacionData.Designer.cs" />
+    <Compile Remove="Migrations\20191230125627_add_VacunaAplicacionData.cs" />
+    <Compile Remove="Migrations\20191230125627_add_VacunaAplicacionData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

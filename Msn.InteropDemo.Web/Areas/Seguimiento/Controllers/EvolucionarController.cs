@@ -173,13 +173,15 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<JsonResult> GetEsquemasVacunasAsync(int pacienteId, int evolucionAplicacionVacunaId, decimal vacunaSctId)
+        public async System.Threading.Tasks.Task<JsonResult> GetEsquemasVacunasAsync(int evolucionAplicacionVacunaId, decimal vacunaSctId)
         {
             try
             {
-                var esquemas = await _nomivacAppService.GetEsquemasForVacunaSctIdAsync(vacunaSctId);
+                var esquemasEntities = await _nomivacAppService.GetEsquemasForVacunaSctIdAsync(vacunaSctId);
+                var esquemaItems = from x in esquemasEntities select new { id = x.Id, name = x.Nombre };
+
                 var vacuna = _evolucionAppService.GetVacunaAplicacion(evolucionAplicacionVacunaId);
-                var data = new { esquemas, vacuna };
+                var data = new { esquemaItems, vacuna };
                 
                 return new JsonResult(data) { StatusCode = 200 };
             }
@@ -187,6 +189,25 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
             {
                 _logger.LogError(ex, "Error obteniendo datos");
                 return new JsonResult(new { message = ex.Message }) { StatusCode = 500 };
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async System.Threading.Tasks.Task<JsonResult> RegistrarAplicacionVacunaAsync(int evolucionAplicacionVacunaId, int esquemaNomivacId, string fechaAplicacion)
+        {
+            try
+            {
+                var dt = Common.Utils.Helpers.DateTimeHelper.FromDateTimeAR(fechaAplicacion);
+                var resp = await _nomivacAppService.RegistrarAplicacionNomivacAsync(evolucionAplicacionVacunaId, 
+                                                                                    esquemaNomivacId, 
+                                                                                    dt.Value);
+                
+                return new JsonResult(resp) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
 
