@@ -96,6 +96,14 @@ function validateFormAplicatVacuna() {
 function registrarAplicacionVacuna() {
     var loc = window.rootUrl + "Seguimiento/Evolucionar/RegistrarAplicacionVacunaAsync";
 
+    btnConfirmAplicarVacuna = $('#btnConfirmAplicarVacuna');
+    btnCancelAplicarVacuna = $('#btnCancelAplicarVacuna');
+
+    var btnPreHtml = btnConfirmAplicarVacuna.html();
+
+    btnConfirmAplicarVacuna.html('<span class="fas fa-spinner fa-spin"></span><span> aplicando</span>');
+    btnCancelAplicarVacuna.addClass('disabled');
+
     var dataToPost = {
         evolucionAplicacionVacunaId: $('#aplicarVacunaCurrentEvolucionVacunaId').val(),
         esquemaNomivacId: $('#selectAplicarVacunaEsquemaId').val(),
@@ -110,11 +118,23 @@ function registrarAplicacionVacuna() {
         data: dataToPost,
         cache: false,
         success: function (data) {
-            alert("Immunization ID:" + data);
+            //alert("Immunization ID:" + data);
+            btnCancelAplicarVacuna.removeClass('disabled');
+            btnConfirmAplicarVacuna.html(btnPreHtml);
+            showBtnVacunaDetail($('#aplicarVacunaCurrentEvolucionVacunaId').val())
         },
         error: function (request, status, error) {
+            btnCancelAplicarVacuna.removeClass('disabled');
+
             showErrorDialog("Error", request.responseText, function () { });
             console.log(request.responseText);
         }
+    });
+}
+
+
+function showBtnVacunaDetail(id) {
+    $('btnAplicarVacunaId' + id).hide('slow', function () {
+        $('btnDetalleVacunaId' + id).show('slow');
     });
 }

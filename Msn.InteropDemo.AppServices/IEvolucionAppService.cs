@@ -13,7 +13,7 @@ namespace Msn.InteropDemo.AppServices
         IEnumerable<ViewModel.Snomed.SnomedItem> SearchSnowstormByExpressionTerm(string expression, string term);
         ViewModel.Evoluciones.EvolucionViewModel GetById(int evolucionId);
         List<ViewModel.Evoluciones.EvolucionHistoItemViewModel> GetEvolucionHistoDates(int pacienteId);
-        IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId, bool soloNoAplicadas = true);
+        IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId);
         EvolucionVacunaAplicacion GetVacunaAplicacion(int evolucionAplicacionId);
     }
 }

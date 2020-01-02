@@ -34,7 +34,9 @@ namespace Msn.InteropDemo.AppServices.Implementation.Mapping.Profiles
             CreateMap<Entities.Evoluciones.EvolucionVacunaAplicacion, ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>()
                 .ForMember(dest => dest.FechaConsultaUI, orig => orig.MapFrom(x => x.Evolucion.CreatedDateTime.ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.SctConceptId, orig => orig.MapFrom(x => x.SctConceptId.HasValue ? x.SctConceptId.ToString() : ""))
-                .ForMember(dest => dest.EstaAplicada, orig => orig.MapFrom(x => x.FechaAplicacion.HasValue));
+                .ForMember(dest => dest.NomivacEsquemaId, orig => orig.MapFrom(x => x.AplicacionNomivacEsquemaId))
+                .ForMember(dest => dest.FechaAplicacionUI, orig => orig.MapFrom(x => x.FechaAplicacion.HasValue ? x.FechaAplicacion.Value.ToString("dd/MM/yyyy") : ""))
+                .ForMember(dest => dest.EstaAplicada, orig => orig.MapFrom(x => x.NomivanImmunizationId.HasValue));
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
