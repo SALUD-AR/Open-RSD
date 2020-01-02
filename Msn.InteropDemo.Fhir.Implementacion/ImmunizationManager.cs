@@ -83,16 +83,25 @@ namespace Msn.InteropDemo.Fhir.Implementacion
                 }
             };
 
-            var immuResp = await client.CreateAsync(immu);
-
-            var ret = new RegistrarImmunizationResponse
+            try
             {
-                Id = immuResp.Id
-            };
+                var immuResp = await client.CreateAsync(immu);
 
-            _currentContext.RegisterActivityLog(activity);
+                var ret = new RegistrarImmunizationResponse
+                {
+                    Id = immuResp.Id
+                };
 
-            return ret;
+                return ret;
+            }
+            catch 
+            {
+                throw;
+            }
+            finally
+            {
+                _currentContext.RegisterActivityLog(activity);
+            }
         }
 
 

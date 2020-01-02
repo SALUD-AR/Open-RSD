@@ -82,6 +82,8 @@ function aplicarVacuna() {
     }
 
     registrarAplicacionVacuna();
+
+   
 }
 
 
@@ -118,23 +120,21 @@ function registrarAplicacionVacuna() {
         data: dataToPost,
         cache: false,
         success: function (data) {
-            //alert("Immunization ID:" + data);
+
             btnCancelAplicarVacuna.removeClass('disabled');
             btnConfirmAplicarVacuna.html(btnPreHtml);
-            showBtnVacunaDetail($('#aplicarVacunaCurrentEvolucionVacunaId').val())
+
+            loadGridVacunas();
+
+            var theModal = $('#aplicarVacunaModal');
+            theModal.modal('hide');
         },
         error: function (request, status, error) {
             btnCancelAplicarVacuna.removeClass('disabled');
+            btnConfirmAplicarVacuna.html(btnPreHtml);
 
             showErrorDialog("Error", request.responseText, function () { });
             console.log(request.responseText);
         }
-    });
-}
-
-
-function showBtnVacunaDetail(id) {
-    $('btnAplicarVacunaId' + id).hide('slow', function () {
-        $('btnDetalleVacunaId' + id).show('slow');
     });
 }
