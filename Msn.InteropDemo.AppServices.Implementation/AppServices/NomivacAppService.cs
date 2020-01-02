@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Msn.InteropDemo.AppServices.Core;
+using Msn.InteropDemo.Entities.Evoluciones;
 using Msn.InteropDemo.Fhir;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Msn.InteropDemo.AppServices.Implementation.AppServices
 {
-    public class NomivacAppService : INomivacAppService
+    public class NomivacAppService : Core.ServiceBase, INomivacAppService
     {
         private readonly ICurrentContext _currentContext;
         private readonly IImmunizationManager _immunizationManager;
@@ -124,5 +125,73 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             return immunizationId;
         }
 
+
+        public IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId)
+        {
+            var model = new List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>();
+            var vacunas = _currentContext.DataContext.EvolucionVacunaAplicaciones
+                                    .Include(p => p.Evolucion.Paciente)
+                                    .Where(x => x.Evolucion.PacienteId == pacienteId)
+                                    .OrderByDescending(x => x.Evolucion.CreatedDateTime)
+                                    .ToList();
+            if (!vacunas.Any())
+            {
+                return model;
+            }
+
+            model = Mapper.Map<List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>>(vacunas);
+
+            var esquemasAplicados = model.Where(m => m.EstaAplicada).Select(m => m.NomivacEsquemaId.Value).ToList();
+            var esquemas = _currentContext.DataContext.NomivacEsquemas.Where(x => esquemasAplicados.Contains(x.Id));
+
+            foreach (var item in model)
+            {
+                if (item.EstaAplicada)
+                {
+                    item.NomivacEsquemaNombre = esquemas.First(x => x.Id == item.NomivacEsquemaId).Nombre;
+                }
+            }
+
+            return model;
+        }
+
+        public EvolucionVacunaAplicacion GetVacunaAplicacion(int evolucionAplicacionId)
+        {
+            var vacuna = _currentContext.DataContext.EvolucionVacunaAplicaciones
+                                    .FirstOrDefault(x => x.Id == evolucionAplicacionId);
+
+            if (vacuna == null)
+            {
+                throw new Exception($"No se ha encontrado la vaciona para le EvolucionAplicacionId{evolucionAplicacionId}");
+            }
+
+            return vacuna;
+        }
+    
+        public async Task<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunaAplicadaDetalleAsync(int evolucionVacunaAplicacionId)
+        {
+            
+            var vacuna = _currentContext.DataContext.EvolucionVacunaAplicaciones
+                                    .Include(p => p.Evolucion.Paciente)
+                                    .Where(x => x.Id == evolucionVacunaAplicacionId)
+                                    .FirstOrDefault();
+
+            if(vacuna == null)
+            {
+                throw new Exception($"Vacuna no encontrada con el ID:{evolucionVacunaAplicacionId}");
+            }
+
+            var model = Mapper.Map<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>(vacuna);
+            if(model.NomivacEsquemaId.HasValue)
+            {
+                var esquema = await _currentContext.DataContext.NomivacEsquemas.Where(x => x.Id == model.NomivacEsquemaId.Value).FirstOrDefaultAsync();
+                if(esquema != null)
+                {
+                    model.NomivacEsquemaNombre = esquema.Nombre;
+                }
+            }
+            
+            return model;
+        }
     }
 }

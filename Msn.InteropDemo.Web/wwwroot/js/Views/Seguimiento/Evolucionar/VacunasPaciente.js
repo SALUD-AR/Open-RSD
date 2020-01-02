@@ -138,3 +138,31 @@ function registrarAplicacionVacuna() {
         }
     });
 }
+
+
+
+function showDetalleVacunaAplicadaModal(evolucionAplicacionVacunaId) {
+    var loc = window.rootUrl + "Seguimiento/Evolucionar/GetVacunaAplicadaContentAsync";
+
+    var dataToPost = {
+        evolucionAplicacionVacunaId: evolucionAplicacionVacunaId,
+        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+    };
+
+    $.ajax({
+        url: loc,
+        type: 'POST',
+        dataType: 'json',
+        data: dataToPost,
+        cache: false,
+        success: function (data) {
+
+            $('#detalleVacunaAplicadaContainer').html(data);
+            $('#detalleVacunaModal').modal('show');
+        },
+        error: function (request, status, error) {
+            console.log(request.responseText);
+            showErrorDialog("Error", request.responseText, function () { });
+        }
+    });
+}

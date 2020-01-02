@@ -1,0 +1,16 @@
+﻿@model Msn.InteropDemo.ViewModel.Vacunas.VacunaAplicacionGridItemViewModel
+<div class="mb-2 alert alert-success small">
+    <div>
+        <span><b>Snomed CT:</b> </span> <span>@Model.SctConceptId</span>
+    </div>
+    <div>
+        <span><b>Snomed Term:</b> </span> <span>@Model.SctDescriptionTerm</span>
+    </div>
+    <div>
+        <span><b>Fecha Aplicación: </b></span>@Model.FechaAplicacionUI
+    </div>
+    <div>
+        <span><b>Esquema Aplicado: </b></span>@Model.NomivacEsquemaNombre
+    </div>
+</div>
+

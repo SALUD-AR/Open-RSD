@@ -137,46 +137,5 @@ namespace Msn.InteropDemo.AppServices.Implementation.AppServices
             return model;
         }
 
-        public IEnumerable<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel> GetVacunasAplicacion(int pacienteId)
-        {
-            var model = new List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>();
-            var vacunas = CurrentContext.DataContext.EvolucionVacunaAplicaciones
-                                    .Include(p => p.Evolucion.Paciente)
-                                    .Where(x=>x.Evolucion.PacienteId == pacienteId)
-                                    .OrderByDescending(x=>x.Evolucion.CreatedDateTime)
-                                    .ToList();
-            if (!vacunas.Any())
-            {
-                return model;
-            }
-
-            model = Mapper.Map<List<ViewModel.Vacunas.VacunaAplicacionGridItemViewModel>>(vacunas);
-
-            var esquemasAplicados = model.Where(m => m.EstaAplicada).Select(m => m.NomivacEsquemaId.Value).ToList();
-            var esquemas = CurrentContext.DataContext.NomivacEsquemas.Where(x => esquemasAplicados.Contains(x.Id));
-
-            foreach (var item in model)
-            {
-                if(item.EstaAplicada)
-                {
-                    item.NomivacEsquemaNombre = esquemas.First(x => x.Id == item.NomivacEsquemaId).Nombre;
-                }
-            }
-
-            return model;
-        }
-
-        public EvolucionVacunaAplicacion GetVacunaAplicacion(int evolucionAplicacionId)
-        {
-            var vacuna = CurrentContext.DataContext.EvolucionVacunaAplicaciones
-                                    .FirstOrDefault(x => x.Id == evolucionAplicacionId);
-
-            if (vacuna== null)
-            {
-                throw new Exception($"No se ha encontrado la vaciona para le EvolucionAplicacionId{evolucionAplicacionId}");
-            }
-            
-            return vacuna;
-        }
     }
 }

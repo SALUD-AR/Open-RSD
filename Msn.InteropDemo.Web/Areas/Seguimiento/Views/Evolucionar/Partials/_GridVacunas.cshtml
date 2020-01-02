@@ -48,7 +48,8 @@
                         <button id="@btnDetalleVacunaId"
                                 class="btn btn-success btn-sm"
                                 data-conceptid="@item.SctConceptId" data-id="@item.Id"
-                                @detalleVisibleStyle    >
+                                onclick="showDetalleVacunaAplicadaModal(@item.Id)"
+                                @detalleVisibleStyle >
                             <span class="fas fa-info-circle"></span>&nbsp;Detalle
                         </button>
                     </td>

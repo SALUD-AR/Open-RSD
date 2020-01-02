@@ -160,7 +160,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
         {
             try
             {
-                var items = _evolucionAppService.GetVacunasAplicacion(pacienteId);
+                var items = _nomivacAppService.GetVacunasAplicacion(pacienteId);
                 var table = this.RenderViewToStringAsync("Partials/_GridVacunas", items).Result;
                 return new JsonResult(new { success = true, table, count = items.Count() }) { StatusCode = 200 };
             }
@@ -180,7 +180,7 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                 var esquemasEntities = await _nomivacAppService.GetEsquemasForVacunaSctIdAsync(vacunaSctId);
                 var esquemaItems = from x in esquemasEntities select new { id = x.Id, name = x.Nombre };
 
-                var vacuna = _evolucionAppService.GetVacunaAplicacion(evolucionAplicacionVacunaId);
+                var vacuna = _nomivacAppService.GetVacunaAplicacion(evolucionAplicacionVacunaId);
                 var data = new { esquemaItems, vacuna };
                 
                 return new JsonResult(data) { StatusCode = 200 };
@@ -204,6 +204,24 @@ namespace Msn.InteropDemo.Web.Areas.Seguimiento.Controllers
                                                                                     dt.Value);
                 
                 return new JsonResult(resp) { StatusCode = 200 };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message) { StatusCode = 500 };
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async System.Threading.Tasks.Task<JsonResult> GetVacunaAplicadaContentAsync(int evolucionAplicacionVacunaId)
+        {
+            try
+            {
+                var model = await _nomivacAppService.GetVacunaAplicadaDetalleAsync(evolucionAplicacionVacunaId);
+                var content = await this.RenderViewToStringAsync("Partials/_DetalleVacunaContent", model);
+
+                return new JsonResult(content) { StatusCode = 200 };
             }
             catch (Exception ex)
             {
